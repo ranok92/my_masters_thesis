@@ -1,0 +1,25 @@
+\part{\rm\bfseries Introduction}
+\label{ch:introduction}
+\textbf{The motivation for the problem of social navigation.}
+Stationary robots are okay, but robots that move about? That is the real deal, which is why autonomous navigation has been a hot topic for the past couple of decades. The task of navigation can be seen as a two-stage problem involving:
+\begin{enumerate}
+    \item A high-level planning problem.
+    \item A lower-level control problem.
+\end{enumerate}
+Given a start and a final goal, the high-level planning is responsible for chalking out a near-optimal feasible path (where optimality depends on the task at hand, be it the shortest path, or the path with the least congestion or maybe get a drink on the way, etc.) Once the high-level planner produces a general plan of navigation (maybe return a set of control points describing the path) the responsibility of the lower-level controller is to go from one point to the next in the best possible way.
+Here the term 'best' is a loose term with hardly a solid definition. Different metrics can be used to score a controller. Some of the obvious comparison points will be:
+\begin{enumerate}
+	\item Was the controller able to reach the control point as planned out by the high-level planner.
+	\item How much time it took for the local controller to navigate the segment.
+	\item Did it hit something that it was not supposed to?
+\end{enumerate}
+But after that, things start becoming a bit blurry, and it becomes difficult to pinpoint characteristics of the controller as to what makes the controller better than another. It is not a one-size-fits-all kind of a strategy. This lack of an ironclad rule-set becomes more apparent when the goal is to navigate among humans.
+Few other talking points:
+\begin{enumerate}
+	\item Existing works and their performance and issues in one line or so.
+	\item Freezing robot problem.
+	\item Any kind of study that is involved with finding how to rate a controller/path. 
+\end{enumerate}
+\section{The main problem}
+\subsection{The smaller problem}
+
