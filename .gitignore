@@ -4,6 +4,7 @@
 *.log
 *.toc
 *.ist
+*.pdf
 *.acn
 *.acr
 *.alg
