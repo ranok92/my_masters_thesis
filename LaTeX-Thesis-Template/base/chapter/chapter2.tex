@@ -1,26 +1,60 @@
 \section{Data driven methods}
 In this section, we will go through a different learning-based approach that has been explored in the literature. Learning-based methods in the field of social navigation can be broadly classified into reinforcement learning-based approach and inverse reinforcement learning-based approaches. As for both the cases the problem at hand is formulated in the form of a Markov Decision Process or MDP let us set up the MDP formulation before delving into the methods.
 
+\subsubsection*{Problem definition:}
+A Markov decision process can be described as the following tuple
+(S,A,T,$\gamma$, R) where S is the set of all possible states, A is the set of all possible actions, T is the transition dynamics, $\gamma$ is the discount factor and R is the set of rewards. 
+In a reinforcement learning problem setting, the goal is to find a policy, which is a function that maps a state to action that maximizes the expected reward obtained.
+In contrast, in an inverse reinforcement learning problem setting, there is no reward function provided. Instead, we are provided with a set of expert demonstrations say D = {$\tau_1$, $\tau_2$, ... }. And the goal is to come up with a reward function R that maps from state to a real number that best explains the expert behavior and eventually a policy that would exhibit performance similar to that of the expert.
 
 
-Collision avoidance in pedestrian-rich environments with deep reinforcement learning.
+
 Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more obvious choices to tackle the problem of social navigation. 
-The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive. In their work, Socially aware motion planning with Deep RL, Chen et. al. address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent.
+The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive. In their work, \textbf{Socially aware motion planning with Deep RL, Chen et. al.} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent.
 The reward function primarily focuses on three different aspects of interaction: overtaking, passing and crossing. The reward they define is as follows:
 Equation 9
-They note that symmetry is one of the driving factors to incorporate social behavior, so they introduce a network architecture for symmetric multiagent training.
+They note that symmetry is one of the driving factors to incorporate social behavior, so they introduce a network architecture for symmetric multi-agent training.
 A picture of the symmetric network.
 
+\textbf{Collision avoidance in pedestrian-rich environments with deep reinforcement learning}
+\textbf{Social LSTM: Human Trajectory Prediction in Crowded Spaces}
 
 Nonetheless, coming up with socially compliant reward functions are hard. And so, the application of inverse RL seems almost too tempting to let go. A quick browse 
-Learning approaches meet probabilistic road map style path planner.
+\textbf{Learning approaches meet probabilistic road map style path planner.}
 
 
-
-Learning how pedestrians navigate: A deep IRL approach. 
 For all of the above work, be it a data-driven approach, or a model-based approach, there has been some kind of assumptions made on how the robot should behave, or what should it learn to not do. But from research (cite the work), it is known that trying to come up with this checklist is hard and even if many of the rules can be formulated, these vary a lot across different cultural settings and social norms. As a result, recent years have seen considerable interest in using inverse reinforcement learning to tackle the problem. IRL is the branch of reinforcement learning where the goal to get both a trained policy and an underlying reward function from a set of expert demonstrations.
-Okal et al in their work presents a comprehensive study of the effect of different feature representations on the performance of the agent.
-Kim and pineau use a similar idea and implement it on a real robot. 
-In one of the more recent works by Fahad et. al., they present an inverse RL pipeline to train agents from demonstrations using maximum entropy IRL.
+\textbf{Okal et al} in their work presents a comprehensive study of the effect of different feature representations on the performance of an agent.
+\textbf{Kim and pineau} use a similar idea, where they use expert demonstrations of controlling a wheelchair and use that to create a socially compliant agent for controlling a wheelchair which they take a step further by installing in a real wheelchair. 
+In one of the more recent works by \textbf{Fahad et. al.}, they present an inverse RL pipeline to train agents from demonstrations using maximum entropy IRL.
 The objective is to maximize the likelihood of observing the states visited by the expert, which is expressed as Equation 3.
+Each demonstration, or trajectory, in this case, is effectively broken into a sum of the individual states encountered by the expert. The final update rule for the reward network is given by equation 6 
+where $\mu_{d}$ is the state visitation frequency is the expected value of the states visited by the expert and $E[\mu]$ is the expected value of states visited by the agent. The reward function in the algorithm is also directly dependent on the state and so, the way the states are interpreted using feature representations becomes a vital part of the research in social navigation and IRL in general. 
+In most of the cases, the goal is to find succinct yet meaningful features that can capture the information needed by an agent to properly comprehend its current state. Good representation can adequately capture significant bits of information needed to become the expert without being too bulky.  The feature representation used here can be broken into 4 parts:
+Social Affinity Map feature(SAM): This captures the motion of the pedestrians in the vicinity of the agent. The area near the agent is divided into two concentric circles. The region inside the inner circle is then divided into 4 parts, and the region between the inner and outer circle is divided into 6 parts as shown in the figure below.
+Information from each of these 10 areas (or bins) is then expressed using a 6-dimensional vector:
+THE VECTOR	
+that captures the average velocity of the pedestrians in a given bin. The feature thresholds used are given below.
+
+2.Density feature: Helps provide an idea of how dense the vicinity of the agent is. It is calculated by adding up the number of pedestrians present in the spatial bins (calculated above). Once calculated they are discretized based on some predefined threshold.
+Distance feature: Captures the distance between the agent's current location and the goal.
+Default Cost feature: Introduced to balance the rest of the other features. This has been proposed by various other works in the past.
+The final feature representation is given by 
+
 And the overall method is given by algorithm 1.
+
+
+Conclusion:
+Both, reinforcement learning and inverse reinforcement learning bring a unique set of strengths and limitations to the table when it comes to the tackling of the problem of social navigation. 
+
+For inverse reinforcement learning:
+Adv:
+The primary advantage of IRL over all other methods discussed, both model-based and data-driven methods, is that there is no need to specify a handcrafted reward function built to induce certain kinds of behavior within the agent. Most of the current work in this domain primarily focuses on capturing the expert's behavior, thus encapsulating the 'naturalness' in the movements during navigation.
+Disadvantages:
+Comment of IRL and feature engineering. 
+Getting expert demonstrations are more expensive compared to RL.
+Hard to generalize. 
+For RL:
+In RL based work, the 'socialness' of a learning agent can and is introduced by carefully designed reward functions. In SA-CADRL, the authors use a handcrafted reward function to introduce the right-handed rules during scenarios like passing, crossing and overtaking, focusing primarily on introducing the 'naturalness' factor in the agent's policy.
+Disadv:
+Handcrafting rewards can help cover some aspects of the way a human navigates, but given that it is hard to figure out and generalize what is the social norm for different social interactions (of which there are many) sets RL based methods to a heavy limitation.
