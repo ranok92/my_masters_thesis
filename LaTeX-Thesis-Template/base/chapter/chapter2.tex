@@ -1,0 +1,26 @@
+\section{Data driven methods}
+In this section, we will go through a different learning-based approach that has been explored in the literature. Learning-based methods in the field of social navigation can be broadly classified into reinforcement learning-based approach and inverse reinforcement learning-based approaches. As for both the cases the problem at hand is formulated in the form of a Markov Decision Process or MDP let us set up the MDP formulation before delving into the methods.
+
+
+
+Collision avoidance in pedestrian-rich environments with deep reinforcement learning.
+Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more obvious choices to tackle the problem of social navigation. 
+The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive. In their work, Socially aware motion planning with Deep RL, Chen et. al. address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent.
+The reward function primarily focuses on three different aspects of interaction: overtaking, passing and crossing. The reward they define is as follows:
+Equation 9
+They note that symmetry is one of the driving factors to incorporate social behavior, so they introduce a network architecture for symmetric multiagent training.
+A picture of the symmetric network.
+
+
+Nonetheless, coming up with socially compliant reward functions are hard. And so, the application of inverse RL seems almost too tempting to let go. A quick browse 
+Learning approaches meet probabilistic road map style path planner.
+
+
+
+Learning how pedestrians navigate: A deep IRL approach. 
+For all of the above work, be it a data-driven approach, or a model-based approach, there has been some kind of assumptions made on how the robot should behave, or what should it learn to not do. But from research (cite the work), it is known that trying to come up with this checklist is hard and even if many of the rules can be formulated, these vary a lot across different cultural settings and social norms. As a result, recent years have seen considerable interest in using inverse reinforcement learning to tackle the problem. IRL is the branch of reinforcement learning where the goal to get both a trained policy and an underlying reward function from a set of expert demonstrations.
+Okal et al in their work presents a comprehensive study of the effect of different feature representations on the performance of the agent.
+Kim and pineau use a similar idea and implement it on a real robot. 
+In one of the more recent works by Fahad et. al., they present an inverse RL pipeline to train agents from demonstrations using maximum entropy IRL.
+The objective is to maximize the likelihood of observing the states visited by the expert, which is expressed as Equation 3.
+And the overall method is given by algorithm 1.

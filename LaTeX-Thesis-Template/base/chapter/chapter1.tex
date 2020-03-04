@@ -1,0 +1,48 @@
+\section{Various classical methods}
+\hline
+\subsection*{Outline structure of the chapter}
+\begin{enumerate}
+    \item Describe the problem of navigation.
+    \item Describe the problem of social navigation and what how is it different from the problem of classical navigation.
+    \item What are the factors that make this problem hard to pin and thus hard to solve? Include works from the paper "Influence of proxemic behaviours in human-robot interaction. (Takayama et al)
+    \item Set of works done before and how they try to approach the problem.
+\end{enumerate}
+
+\subsection*{Papers to inculde}
+    \begin{enumerate}
+        \item Social forces model and its family (Reif and wang, helbing and Molnar).
+        \item Qualitative trajectory calculus
+        \item A framework towards a socually aware mobile robot motion in human ventered dynamic environment. - Pandey et al
+        \item Dynamic window approach for reactive collision avoidance.
+        \item Human aware mobile robot motion planner - Sisbot
+        \item Trajectory planning for robots in dynamic human environments. Svenstrup
+    \end{enumerate}
+
+\hline
+
+In this chapter we will go through some of the classical methods/ model-based approaches that has been taken to tackle the problem of social navigation. We will start by briefly introducing some methods for tackling the problem of navigation and their limitations to accomplishing the task of social navigation and what measures were subsequently taken up to address it.
+In their work, Khatib et. al. introduce a path planner which they call artificial potential fields. The main idea behind the method is that the agent is moving through a place/field? where the goal exerts as an attractive force and the obstacle surfaces produces negative forces. The formulation of these forces are based on the distances between the agent and the goal/obstacle. The resulting controller, with proper hyperparameters does a fairly good job of navigating a scene and checking all the boxes of a good navigating agent. It reaches the goal and avoids the obstacles in the path to doing so. That being said, there were many drawbacks to this method, the most famous being getting stuck in a local minima, which were addressed by more sophisticated methods like probabilistic road-map based approaches (RRT Lavalle)
+
+The 'social' element was introduced into a artificial potential field based controller by Helbing and Molnar in their work, Social forces model.
+Rather than representing the force applied to an agent as the sum of the forces from external factors (obstacles and goal(s)), they model the pedestrian behavior as a combination of a set of internal motivations. 
+The final formulation is given by equation 10.
+where, the first term of the equation is further expanded as equation 9.
+Each of the terms being added up in equation 9 is a mathematical formulation of an internal motivation.
+The first term is the motivation to reach the goal.
+The second and third term denotes the motivation to maintain a certain distance from other pedestrians and boundaries respectively.
+The final term represents attractive forces other than the goal, that might attract a pedestrian like a street artist or a window of a shop.
+The intricate modeling of this sort has led to the creation of quite convincing pedestrian models. 
+Some of the more recent works build on this idea using more and more tools and methods at their disposal to get more sophisticated controllers.
+
+In their work 'A human aware mobile robot motion planner', Sisbot et. al. present a more sophisticated and meticulously planned planner. Similar to the work of potential fields (Khatib et al) and the social forces model (Molnar et al), the final planner plans a path with the least cost. But the way the cost map is generated is different.
+The authors generate and make use of three different cost maps namely $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
+The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and the state of the humans, where the state includes information like the posture (sitting or standing), configuration and parameters.
+The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of the robot to the person in that particular location. The rationale being, the more the effort a human has to make to keep the robot in his/her vision, the greater is the discomfort caused by the robot.
+And finally, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden}$. The final cost function is something like this.
+
+Authored by Svenstrup et. al. the work, Trajectory planning for robots in dynamic human environment, takes on the problem of autonomous navigation in a social environment in a different approach. Although they follow the trend of calculating a 'social' potential field like the other papers discussed, they layer it with the use of a rapidly exploring random tree and also take into account the robot kino-dynamics while planning future trajectory.
+Calculating the potential field:
+The pf calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behaviour for Human-Robot Interaction", where they construct the potential field by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
+This PF information is used in the node selection stage of the RRT algorithm.
+The overall algorithm:
+

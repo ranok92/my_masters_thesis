@@ -1,0 +1,17 @@
+\section{The environment}
+The features of the environment:
+\begin{enumerate}
+    \item This is an environment built using pygame.
+    \item It represents the map from a top down view. 
+    \item It is a highly customised environment and can support both static and dynamic obstacles.
+    \item It is a continuous environment, with the origin on the top left, and the coordinate system resembling that of an image.
+    \item All of the following can be controlled.
+        \begin{enumerate}
+            \item Size of the world, agent, goal and obstacles.
+            \item Static obstacles can be placed manually, or by passing in an image where the obstacles are drawn in red.
+            \item Dynamic obstacles can be placed by passing an annotation file, where the annotation file resembles a certain format and has frame by frame information.
+            Using this the environment can simulate actual real world scenarios, taking tracking annotation from various popular videos like the university dataset, stanford drone dataset.
+        \end{enumerate}
+    \item The environment is built keeping standard gym environments in mind. And can be easily integrated with RL frameworks. Has the necessary functions like reset, step, and render among other helper functions.
+    \item 
+\end{enumerate}
