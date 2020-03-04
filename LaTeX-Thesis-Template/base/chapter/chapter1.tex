@@ -35,6 +35,12 @@ The final term represents attractive forces other than the goal, that might attr
 The intricate modeling of this sort has led to the creation of quite convincing pedestrian models. 
 Some of the more recent works build on this idea using more and more tools and methods at their disposal to get more sophisticated controllers.
 
+
+Conclusion:
+A lot of careful engineering has been put into creating this 'formulae' that dictate/emulate the naturalness of human-movement while negotiating crowded space in an artificial agent/robot. 
+Highly depends on the modeler and the different cases being considered and assumptions being made in the creation of the model. 
+Right off the bat, I can think or rather situations have been shown by Kruse et al (behaving in a queue formation) which is not covered by this particular model of human behavior modeling.
+
 In their work 'A human aware mobile robot motion planner', Sisbot et. al. present a more sophisticated and meticulously planned planner. Similar to the work of potential fields (Khatib et al) and the social forces model (Molnar et al), the final planner plans a path with the least cost. But the way the cost map is generated is different.
 The authors generate and make use of three different cost maps namely $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
 The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and the state of the humans, where the state includes information like the posture (sitting or standing), configuration and parameters.
