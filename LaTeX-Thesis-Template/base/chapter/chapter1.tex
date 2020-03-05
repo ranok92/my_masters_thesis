@@ -53,7 +53,7 @@ Formulations of this nature are highly dependent on the different cases being co
 \subsubsection*{Sisbot et al}
 Looking into more recent work in the field of navigation,
 Sisbot et. al. in their work 'A human aware mobile robot motion planner', present a more sophisticated and meticulously constructed path planner. Similar to the work of potential fields (Khatib et al) and the social forces model (Molnar et al), the planner plans a path with the least cost ('cost' is analogous to 'forces/potential'). But the process of generating the cost map is different.
-The authors generate and make use of three different cost maps namely $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
+The authors generate and make use of three cost maps namely $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
 The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and the state of the humans, where the state includes information like the posture (sitting or standing), configuration and parameters.
 The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of the robot to the person in that particular location. The rationale being, the more the effort a human has to make to keep the robot in his/her vision, the greater is the discomfort caused by the robot.
 And finally, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden}$. 
@@ -67,6 +67,7 @@ The final cost function (now including the reserved hidden function) is somethin
 Hyperparameters like the weight of the two cost function and what not can be used to fine-tune the method to make the method suit the situation at hand.
 
 \subsubsection*{Svenstrup et al}
+Finally, we look into another body of work published by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
 Authored by Svenstrup et. al. the work, Trajectory planning for robots in dynamic human environment, takes on the problem of autonomous navigation in a social environment in a different approach. Although they follow the trend of calculating a 'social' potential field like the other papers discussed, they layer it with the use of a rapidly exploring random tree and also take into account the robot kino-dynamics while planning future trajectory.
 Calculating the potential field:
 The calculation of the PF involves three different terms:
