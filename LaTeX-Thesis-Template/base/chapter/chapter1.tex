@@ -32,14 +32,16 @@ Rather than representing the force applied to an agent as the sum of the forces 
 
 The final formulation is given by:
 \begin{align}
-	equation 10
+\frac{d\vec{w_{\alpha}}}{dt}:=\vec{F_{\alpha}}(t)+fluctuations
 \end{align}
 
 where the first term of the equation is further expanded as:\\
 
-\begin{align}
-	equation 9
-\end{align}
+\begin{multline}
+\vec{F_{\alpha}}(t):=
+\vec{F_{\alpha}^{0}}(\vec{v_{\alpha}}, v_{\alpha}^{0}\vec{e_{\alpha}})+\sum_{\beta}\vec{F_{\alpha, \beta}}(\vec{e_{\alpha}}, \vec{r_{\alpha}} - \vec{r_{\beta}})
++\\\sum_{B}\vec{F_{\alpha\beta}}(\vec{e_{\alpha}}, \vec{r_{\alpha}} - \vec{r_{B}^{\alpha}}) + \sum_{i}\vec{F_{\alpha i}}(\vec{e_{\alpha}}, \vec{r_{\alpha}}-\vec{r_i},t)
+\end{multline}
 
 Each of the terms being added up in equation 9 is a mathematical formulation of an internal motivation.
 The first term is the motivation to reach the goal.
@@ -52,23 +54,33 @@ A lot of careful engineering has been put into creating this 'formulae' that dic
 Formulations of this nature are highly dependent on the different cases being considered and assumptions being made in the creation of the model. 
 \subsubsection*{Sisbot et al}
 Looking into more recent work in the field of navigation,
-Sisbot et. al. in their work 'A human aware mobile robot motion planner', present a more sophisticated and meticulously constructed path planner. Similar to the work of potential fields (Khatib et al) and the social forces model (Molnar et al), the planner plans a path with the least cost ('cost' is analogous to 'forces/potential'). But the process of generating the cost map is different.
-The authors generate and make use of three cost maps namely $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
-The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and the state of the humans, where the state includes information like the posture (sitting or standing), configuration and parameters.
-The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of the robot to the person in that particular location. The rationale being, the more the effort a human has to make to keep the robot in his/her vision, the greater is the discomfort caused by the robot.
-And finally, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden}$. 
-The final path planner is a planner that selects the path with a minimum cost path where the cost is constructed by merging the different cost maps that are created above.
-Two ways to merge the primary cost maps (the safety and the visibility map)
+Sisbot et. al. in their work 'A human aware mobile robot motion planner', present a more sophisticated and meticulously constructed path planner. Similar to the work of potential fields (Khatib et al) and the social forces model (Molnar et al), the planner plans a path with the least cost ('cost' is analogous to 'forces/potential'). But the process of generating the cost map is different.\\
+The authors generate and make use of three cost maps, primarily, $Cost_{safety}$, $Cost_{visibility}$ and an additional $Cost_{hidden zone}$.
+The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and his/her state, where the state includes information like the posture (sitting or standing), configuration and parameters.\\
+The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of the robot to a person in a given location. The rationale being, the effort a human has to make to keep the robot in his/her vision is directly proportional to the discomfort caused by the robot with its movements.\\
+And lastly, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden zone}$. 
+The authors also provide two slightly nuanced ways of merging the two primary costs. One where the $Cost_{merged}$ is the weighted sum of two
+\begin{align}
+Cost_{merged}(x,y) = w_{1}Cost{safety}(x,y) + w_{2}Cost_{visibility}(x,y)
+\end{align}
+and 
+\begin{align}
+Cost_{merged}(x,y) = max(Cost{safety}(x,y), Cost_{visibility}(x,y))
+\end{align}
 
-Way 1\\
-Way 2\\
-
-The final cost function (now including the reserved hidden function) is something like this.
-Hyperparameters like the weight of the two cost function and what not can be used to fine-tune the method to make the method suit the situation at hand.
+The final cost function factoring in the $Cost_{hidden zone}$ is
+\begin{align}
+Cost_{final}(x,y) \leftarrow w3 Cost_{hidden zone}(x,y)
+\end{align}
+when, x and y are in the field of view of a human but is obstructed by the presence of the robot and 
+\begin{align}
+Cost_{final}(x,y) \leftarrow Cost_{merged}(x,y)
+\end{align}
+Once the final cost grid is obtained, a path between two points on the grid is computed using $A^*$ search.
 
 \subsubsection*{Svenstrup et al}
-Finally, we look into another body of work published by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
-Authored by Svenstrup et. al. the work, Trajectory planning for robots in dynamic human environment, takes on the problem of autonomous navigation in a social environment in a different approach. Although they follow the trend of calculating a 'social' potential field like the other papers discussed, they layer it with the use of a rapidly exploring random tree and also take into account the robot kino-dynamics while planning future trajectory.
+Finally, we look into another body of work by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
+In their work, Trajectory planning for robots in dynamic human environment, SvenStrup et al takes on the problem of autonomous navigation in a social environment in a different approach. They use the concept of 'forces' guiding the agent towards a goal, but they layer it with the use of a rapidly exploring random tree and also take into account the robot kino-dynamics while planning future trajectory.
 Calculating the potential field:
 The calculation of the PF involves three different terms:
 Absolute cost the robot would get. I.e. a cost that does not depend on the obstacles.	
@@ -77,9 +89,9 @@ The cost associated with the humans present in the vicinity.
 The final cost is given by equation 4.
 Description of each of the cost terms:
 Cost concerning the environment :
-Nonagoraphobic behavior,  i.e. the agent is motivated not to be in the edges of the environment. Provided by equation 5.
+Non-agoraphobic behavior,  i.e. the agent is motivated not to be in the edges of the environment. Provided by equation 5.
 Cost of proximity to humans:
-The pf calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behaviourfor Human-Robot Interaction", where they construct the potential field by fine-tuning the covariances of four gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
+The pf calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction", where they construct the potential field by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
 
 Equation - 6
 Figure depicting the PF around a pedestrian.
