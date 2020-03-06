@@ -61,16 +61,16 @@ The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of 
 And lastly, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden zone}$. 
 The authors also provide two slightly nuanced ways of merging the two primary costs. One where the $Cost_{merged}$ is the weighted sum of two
 \begin{align}
-Cost_{merged}(x,y) = w_{1}Cost{safety}(x,y) + w_{2}Cost_{visibility}(x,y)
+Cost_{merged}(x,y) = w_{1}Cost_{safety}(x,y) + w_{2}Cost_{visibility}(x,y)
 \end{align}
 and 
 \begin{align}
-Cost_{merged}(x,y) = max(Cost{safety}(x,y), Cost_{visibility}(x,y))
+Cost_{merged}(x,y) = max(Cost_{safety}(x,y), Cost_{visibility}(x,y))
 \end{align}
 
 The final cost function factoring in the $Cost_{hidden zone}$ is
 \begin{align}
-Cost_{final}(x,y) \leftarrow w3 Cost_{hidden zone}(x,y)
+Cost_{final}(x,y) \leftarrow w_{3} Cost_{hidden zone}(x,y)
 \end{align}
 when, x and y are in the field of view of a human but is obstructed by the presence of the robot and 
 \begin{align}
@@ -79,35 +79,48 @@ Cost_{final}(x,y) \leftarrow Cost_{merged}(x,y)
 Once the final cost grid is obtained, a path between two points on the grid is computed using $A^*$ search.
 
 \subsubsection*{Svenstrup et al}
-Finally, we look into another body of work by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
-In their work, Trajectory planning for robots in dynamic human environment, SvenStrup et al takes on the problem of autonomous navigation in a social environment in a different approach. They use the concept of 'forces' guiding the agent towards a goal, but they layer it with the use of a rapidly exploring random tree and also take into account the robot kino-dynamics while planning future trajectory.
+Lastly, we look into another body of work by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
+In their work, Trajectory planning for robots in dynamic human environment, Svenstrup et al takes on the problem of autonomous navigation in a social environment in a different approach. They use the idea of a potential field and combine that with a rapidly exploring random tree that take into account the robot kino-dynamics while planning future trajectory.
 Calculating the potential field:
-The calculation of the PF involves three different terms:
-Absolute cost the robot would get. I.e. a cost that does not depend on the obstacles.	
-The cost associated with the goal.
-The cost associated with the humans present in the vicinity.
-The final cost is given by equation 4.
-Description of each of the cost terms:
-Cost concerning the environment :
-Non-agoraphobic behavior,  i.e. the agent is motivated not to be in the edges of the environment. Provided by equation 5.
-Cost of proximity to humans:
-The pf calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction", where they construct the potential field by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
+The calculation of the potential field is broken down to three parts:
+\begin{enumerate}
+\item The cost associated with the general desired behavior of the agent. The authors use a cost function with a bias towards a non-agoraphobic behavior i.e. an agent motivated not linger at the edges of an environment. This is given by
+\begin{align}
+g_{1}(x(t)) = c_{y}y^{2}(t)
+\end{align}
+where, $c_y$ is a hyper parameter denoting the affinity of the agent to move towards the center of the environment.
+\item The cost associated with the presence of humans in the vicinity. The calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction", where the potential field is constructed by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
+\begin{align}
+g_{2}(x_{1:2}) = \sum_{k=1}^{4}c_{k}\exp(-\frac{1}{2}[x_{1:2} - 0]^{T}\sum^{-1}_{k}[x_{1:2} - 0])
+\end{align} 
+where $c_{k}$ are the normalizing constants, $x_{1:2}$ denote the relative position of the robot to the person and $\sum_k$ are the co-variances of the distributions.
+\item The cost associated with the goal which penalizes the robot for not moving or not orienting itself towards the goal. The cost is not uniform and is skewed to have a higher penalty at lower distances.
+\begin{align}
+g_{3}(x(t)) = c_{e1}\exp(c_{e2}(x(t) - \hat{x}(0))) + c_{\theta}\theta^{4}(t)
+\end{align}
+\textbf{where, $c_{(.)}$ are constants and $\hat{x}(0)$ is the desired position at time $t=0$.}
+\end{enumerate}
 
-Equation - 6
 Figure depicting the PF around a pedestrian.
 
-Cost of heading towards the goal:
-Motivates the agent to move towards the goal at each instant by providing a  negative reward for each move that deviates the agent from the shortest path to the goal. The induced penalty is represented in the form of an exponential function as shown below:
-Equation - 7
+The final cost is given by 
+\begin{align}
+G(t) = g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t)) + g_{3}(x(t))
+\end{align}
+where,$\mathcal{P}(t)$ is the matrix containing the positions of the persons at a given time $t$ and $g_{1}$, $g_{2}$ and $g_{3}$ are the three cost functions described above.\\
+The navigation is represented as a minimization problem that aims to minimize the cost of moving through the potential field while respecting the dynamic constraints of the robot and is given by
+\begin{align}
+\begin{split}
+minimize \qquad I(\tilde{u}_{0:T}) = &\int_{0}^{T} [g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t))]dt + g_{3}(x(t))\\
+s.t. \qquad \qquad \dot{x}(t) = & f(x(t),u(t)) \\
+where \qquad g_{1}(x(t)) = &c_{y}x_{2}(t)^{2}\\
+		g_{2}((x(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\exp(-\frac{1}{2}[x_{1:2} - \mu_{j}]^{T}\sum^{-1}_{k}[x_{1:2} - \mu_{j}])\\
+		g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
+\end{split}
+\end{align}
+The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
 
-The minimization problem:
-
-RRT based trajectory planning:
-The trajectory planner is based on a standard RRT planner with some key modifications. The introduce a step to prune the nodes that helps in reducing the size of the tree. They also modify the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate according to that. Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
-
-The overall algorithm:
-
-The trend here is obvious: take a vanilla planning algorithm and modify it using information from proxemic studies or other human considerations.
+\textbf{Their overall algorithm:????}
 
 General Conclusion:
 Most of these methods share are similar to the original potential field idea, the place they vary is that instead of using the more mechanical gravitational potentials as introduced by khatib, they use something which better encapsulates the nature of the human movement.
