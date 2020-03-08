@@ -1,25 +1,42 @@
 \section{Data driven methods}
-In this section, we will go through a different learning-based approach that has been explored in the literature. Learning-based methods in the field of social navigation can be broadly classified into reinforcement learning-based approach and inverse reinforcement learning-based approaches. As for both the cases the problem at hand is formulated in the form of a Markov Decision Process or MDP let us set up the MDP formulation before delving into the methods.
-
+In this section, we will go through a different learning-based approach that has been explored in the literature. Learning-based methods in the field of social navigation can be broadly classified into reinforcement learning (RL)-based approach and inverse reinforcement learning(IRL)-based approaches. While these methods differ at their core, the problem definition for both the cases is the same with a key difference. For both RL and IRL settings, the problem at hand is expressed in the form of a Markov decision process (MDP). We define the problem below.
 \subsubsection*{Problem definition:}
-A Markov decision process can be described as the following tuple
-(S,A,T,$\gamma$, R) where S is the set of all possible states, A is the set of all possible actions, T is the transition dynamics, $\gamma$ is the discount factor and R is the set of rewards. 
-In a reinforcement learning problem setting, the goal is to find a policy, which is a function that maps a state to action that maximizes the expected reward obtained.
-In contrast, in an inverse reinforcement learning problem setting, there is no reward function provided. Instead, we are provided with a set of expert demonstrations say D = {$\tau_1$, $\tau_2$, ... }. And the goal is to come up with a reward function R that maps from state to a real number that best explains the expert behavior and eventually a policy that would exhibit performance similar to that of the expert.
+\textbf{A Markov decision process is a discrete time stochastic control proces$s^{*taken\ from\ wiki}$} and can be represented as a 4 tuple
+($\mathcal{S}$,$\mathcal{A}$,T,$\gamma$, $\mathcal{R}$), where,
+\begin{itemize}
+	\item $\mathcal{S}$ is the set of all possible states.
+	\item $\mathcal{A}$ is the set of all possible actions.
+	\item T is the transition dynamics.
+	\item $\gamma$ is the discount factor.
+	\item $\mathcal{R}$ is the set of rewards.
+\end{itemize}  
+In a reinforcement learning problem setting, the goal is to find a policy $\pi$, which is a function that maps a state to action that maximizes the expected reward obtained.\\
+In contrast, in an inverse reinforcement learning problem setting, there is no reward function provided. Instead, we are provided with a set of expert demonstrations say D = \{$\tau_1$, $\tau_2$, ... \}. And the goal is to generate a reward function $\mathcal{R}$, that best explains the expert behavior and a policy that would maximize the reward function.
 
 
-
-Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more obvious choices to tackle the problem of social navigation. 
-The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive. In their work, \textbf{Socially aware motion planning with Deep RL, Chen et. al.} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent.
+\subsection*{RL based approaches}
+ In their work, \textbf{Socially aware motion planning with Deep RL, Chen et. al.} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent.
 The reward function primarily focuses on three different aspects of interaction: overtaking, passing and crossing. The reward they define is as follows:
 Equation 9
 They note that symmetry is one of the driving factors to incorporate social behavior, so they introduce a network architecture for symmetric multi-agent training.
 A picture of the symmetric network.
 
 \textbf{Collision avoidance in pedestrian-rich environments with deep reinforcement learning}
-\textbf{Social LSTM: Human Trajectory Prediction in Crowded Spaces}
+Addresses the drawback of the previous work, the inability to tackle variable number of agents in the environment. They address this by introducing a Long Short Term Memory (LSTM) based network architecture that takes as input the information from the nearby pedestrians in a sequence. This eliminates the need for specifying a limit on the number of nearby-agents the method can handle.\\
+The state comprises of two parts: 
+\begin{enumerate}
+	\item The information of the agent itself, \textbf{s}
+	\item The information from the other n number of agents present in the environment at a given time. This is where the LSTM comes in to play which takes the information from these n agents and passes them sequentially through an LSTM layer to generate a final hidden state which is concatenated with \textbf{s} to obtain the final state representation of the environment.
+\end{enumerate}
+\textbf{Pictures of the network architecture}
+\\
+The reward function used in this work is a relatively straight forward sparse reward structure with positive and negative feedback for reaching the goal or encountering a collision and \textbf{a reward function decay in near-collision states}.  
 
+\textbf{Conclusion}
+Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more obvious choices to tackle the problem of social navigation. 
+The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive.\\
 Nonetheless, coming up with socially compliant reward functions are hard. And so, the application of inverse RL seems almost too tempting to let go. A quick browse 
+\subsection*{IRL based approaches}
 \textbf{Learning approaches meet probabilistic road map style path planner.}
 
 
