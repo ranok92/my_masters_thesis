@@ -32,16 +32,17 @@ The state comprises of two parts:
 \\
 The reward function used in this work is a relatively straight forward sparse reward structure with positive and negative feedback for reaching the goal or encountering a collision and \textbf{a reward function decay in near-collision states}.  
 
-\textbf{Conclusion}
+\textbf{Conclusion}\\
 Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more obvious choices to tackle the problem of social navigation. 
-The catch with using RL in social navigation is the necessity to formulate a meaningful reward function to dictate the agents' behavior. Coming up with a concise set of rules can be hard as 'social norms' are somewhat elusive.\\
-Nonetheless, coming up with socially compliant reward functions are hard. And so, the application of inverse RL seems almost too tempting to let go. A quick browse 
+However, using RL in the task of social navigation necessitates the formulation of a reward function that can correctly capture the 'social and cultural' characteristics. Coming up with such a set of rules can be difficult and daunting as 'social norms' are not always explicit and can vary widely across different societies and even based on a given situation.\\
+
+And so, the application of inverse RL seems almost too tempting to let go. A quick browse 
 \subsection*{IRL based approaches}
 \textbf{Learning approaches meet probabilistic road map style path planner.}
 
 
 For all of the above work, be it a data-driven approach, or a model-based approach, there has been some kind of assumptions made on how the robot should behave, or what should it learn to not do. But from research (cite the work), it is known that trying to come up with this checklist is hard and even if many of the rules can be formulated, these vary a lot across different cultural settings and social norms. As a result, recent years have seen considerable interest in using inverse reinforcement learning to tackle the problem. IRL is the branch of reinforcement learning where the goal to get both a trained policy and an underlying reward function from a set of expert demonstrations.
-\textbf{Okal et al} in their work presents a comprehensive study of the effect of different feature representations on the performance of an agent.
+\textbf{Vasquez et al} in their work presents a comprehensive study of the effect of different feature representations on the performance of an agent.
 \textbf{Kim and pineau} use a similar idea, where they use expert demonstrations of controlling a wheelchair and use that to create a socially compliant agent for controlling a wheelchair which they take a step further by installing in a real wheelchair. 
 In one of the more recent works by \textbf{Fahad et. al.}, they present an inverse RL pipeline to train agents from demonstrations using maximum entropy IRL.
 The objective is to maximize the likelihood of observing the states visited by the expert, which is expressed as Equation 3.
