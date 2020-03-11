@@ -40,10 +40,12 @@ And so, the application of inverse RL seems almost too tempting to let go. A qui
 \subsection*{IRL based approaches}
 \textbf{Learning approaches meet probabilistic road map style path planner.}
 
+\textbf{Vasquez et al} in their work, present a comprehensive study on the effect of different feature representations and IRL methods on the performance of an agent in the task of social navigation. They examine two IRL methods:
+max-margin IRL and max entropy IRL.\\
+For the feature representations, they create a pool of measurements garnered from the state of the agent itself and the state of the other entities in the environment and combine individual entities to create 3 feature representations. \\
+They test all of these on a ROS based pedestrian simulator on 3 scenarios: airport gate, crossing hallway, and intersection. Expert demonstrations for these scenarios are obtained through teleoperation. They find that the performance across the two learning methods are similar. The feature representation, on the other hand, plays a major role in the final performance of the agent hence they conclude that one should spend more time and effort building better feature representations or come up with learning methods that aid in the simplification of building the feature representations.\\
 
-For all of the above work, be it a data-driven approach, or a model-based approach, there has been some kind of assumptions made on how the robot should behave, or what should it learn to not do. But from research (cite the work), it is known that trying to come up with this checklist is hard and even if many of the rules can be formulated, these vary a lot across different cultural settings and social norms. As a result, recent years have seen considerable interest in using inverse reinforcement learning to tackle the problem. IRL is the branch of reinforcement learning where the goal to get both a trained policy and an underlying reward function from a set of expert demonstrations.
-\textbf{Vasquez et al} in their work presents a comprehensive study of the effect of different feature representations on the performance of an agent.
-\textbf{Kim and pineau} use a similar idea, where they use expert demonstrations of controlling a wheelchair and use that to create a socially compliant agent for controlling a wheelchair which they take a step further by installing in a real wheelchair. 
+\textbf{Kim and pineau} use a similar idea, where they use expert demonstrations of controlling a wheelchair and use that to create a socially compliant agent for controlling a wheelchair which they take a step further by installing in a real wheelchair. \\
 In one of the more recent works by \textbf{Fahad et. al.}, they present an inverse RL pipeline to train agents from demonstrations using maximum entropy IRL.
 The objective is to maximize the likelihood of observing the states visited by the expert, which is expressed as Equation 3.
 Each demonstration, or trajectory, in this case, is effectively broken into a sum of the individual states encountered by the expert. The final update rule for the reward network is given by equation 6 
