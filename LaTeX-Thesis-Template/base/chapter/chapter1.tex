@@ -5,15 +5,15 @@
     \item Describe the problem of navigation.
     \item Describe the problem of social navigation and what how is it different from the problem of classical navigation.
 
-    \item What are the factors that make this problem hard to pin and thus hard to solve? Include works from the paper "Influence of proxemic behaviours in human-robot interaction. (Takayama et al)
+    \item What are the factors that make this problem hard to pin and thus hard to solve? Include works from the paper "Influence of proxemic behaviors in human-robot interaction. (Takayama et al)
     \item Set of works done before and how they try to approach the problem.
 \end{enumerate}
 
 \subsection*{Papers to inculde}
     \begin{enumerate}
-        \item Social forces model and its family (Reif and wang, helbing and Molnar).
+        \item Social forces model and its family (Reif and wang, Helbing and Molnar).
         \item Qualitative trajectory calculus
-        \item A framework towards a socially aware mobile robot motion in human ventered dynamic environment. - Pandey et al
+        \item A framework towards a socially aware mobile robot motion in a human ventured dynamic environment. - Pandey et al
         \item Dynamic window approach for reactive collision avoidance.
         \item Human aware mobile robot motion planner - Sisbot
         \item Trajectory planning for robots in dynamic human environments. Svenstrup
@@ -21,9 +21,9 @@
 
 
 
-In this chapter we will go through some of the classical methods/ model-based approaches that has been taken to tackle the problem of social navigation. We will start by briefly introducing some methods for tackling the problem of navigation and their limitations to accomplishing the task of social navigation and what measures were subsequently taken up to address it.
+In this chapter, we will go through some of the classical methods/ model-based approaches that have been taken to tackle the problem of social navigation. We will start by briefly introducing some methods for tackling the problem of navigation and their limitations to accomplishing the task of social navigation and what measures were subsequently taken up to address it.
 \subsubsection*{Khatib et al}
-In their work, Khatib et. al. introduce a path planner which they call artificial potential fields. The main idea behind the method is that the agent is moving through a place/field? where the goal exerts as an attractive force and the obstacle surfaces produces negative forces. The formulation of these forces are based on the distances between the agent and the goal/obstacle. The resulting controller, with proper hyperparameters does a fairly good job of navigating a scene and checking all the boxes of a good navigating agent. It reaches the goal and avoids the obstacles in the path to doing so. That being said, there were many drawbacks to this method, the most famous being getting stuck in a local minima, which were addressed by more sophisticated methods like probabilistic road-map based approaches (RRT Lavalle)
+In their work, Khatib et. al. introduce a path planner called artificial potential fields. The main idea behind the method is that the agent is moving through a place/field? where the goal exerts as an attractive force and the obstacle surfaces produce negative forces. The formulation of these forces is based on the distances between the agent and the goal/obstacle. The resulting controller, with proper hyperparameters, does a fairly good job of navigating a scene and checking all the boxes of a good navigating agent. It reaches the goal and avoids the obstacles in the path to doing so. That being said, there were many drawbacks to this method, the most famous being getting stuck in local minima, which were addressed by more sophisticated methods like probabilistic road-map based approaches (RRT Lavalle)
 \subsubsection*{Helbing and Molnar: Social Forces}
 
 Building on artificial potential fields, Helbing and Molnar in their work, Social force model for pedestrian dynamics. They introduce a way to model pedestrian behavior which works in a similar underlying principle as the 'potential fields' but varying the way the potential is calculated and is designed to encapsulate a richer set of information to imbibe 'social' behavior in the agent's movement.\\
@@ -80,7 +80,7 @@ Once the final cost grid is obtained, a path between two points on the grid is c
 
 \subsubsection*{Svenstrup et al}
 Lastly, we look into another body of work by Svenstrup et al, that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
-In their work, Trajectory planning for robots in dynamic human environment, Svenstrup et al takes on the problem of autonomous navigation in a social environment in a different approach. They use the idea of a potential field and combine that with a rapidly exploring random tree that take into account the robot kino-dynamics while planning future trajectory.
+In their work, Trajectory planning for robots in a dynamic human environment, Svenstrup et al take on the problem of autonomous navigation in a social environment in a different approach. They use the idea of a potential field and combine that with a rapidly exploring random tree that takes into account the robot kino-dynamics while planning future trajectory.
 Calculating the potential field:
 The calculation of the potential field is broken down to three parts:
 \begin{enumerate}
@@ -114,18 +114,19 @@ The navigation is represented as a minimization problem that aims to minimize th
 minimize \qquad I(\tilde{u}_{0:T}) = &\int_{0}^{T} [g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t))]dt + g_{3}(x(t))\\
 s.t. \qquad \qquad \dot{x}(t) = & f(x(t),u(t)) \\
 where \qquad g_{1}(x(t)) = &c_{y}x_{2}(t)^{2}\\
-		g_{2}((x(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\exp(-\frac{1}{2}[x_{1:2} - \mu_{j}]^{T}\sum^{-1}_{k}[x_{1:2} - \mu_{j}])\\
-		g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
+        g_{2}((x(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\exp(-\frac{1}{2}[x_{1:2} - \mu_{j}]^{T}\sum^{-1}_{k}[x_{1:2} - \mu_{j}])\\
+        g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
 \end{split}
 \end{align}
 The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
 
 \textbf{Their overall algorithm:????}
 
-General Conclusion:
-Most of these methods share are similar to the original potential field idea, the place they vary is that instead of using the more mechanical gravitational potentials as introduced by khatib, they use something which better encapsulates the nature of the human movement.
-In one sentence "they are good at what they do, but what they do is not good enough."
+\textbf{General Conclusion:}
+Most of the methods have similar lines of operation: they construct mathematical models using information from the environment that creates opposing forces that act on the agent in a way that enables the agent to move in a manner that is similar to a human in a meaningful way.
 
-Path planning methods have been around for quite some time now and 
+
+
+
 
 
