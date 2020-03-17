@@ -71,29 +71,30 @@ The reward obtained at a given time step.
 The done-flag:
 A flag that indicates the completion of an episode.
 Info:
-
+\subsection*{Additional features}
 In addition to the hallmarks of a regular gym environment, the environment comes with a set of options that provide added flexibility and customizations while training and evaluating IRL agents.
-\textbf{Training modes:}
+\subsubsection*{Training modes:}
 The environment supports 3 types of training modes depending on the need of the experiment. 
-Fixed respawn: The starting and goal position of the agent remains the same throughout the training process.
-Random respawn: For every episode, the agent and the goal spawn at random positions on the map. 
-Replace a pedestrian: For every episode, the agent assumes the role of a randomly selected pedestrian. Once a pedestrian is selected, the pedestrian is ignored as an obstacle for that episode. The initial position of the agent is set to the coordinated of the pedestrian in its first frame of appearance. Similarly, the goal is set to the coordinates of the pedestrian in the final frame.
-This mode is especially useful for training IRL models. The expert demonstrations used in the training are a set of trajectories that are a result of the pedestrian, its goal and surrounding obstacles being of a certain configuration. While it is fair of expecting the IRL agent to perform 'well' in all possible scenarios and not just in the cases seen by the experts, getting an agent to perform well on any general scenario is fairly dependent on the capability of the feature extractor in tandem with the learning method to generalize the states observed by the expert.  
+\begin{enumerate}
+	\item \textbf{Fixed respawn:} The starting and goal position of the agent remains the same throughout the training process.
+	\item \textbf{Random respawn:} For every episode, the agent and the goal spawn at random positions on the map. 
+	\item \textbf{Replace a pedestrian:} For every episode, the agent assumes the role of a randomly selected pedestrian. Once a pedestrian is selected, the pedestrian is ignored as an obstacle for that episode. The initial position of the agent is set to the coordinated of the pedestrian in its first frame of appearance. Similarly, the goal is set to the coordinates of the pedestrian in the final frame.
+	This mode is especially useful for training IRL models because demonstrations from expert for navigation are the optimal demonstrations for a particular setting of goal and obstacle. Placing the agent in the exact context enables the agent observe a similar state distribution as the expert, which helps maintaining the effectiveness of the expert demonstrations. 
+\end{enumerate}
 
 Features available for testing of the environment:
 As this environment was designed primarily for the development of IRL methods for navigation, it also comes with some built-in tools to test IRL methods.
-Deployment of the ghost:
-We know, IRL agents in a way learn from demonstrations. And creating meaning metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. Instead, one simple and effective way of performing a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. Using the deploy ghost option in tandem with the replace-subject option will replace the subject with the agent and simultaneously place a shadow of the original subject the agent replaced. This shadow or 'ghost' does not in any way impact the state of the agent and can be used for both qualitative and quantitative analysis of the performance of the agent. 
+\subsubsection*{Deployment of the ghost}
+We know, IRL agents in a way learn from demonstrations. And creating meaning metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. This shadow or 'ghost' does not in any way impact the state of the agent and can be used for both qualitative and quantitative analysis of the performance of the agent in comparison to the actual expert. 
 
-User control:
+\subsubsection*{User control}
 The environment also has a provision to let an external user control and agent and navigate the crowds. There might be cases where there are not enough expert demonstrations available to perform proper training. In that case, the size of the expert demonstration set can be bolstered by letting humans take control of the agent and generate more expert demonstrations. 
 
 The agent can be controlled by a mouse pointer and action is registered only at the time of the click of the left mouse button. Once a click is registered on the map, the direction and magnitude of the vector joining the current position and the location of the click are taken as the desired orientation and speed respectively.  
 The orientation action is then calculated based on the difference between the current direction of heading of the agent and comparing that with the desired direction. If there is a difference between the two, and a change in the current heading direction of the agent is warranted, then the action to inflict the change is then decided based on the magnitude and sign of the change needed relative to the current heading direction of the agent to minimize the difference.
 The speed action is also calculated in a similar manner, where the magnitude of the difference vector is treated as the desired speed, and based on the current speed of the agent action is taken to minimize the difference.
 
-For example:
-Let the current state of the agent be something and the position of the user click registered at time t is given by something. Let 
-
+\subsubsection*{Creating custom scenarios:}
+The environment has provisions to create custom dynamic scenarios, where the motion of each of the pedestrians can be predefined. This is a very handy tool for creating and testing the agents in situations that are hard to come across or simply unavailable in the available datasets.
 
 
