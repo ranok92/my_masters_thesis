@@ -1,28 +1,54 @@
-In this work, we present a data-driven IRL-based social navigation pipeline. An overview of the pipeline:
-
-
+In this work, we present a data-driven IRL-based social navigation pipeline.\\
+An overview of the pipeline:
+\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor and the other components}
 We will describe each component of the pipeline in greater detail.
 \section*{The IRL block:}
 Inverse reinforcement learning(IRL) or inverse optimal control(IOC) has been in vogue in recent years when it comes to training robots to perform real-world tasks. This is understandable as assigning rewards to individual states to illicit out desired behaviors is challenging. IRL provides a better alternative of obtaining the underlying reward function as well as a trained agent on the obtained reward function using demonstrations from the expert.
 
 To keep the chapter self-contained, we will briefly go over the definition of a Markov decision process, which is at the base of reinforcement and inverse reinforcement learning.
-A Markov decision process or MDP can be defined as a tuple {S, A, P, R, gamma} where,
-S is the set of all possible states,
-A is the set of all possible actions,
-P is the state transition matrix,
-R is the reward and gamma is the discount factor.
-As stated by Ziebart in their paper 2008, the objective of maxent IRL is to find a reward function that maximizes the probability of the states visited by the expert while maximizing the entropy of the model. The idea behind this is, select that reward function which, assigns similar rewards to states that have not been visited by the expert. This helps in reducing ambiguity in the reward function.
+A Markov decision process or MDP can be defined as a tuple ($\mathcal{S}$,$\mathcal{A}$,T,$\gamma$, $\mathcal{R}$)  where,
+\begin{itemize}
+	\item $\mathcal{S}$ is the set of all possible states.
+	\item $\mathcal{A}$ is the set of all possible actions.
+	\item T is the state transition dynamics, i.e. the probability of moving to a state given its previous state and action, $P(s^{'}|s,a)$ .
+	\item $\gamma$ is the discounting factor.
+	\item $\mathcal{R}$ is the set of rewards $R:  \mathcal{S} \mapsto \mathbb{R} $ is the reward function. In practice, instead of using the raw states, hand engineered features are extracted from the states with are then used to calculate the reward of a particular state. This alleviates a lot of complexity when dealing with large continuous state-spaces. 
+	\end{itemize}  
+The goal of the IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $D = \{ \tau_1, \tau_2, \tau_3, \dots, 
+\tau_{M} \}$ in the context of navigation. Each of these trajectories, in turn, can be further broken down into a collection of states $\tau_{i} = \{ s_{0}, s_{1}, s_{2}, \dots, s_{T} \}$ as visited by the expert in the trajectory. 
 
-The objective function.
-Going through the math, the objective function boils down to the minimization of the difference between the SVF of the agent and the expert.
+We base our work on Wulfmeier's paper, which in turn is a neural network adaptation of the work done by Ziebart 2008. 
+According to the max entropy formulation, the probability of the occurrence of a trajectory is directly proportional to the reward it receives.
+\begin{align}
+Entropy equation - Ziebart equation 2
+\end{align}
+and is equal to:
+\begin{align}
+equation with z
+\end{align}
+Given a set of expert demonstrations, an optimal reward structure should maximize the probability of the occurrence of the expert demonstrations and their associated states. Mathematically, this is given by 
+\begin{align}
+the equation for the loglikelihood-Ziebart equation 6
+\end{align}
+The original paper by Ziebart used a linear combination of weights as reward functions. But linear representations have limited capabilities when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier 2015 where they restructure the maxent IRL formulation using neural networks. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can encapsulate.
 
-The original paper by Ziebart used a linear combination of weights with the feature representation of the states to obtain a reward. Linear representation falls short when trying to express reward functions that cannot be expressed in linear combinations. This problem is addressed by Wulfmeier 2015 where they restructure the maxent IRL method using neural networks (universal function approximators).
+\begin{align}
+derive the gradient expression in equation 3 of iros paper
+\end{align}
 
-Change in the math due to swapping of the linear functions with neural networks.
+The original formulation of MEDIRL was in the context of a model-based setting and the state transition matrix was used to calculate the agent SVF. While this produces an exact value of the agent SVF, assuming the availability of the state transition matrix is fairly optimistic for most real-world tasks including navigation. In an attempt to make things less constrained we take the model-free approach and focus on calculating the SVF using sampling-based methods. 
+The SVF calculation:
+The main challenge going model free is the calculation of the Z value, which previously could be calculated using dynamic programming [citation of the paper]. 
+Under the assumption of a model-free but deterministic environment, the SVF of a deterministic policy can be reasonably computed by taking trajectory samples of the policy from the context of all the existing pedestrians in the scene. 
+\begin{align}
+equation 4 from iros2020
+\end{align}
+where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1}
+\begin{algorithm}
+	algorithm 1 from iros2020
+\end{algorithm}
 
-
-In their work, Wulfmeier assumed a model-based environment and used the state transition matrix to obtain the SVF of an agent, we find that a fairly generous assumption, as capturing the state dynamics of real-world environments can be quite challenging. Instead, we focus on calculating the SVF using sampling-based methods. The details on the calculation of the SVF is present in the next section. 
-
+For solving the MDP, we employ actor-critic methods, which we will describe in detail in the next section.
 \subsection*{Overview of the algorithm used}
 The algorithm trains for two networks, the reward network that, given the features of a state returns the reward associated with it,\\
 \textbf{equation}\\ stating this.
@@ -86,7 +112,7 @@ if theta > 90, that means the obstacle is moving away from the agent, and hence 
 
 One thing to note is the risk is calculated for individual obstacles present in the bin separately. And it is not uncommon to have more than one obstacle falling in different risk divisions from the same spatial bin. In that case, the risk value assigned to that bin is the highest risk posed among all the obstacles that fall under that spatial bin.
 
-\subsection*{The SVF calculation}:
+\section*{The SVF calculation}:
 Calculation of the agent SVF:
 Calculation of the expert SVF:
 Challenges of Inverse reinforcement learning in the task of social navigation:
