@@ -67,9 +67,14 @@ For solving the MDP, we employ actor-critic methods, which we will describe in d
 Actor-critic methods are a class of reinforcement learning algorithms that are built upon policy gradient methods. 
 In policy-gradient methods, the goal is to iteratively improve the performance of a given policy which is achieved by maximizing the expected return of the policy. Mathematically, the objective of a policy gradient method can be expressed as:
 \begin{align}
-maximize \;\;\;\; & \mathbb{E} [ R | \pi_{\theta} ] \\
-					   & \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\theta}] 
+maximize \;\; J( \theta )  &\; = \; \mathbb{E} [ R | \pi_{\theta} ] \\
+					   & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\theta}] 
 \end{align}
+where, $r_{t}$ is the reward obtained at time $t$ and $\pi_{\theta}$ is the policy with parameters $\theta$.\\
+This leads to an update function:
+\begin{align}
+\delta J ( \theta ) = 
+\end{align} 
 Vanilla policy gradient methods suffer from high biases because they do not have a normalizing factor for the second term. This is addressed by introducing a 
 baseline. 
 \begin{align}
@@ -85,12 +90,12 @@ The actor uses this information to update its policy distribution.
 \end{algorithm}
 
 
-\section*{The feature extractor}:
-The feature extractor is a vital component in the navigation pipeline as it acts as the medium using which the learning algorithm interacts with the environment something that provides the agent with the information/context to act upon. 
-We have tested with different feature representations and have found that it plays a vital role, as the feature representations provide the information to the agent on which we want them to base their decision on.
+\section*{The feature extractor}
+The feature extractor is a vital component in the navigation pipeline. It acts as the medium that enables the learning algorithm  to interact with the environment. We have tested with different feature representations and have found the choice and design of the feature extractor heavily influences the performance of the experiments.\\
 
-The feature extractor can primarily be broken down into 2 broad components: local information and global information. The local information, as the name suggests, uses the information from the nearby surroundings of the agent and captures that in a binary feature vector. This provides an approximate idea of the obstacles in the vicinity. The global information provides a rough direction of where the goal of the agent is. We believe that this provides the agent with a purpose of navigation, preventing it from just rambling around the map while the local information is used to avoid obstacles and maintain proper decorum while moving towards the goal.
-Although the environment publishes all the information that is there to know about the obstacles in the map, including their location, orientation and velocity, and also the exact coordinates of the goal location, we recognize that getting access to this kind of information in real life on a mobile robot navigating any given scene in the real world is extremely hard to obtain. 
+The information the feature extractor encapsulates can primarily be broken down into 2 broad components: local information and global information.\\ The local information, as the name suggests, comprises of the information from nearby surroundings of the agent captured in the form of a binary feature vector. This provides an approximate idea of the obstacles in the vicinity.\\
+ The global information, on the other hand, provides a rough direction of where the goal is with respect to the agent. This provides the agent with a purpose of navigation, preventing it from just rambling around the map while the local information is used to avoid obstacles and maintain proper decorum while moving towards the goal.\\
+ Another thing that the feature extractor helps in is keeping things real. The environment, by design, publishes all the information that is there to know about the obstacles in the map, including their location, orientation and velocity, and also the exact coordinates of the goal location. Having access to  information on a mobile robot navigating any given scene in the real world is extremely hard to obtain.
 This is again addressed by the feature extractor, which simultaneously acts as an information moderator, sorting information from the environment and presenting it in such a way that it can realistically be obtained by a mobile robot trying to navigate in the real world.
 Both the local and the global components along with their subcomponents are described in greater detail below.
 Talk about the relative orientation calculation
