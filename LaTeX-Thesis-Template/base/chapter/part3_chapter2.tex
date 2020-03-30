@@ -113,40 +113,126 @@ This acts as a compass, providing a rough estimate of the location of the goal b
 \end{figure}
 
 \subsubsection*{Change in orientation}
-Represented by a $4 \times 1$ one-hot vector, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The entire range of [0-180] is divided asymmetrically into 4 divisions. The rationale behind the uneven distribution is that empirically we have found that when humans move,  they do not tend to change their orientation drastically. And having a finer resolution in the lower range help capture the nuances in this behavior in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown below.
+Represented by a $5 \times 1$ one-hot vector, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The value ranges between $0 \degree$ -  $ 180 \degree$. This value is binned in one of 5 asymmetric bins. The rationale behind the uneven distribution is that empirically we have observed that human motion is smooth. So, the bins are constructed in a way to have a finer resolution in the lower range. This helps capture the nuances in the human motion in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown below.
 
-The deviation from goal: Represented by a 4x1 one-hot vector, the deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. This value can range from 0-180 which is equally divided into 4 bins as shown below.
+\begin{table}[htbp]
+	\caption{Bin thresholds orientation change features.}
+	\label{orientation-change-bins}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+			\hline
+			Feature & Threshold \\
+			\hline
+			$\phi_{O1}$ & $\alpha_{OC} \in \left[ 0 , \frac{\pi}{9} \right)$ \\
+			
+			$\phi_{O2}$ & $\alpha_{OC} \in \left[ \frac{\pi}{9} , \frac{2\pi}{9} \right)$ \\
+			
+			$\phi_{O3}$ & $\alpha_{OC} \in \left[ \frac{2\pi}{9} , \frac{3\pi}{9} \right)$ \\
+	
+			
+			$\phi_{O5}$ & $\alpha_{OC} \in \left[ \frac{3\pi}{9} , \frac{4\pi}{9} \right)$ \\
+			
+			$\phi_{O6}$ & $\alpha_{OC} \in \left[ \frac{4\pi}{9} , \pi \right)$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+\subsection*{Deviation from the goal}
+Represented by a $4 \times 1$ one-hot vector, the deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins, with greater emphasis is laid on the lower degrees due to reasons mentioned earlier.
 
+\begin{table}[htbp]
+	\caption{Bin thresholds for deviation from the goal.}
+	\label{deviation-from-goal-bins}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+			\hline
+			Feature & Threshold \\
+			\hline
+			$\phi_{GA1}$ & $\alpha_{GA} \in \left[ 0 , \frac{\pi}{8} \right)$ \\
+			
+			$\phi_{GA2}$ & $\alpha_{GA} \in \left[ \frac{\pi}{8} , \frac{\pi}{4} \right)$ \\
+			
+			$\phi_{GA3}$ & $\alpha_{GA} \in \left[ \frac{\pi}{4} , \frac{3\pi}{4} \right)$ \\
+			
+			$\phi_{GA4}$ & $\alpha_{GA} \in \left[ \frac{3\pi}{4} , \pi \right]$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\vspace{3cm}
 \subsection*{The local information}
-The purpose of the local information is to cram is as much information as possible in the most succinct way. Taking inspiration from previous works in this field, we have used spatial bins to effectively break the region surrounding the agent into discrete parts.
+Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively break the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
 
-Creation of the bins:
-There are two layers of spatial bins surrounding the agent and is denoted by constructing two concentric circles around the agent. The region between the agent and the inner circle is then broken into 8 equal divisions and they comprise of bin 1-8. Similarly, the region between the first and the second bin is again divided into 8 equal divisions which form bins 9-16.
-Calculation of the risk:
-'Risk' is a term we concoct to measure much of a  threat the agent is facing at a given time from any of these bins. Here 'threat' can loosely be seen as a measure of the possibility of hitting an obstacle. The higher the threat, the greater the chance that if the agent and the obstacles continue on their current course it will end in a collision.
-The 'risk' can be seen in 3 levels:
-high low and something in between.
-High risk:
-When the relative motion of an obstacle is towards the agent.
-Low risk:
+\subsubsection*{Creation of the bins}
+There are 16 spatial bins surrounding the agent. They are arranged in two concentric circles around the agent. The region between the agent and the inner circle is then broken into 8 equal divisions. These form bins from 1 - 8. Similarly, the region between the first and the second bin is again divided into 8 equal divisions which form bins 9 - 16.
+\subsubsection*{Calculation of the risk}
+'Risk' is a term we label the 'threat' the agent faces at a given time from any of these bins. Here 'threat' can loosely be seen as a measure of the possibility of hitting an obstacle. The higher the threat, the greater the chance that if the agent and the obstacles continue on their current course it will end in a collision.
+The 'risk factor' is divided in 3 levels: high, low and something in between.
+\begin{itemize}
+	\item High risk:
+When the relative motion of an obstacle is towards the agent and can lead to a collision if not intervened.
+	\item Low risk:
 When the relative motion of an obstacle is away from the agent.
-Med risk:
-If not any of the above, it is classified as medium risk.
-Mathematically, they are calculated as follows:
+	\item Med risk:
+Anything in between
+\end{itemize}
+The calculation of the risk values are based on the following entities:
+\begin{align}
+	\vec{o}_{rel} = & \;\; \vec{o}_{obs} - \vec{o}_{agent}  \\
+	\vec{d}_{rel} =  &\;\; \vec{d}_{agent} - \vec{d}_{obs} \\
+	\theta_{risk} =  & \;\; \angle (\vec{o}_{rel}, \vec{o}_{rel}) \\
+	\mathbf{s}_{obs} = & \;\; \tan(\theta_{risk}) \times |\vec{d_{rel}}| \\
+	\mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
+\end{align}
+where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated \textbf{safety margin} between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
+An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-threshold-table}
 
-relative orient = obs orientation - agent orientation
-relative distance = agent position - obs position
-Let the angle between the two vectors is theta, then it is classified as high risk when
-theta is less than 90 and tan theta * relative distance < threshold
-where the threshold depends on the radius of the agent and that of the obstacle at hand.
-if theta > 90, that means the obstacle is moving away from the agent, and hence chances of collision with the agent are highly unlikely resulting in the classification of low risk.
+\begin{table}[htbp]
+	\caption{Thresholds for calculating risk.}
+	\label{risk-threshold-table}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+			\hline
+			Risk value & Risk condition \\
+			\hline
+			High & $\theta < 90\degree$ \&  $\mathbf{s}_{obs}$ < $\mathbf{T}$   \\
+			
+			Low & $\theta > 90\degree$\\
+			
+			Medium & otherwise \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+The risk value of each bin is represented using a $3 \times 1$ one-hot vector. One thing to note is the risk is calculated for individual obstacles present in the bin separately. And it is not uncommon to have more than one obstacle falling in different risk divisions from the same spatial bin. In that case, the risk value assigned to that bin is the highest risk posed among all the obstacles that fall under that spatial bin.
+\begin{figure}[!htbp]
+	\text{Graphics that shows each of the risk conditions}
+\end{figure}
 
-One thing to note is the risk is calculated for individual obstacles present in the bin separately. And it is not uncommon to have more than one obstacle falling in different risk divisions from the same spatial bin. In that case, the risk value assigned to that bin is the highest risk posed among all the obstacles that fall under that spatial bin.
+\section*{The SVF calculation}
+One of the main challenges of IRL is calculating the expected state distribution of a given RL trained agent. (equation x). In model-based environments, this can be calculated using dynamic programming \cite{wulfmeier-deepirl}. We find the assumption of the access to the state transition matrix for a real world setting a bit too ambitious and instead assume a model-free but deterministic environment. \textbf{Explanation as to why this is a reasonable assumption} This is a reasonable assumption in the context of a navigation problem because, the movements of pedestrians in general are inherently deterministic and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
 
-\section*{The SVF calculation}:
-Calculation of the agent SVF:
-Calculation of the expert SVF:
-Challenges of Inverse reinforcement learning in the task of social navigation:
-
+The lack of state dynamics forces us to look into sampling techniques to get a reasonable estimate of the svf. While this can be time consuming and computationally expensive, the problem is drastically simplified with greedy policies. (greedy soft actor critic).\textbf{Why?} 
+Svf calculation for an agent following a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \ref{agent-approx}
+\begin{align}
+\label{agent-approx}
+\text{Equation to calculate the state visitation frequency}
+\end{align}
+Another thing we experiment with is smoothing of the svf. \\
+\textbf{Why smoothing?}\\
+To explicitly take into consideration the uncertainty that might arise due to measurements from on-board sensors. The goal : instead of assigning increasing the SVF value for a given state by $1$ on observation, get a probability distribution of all the nearby states that might be occurring given the observed state and use that distribution to update the SVF instead.\\
+\textbf{Equations to describe the smoothing process.}
+As the state vector is composed of different components, the probabilistic distribution is applied to each of the components separately.
+\begin{itemize}
+	\item Smoothing of the goal.
+	\item Smoothing of the deviation from goal.
+	\item Smoothing of the change in orientation.
+	\item Smoothing of the risk information.
+	\item Smoothing of the speed information.
+\end{itemize}
 
 
