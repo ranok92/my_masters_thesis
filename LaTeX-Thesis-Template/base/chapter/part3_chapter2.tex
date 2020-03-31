@@ -214,17 +214,22 @@ The risk value of each bin is represented using a $3 \times 1$ one-hot vector. O
 \end{figure}
 
 \section*{The SVF calculation}
-One of the main challenges of IRL is calculating the expected state distribution of a given RL trained agent. (equation x). In model-based environments, this can be calculated using dynamic programming \cite{wulfmeier-deepirl}. We find the assumption of the access to the state transition matrix for a real world setting a bit too ambitious and instead assume a model-free but deterministic environment. \textbf{Explanation as to why this is a reasonable assumption} This is a reasonable assumption in the context of a navigation problem because, the movements of pedestrians in general are inherently deterministic and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
+One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (svf) of a given agent. (equation x). In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier-deepirl}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. \textbf{Explanation as to why this is a reasonable assumption} This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians in general are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
 
-The lack of state dynamics forces us to look into sampling techniques to get a reasonable estimate of the svf. While this can be time consuming and computationally expensive, the problem is drastically simplified with greedy policies. (greedy soft actor critic).\textbf{Why?} 
+Due to the lack of state dynamics we use sampling techniques to get a \textbf{good} estimate of the svf. While this can be time consuming and computationally expensive, the problem is drastically simplified when using greedy policies. (greedy soft actor critic).\textbf{Why?} 
 Svf calculation for an agent following a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \ref{agent-approx}
 \begin{align}
 \label{agent-approx}
 \text{Equation to calculate the state visitation frequency}
 \end{align}
-Another thing we experiment with is smoothing of the svf. \\
-\textbf{Why smoothing?}\\
-To explicitly take into consideration the uncertainty that might arise due to measurements from on-board sensors. The goal : instead of assigning increasing the SVF value for a given state by $1$ on observation, get a probability distribution of all the nearby states that might be occurring given the observed state and use that distribution to update the SVF instead.\\
+We also introduce a \textbf{smoothing technique} for the calculated svf. \\
+\textbf{What is smoothing?}\\
+ The goal : instead of assigning increasing the SVF value for a given state by $1$ on observation, get a probability distribution of all the nearby states that might be occurring given the observed state and use that distribution to update the SVF instead.\\
+ \textbf{Why smoothing?}
+ Two fold use:\\
+ To explicitly take into consideration the uncertainty that might arise due to measurements from on-board sensors.\\
+ Not all states are equally different from each other. \textbf{An example.} This is accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only.  
+  
 \textbf{Equations to describe the smoothing process.}
 As the state vector is composed of different components, the probabilistic distribution is applied to each of the components separately.
 \begin{itemize}
