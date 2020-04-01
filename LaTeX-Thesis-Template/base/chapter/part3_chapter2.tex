@@ -163,25 +163,24 @@ Represented by a $4 \times 1$ one-hot vector, the deviation from goal captures t
 \end{table}
 
 \subsubsection*{Speed}
-The current speed of the agent is quantized and represented with a $ 6 \times 1$ one-hot feature vector. 
-The divisions are shown in the Table \ref{speed-division}
+The entire range of all possible speed values are divided into 6 divisions and the current speed of the agent is represented by a $ 6 \times 1$ one-hot feature vector. The entire range of possible speeds are divided into 6 divisions with each division corresponding to an element of the one-hot vector.
 
-\begin{table}[htbp]
-	\caption{Thresholds for the qantization of the speed of the agent.}
-	\label{deviation-from-goal-bins}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|}
-			\hline
-			Raw speed & Speed bin \\
-			\hline
-			0 - 0.2 & 0 \\
-			0.2 - 0.4 & 1 \\
-			0.4 - 0.6 & 2 \\
-			\hline
-		\end{tabular}
-	\end{center}
-	\end{table}
+%\begin{table}[htbp]
+%	\caption{Thresholds for the qantization of the speed of the agent.}
+%	\label{deviation-from-goal-bins}
+%	\begin{center}
+%		\renewcommand{\arraystretch}{1.3}
+%		\begin{tabular}{|c|c|}
+%			\hline
+%			Raw speed & Speed bin \\
+%			\hline
+%			0 - 0.2 & 0 \\
+%			0.2 - 0.4 & 1 \\
+%			0.4 - 0.6 & 2 \\
+%			\hline
+%		\end{tabular}
+%	\end{center}
+%	\end{table}
 
 \subsection*{The local information}
 Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively break the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
@@ -248,8 +247,8 @@ In the traditional way of calculating the SVF, the observation of a given state 
 Instead for a single observation, we opt for the increment in the visitation frequency of a set of neighboring states based on the closeness of the neighboring states to the state observed. Here smoothing is defined as the distribution of the visitation weight of a state over its set of neighboring states based on their spatial similarity.\\
 \textbf{Why smoothing?}
 Having a 1 to 1 mapping between the observation and the increment of the SVF misses out on the fact that not all states \textit{are equally different.} \textbf{differ from each other in equal magnitude} \\
-\textbf{An example}
-This is accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only. \\ 
+\textbf{For example:} consider 3 different states, which differ only in their goal location component. Now, if two of the states indicated the goal to be in the $2^{nd}$ spatial bin and $3^{rd}$ spatial bin, then the difference between these two states are smaller than a $3^{rd}$ state where the goal is in the $6^{th}$ bin.
+This inequality in the differences among different states are accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only. \\ 
 \textbf{How smoothing?}
 The state vector comprises of different components, and the 'smoothed' state is obtained by convolving a smoothing kernel to each of them separately. The values used in the kernel, and the type of convolution applied depends on the nature of the spatial division the feature represents and is summarised in the Table \ref{conv-table}.
 
