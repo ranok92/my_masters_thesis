@@ -162,7 +162,27 @@ Represented by a $4 \times 1$ one-hot vector, the deviation from goal captures t
 	\end{center}
 \end{table}
 
-\vspace{3cm}
+\subsubsection*{Speed}
+The current speed of the agent is quantized and represented with a $ 6 \times 1$ one-hot feature vector. 
+The divisions are shown in the Table \ref{speed-division}
+
+\begin{table}[htbp]
+	\caption{Thresholds for the qantization of the speed of the agent.}
+	\label{deviation-from-goal-bins}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+			\hline
+			Raw speed & Speed bin \\
+			\hline
+			0 - 0.2 & 0 \\
+			0.2 - 0.4 & 1 \\
+			0.4 - 0.6 & 2 \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+
 \subsection*{The local information}
 Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively break the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
 
@@ -188,11 +208,11 @@ The calculation of the risk values are based on the following entities:
 	\mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
 \end{align}
 where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated \textbf{safety margin} between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
-An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-threshold-table}
+An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
 
 \begin{table}[htbp]
-	\caption{Thresholds for calculating risk.}
-	\label{risk-threshold-table}
+	\caption{Categorization of the risk.}
+	\label{risk-categorization-table}
 	\begin{center}
 		\renewcommand{\arraystretch}{1.3}
 		\begin{tabular}{|c|c|}
@@ -222,22 +242,35 @@ Svf calculation for an agent following a greedy policy in a deterministic enviro
 \label{agent-approx}
 \text{Equation to calculate the state visitation frequency}
 \end{align}
-We also introduce a \textbf{smoothing technique} for the calculated svf. \\
+Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
 \textbf{What is smoothing?}\\
- The goal : instead of assigning increasing the SVF value for a given state by $1$ on observation, get a probability distribution of all the nearby states that might be occurring given the observed state and use that distribution to update the SVF instead.\\
- \textbf{Why smoothing?}
- Two fold use:\\
- To explicitly take into consideration the uncertainty that might arise due to measurements from on-board sensors.\\
- Not all states are equally different from each other. \textbf{An example.} This is accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only.  
-  
-\textbf{Equations to describe the smoothing process.}
-As the state vector is composed of different components, the probabilistic distribution is applied to each of the components separately.
-\begin{itemize}
-	\item Smoothing of the goal.
-	\item Smoothing of the deviation from goal.
-	\item Smoothing of the change in orientation.
-	\item Smoothing of the risk information.
-	\item Smoothing of the speed information.
-\end{itemize}
+In the traditional way of calculating the SVF, the observation of a given state contributes to the increment of the visitation frequency of that state by 1. 
+Instead for a single observation, we opt for the increment in the visitation frequency of a set of neighboring states based on the closeness of the neighboring states to the state observed. Here smoothing is defined as the distribution of the visitation weight of a state over its set of neighboring states based on their spatial similarity.\\
+\textbf{Why smoothing?}
+Having a 1 to 1 mapping between the observation and the increment of the SVF misses out on the fact that not all states \textit{are equally different.} \textbf{differ from each other in equal magnitude} \\
+\textbf{An example}
+This is accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only. \\ 
+\textbf{How smoothing?}
+The state vector comprises of different components, and the 'smoothed' state is obtained by convolving a smoothing kernel to each of them separately. The values used in the kernel, and the type of convolution applied depends on the nature of the spatial division the feature represents and is summarised in the Table \ref{conv-table}.
 
-
+\begin{table}
+	\caption{Table showing the details of the convolution used for smoothing the state feature vector.}
+	\label{conv-table}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Feature component & Convolution Kernel & Convolution type\\
+			\hline
+			Relative goal orientation & $ [0.1, \;0.8, \; 0.1 ]$ & Wrap  \\
+			
+			Change in orientation & $[ 0.1, \; 0.8; \;0.1 ]$ & Same \\
+			
+			Deviation from goal & $[0.9,\; 0.1]$, $[0.1,\; 0.9]$,
+									      $[0.05, \; 0.9, \; 0.05]$, $[0.1,\; 0.9]$ & Same \\
+			Local spatial bins & $[ 0.1, \; 0.8,\;0.1 ]$ & Wrap \\
+			Speed info & $[ 0.1, \; 0.8,\;0.1 ]$  & Same \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
