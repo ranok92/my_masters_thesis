@@ -1,0 +1,28 @@
+The types of experiments conducted:
+
+To test the generalization capabilities of our method we train on the expert demonstrations from one of the videos and test it on data from different videos.
+
+\begin{itemize}
+        \item Training and testing on the same annotation file.
+        \item Training and testing on different annotation files.
+        \item Testing on custom scenarios.
+\end{itemize}
+
+For each of the test videos above we compare the following metrics:
+\begin{itemize}
+        \item \textbf{Reaching the goal:} The ability to reach a goal from a given position is one of the most basic and important criteria to measure the performance of a navigating agent. It is calculated as the percentage of runs per 
+        \item \textbf{Distance to displacement ratio:} This metric captures the efficiency of the path an agent takes to move between two points. It is calculated as the ratio between the euclidian distance between the two points and the distance traveled by the agent to move between the two. So, for two agents moving from the same start and endpoints, given both of them are successful in reaching the goal, the agent taking a more direct path, is rated better than the other. (The results are shown in the form of histogram plots)
+        \item \textbf{Minimum distance over time graphs:} Indicates the minimum distance maintained by an agent throughout its entire trajectory. It can be thought of as a measure of how 'dangerously' or 'cautiously' an agent behaves while interacting with neighboring obstacles. (line graphs over time frame)
+        \item \textbf{Avg smoothness:} Trajectories traced by people are smooth with rare occurrences of drastic change in the heading direction. This metric measures how much an agent changes its heading direction, thus the smoothness of its trajectory while negotiating obstacles or navigating in general. (bar plots with error bars.)
+        \item \textbf{Drift analysis plots: }This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian, and is calculated as the MSE between the points on the trajectory of the agent and the pedestrian(ground truth)at each time frame. It is a measure of how much the trajectory traced by an agent conforms to the trajectory traced by the actual pedestrian when subjected to similar conditions. (line graphs with error bars)
+        \item \textbf{Traced trajectory of multiple agents for a particular pedestrian:} Primarily a visual tool to see how an agent performs in comparison to the ground truth.
+\end{itemize}
+Participating agents:
+\begin{itemize}
+        \item Potential fields.
+        \item RL DroneFeatures
+        \item IRL DroneFeatures Non smoothing
+        \item IRL DroneFeatures Smoothing
+        \item Vasquez features 1,2, and 3
+        \item Fahad features.
+\end{itemize}
