@@ -1,6 +1,29 @@
-The types of experiments conducted:
+\subsection{Structure of the section}
+Overview stating the goals we want to convey though the experiment section. The what and how of the experiments.
+\subsubsection*{Overview}
+In this chapter we perform various qualitative and quantitative evaluations to showcase the performance of our method compared to others. In the first half we pitch our IRL method to a classical agent and a RL based agent trained in similar setting and a simple yet dense hand crafted reward function. Feature representations play a vital role in an IRL pipeline and so we follow it up by comparing the performance of IRL agents trained in similar setting but different feature representations.
+Next, we check the generalizability of our setup and compare the performance of our agent between scenes on which it was trained and scenes on which it wasnt trained (real-life videos as well as custom scenarios)
+We understand that getting tricky situations in general from realworld video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced qualitative behaviours of the IRL and how that differs to that of the RL.
 
-To test the generalization capabilities of our method we train on the expert demonstrations from one of the videos and test it on data from different videos.
+Lastly, we look into the reward function: the second, and unfortunately, in most of the cases ignored part to of the equation. We try to visualize and interpret the reward function in an attempt to get a better insight into the functioning of our agent.
+
+\subsubsection*{Description of the scenario}
+
+\subsubsection*{Description of the training parameters?}
+
+\subsubsection*{Description of the other feature extractors}
+\subsubsection*{Description of the metrics used}
+What do we want to show? 
+\begin{enumerate}
+	\item Justify the use of IRL over RL or traditional methods.
+	\item Establish the superiority of the feature representation over other
+	\item Show that the smoothing affects the performance of the agent in a positive way.
+	\item Show the generalizability of the method. (Compare the performance metrics of the agent in the two different scenarios.)
+	\item Another benefit of IRL is the availability of the reward network. Visualization and comprehension of the reward network. 
+\end{enumerate}
+How do we show?
+
+To test the generalization capabilities of our method we train on the expert demonstrations from lone of the video and test it on data from different scenarios.
 
 \begin{itemize}
         \item Training and testing on the same annotation file.
@@ -26,3 +49,4 @@ Participating agents:
         \item Vasquez features 1,2, and 3
         \item Fahad features.
 \end{itemize}
+Visualization of the cost maps at different time frames.
