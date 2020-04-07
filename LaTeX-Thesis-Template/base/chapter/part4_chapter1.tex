@@ -1,17 +1,50 @@
 \subsection{Structure of the section}
 Overview stating the goals we want to convey though the experiment section. The what and how of the experiments.
 \subsubsection*{Overview}
-In this chapter we perform various qualitative and quantitative evaluations to showcase the performance of our method compared to others. In the first half we pitch our IRL method to a classical agent and a RL based agent trained in similar setting and a simple yet dense hand crafted reward function. Feature representations play a vital role in an IRL pipeline and so we follow it up by comparing the performance of IRL agents trained in similar setting but different feature representations.
-Next, we check the generalizability of our setup and compare the performance of our agent between scenes on which it was trained and scenes on which it wasnt trained (real-life videos as well as custom scenarios)
-We understand that getting tricky situations in general from realworld video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced qualitative behaviours of the IRL and how that differs to that of the RL.
+In this chapter we perform various qualitative and quantitative evaluations to showcase the performance of our method compared to others. All the experiments are conducted in the in-house built simulator described in Section \ref{section}. There are a lot of choices regarding methods and features that has been made, and we try to evaluate each of these choices against the existing literature.\\
+The first subsection provides a comparison among our IRL method, a classical agent and a RL based agent trained in similar setting using a simple yet dense hand-crafted reward function.\\
+ Feature representations play a vital role in an IRL pipeline and so, the following section compares the performance of IRL agents trained in similar setting but different feature representations.\\
+This is followed by a set of experiments to evaluate the generalizability of our setup, where the performance of an agent is compared between a known and an unknown environment. Here "known" is defined as the environment from which the expert demonstrations have been collected.\\
 
-Lastly, we look into the reward function: the second, and unfortunately, in most of the cases ignored part to of the equation. We try to visualize and interpret the reward function in an attempt to get a better insight into the functioning of our agent.
+Getting tricky scenarios that help showcase the subtle qualitative aspects of a navigating agent from real-world video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced qualitative behaviors of the IRL and how that differs to that of the RL.
+
+The last subsection, looks into the reward function: the second, and unfortunately, in most of the cases, ignored part of the equation. We try to visualize and interpret the reward function in an attempt to get a better insight into the functioning of our agent.
 
 \subsubsection*{Description of the scenario}
+To train our agent we select demonstrations from the UCY university students dataset \cite{ucy-dataset-university-students}. It consists of trajectories of 430 different pedestrians on a relatively busy area captured over a time span of 3 minutes and 37 seconds. The video is captured at 25 fps resulting in a total of 5400 frames. The length of the trajectories vary from $the min$  to $the max$ with an average of 406 frames per trajectory. 
+\begin{figure}
+	\caption {Distribution of pedestrian trajectory length}
+\end{figure}
+There are a few key properties that makes this environment challenging: dense crowd, open space so lack of any constrain offered by spaces like narrow pathways, as because open space pedestrians(obstacles) can and does come from different directions making the process of negotiating such crowds rather challenging. 
 
+%\begin{table}
+%	\caption {Table containing useful information on the what is useful}
+%	\label{university-students-stats}
+%		\begin{center}
+%		\renewcommand{\arraystretch}{1.3}
+%		\begin{tabular}{|c|c|}
+%			\hline
+%			Property  & Value \\
+%			\hline
+%			Number of pedestrians &    \\
+%			Avg trajectory length &  \\
+%			 & $\theta > 90\degree$\\
+%			
+%			Medium & otherwise \\
+%			\hline
+%		\end{tabular}
+%	\end{center}
+%\end{table} 
 \subsubsection*{Description of the training parameters?}
 
+The MEDIRL pipeline is run for 100 epochs. The AC2 \cite{ac2} training for the inner loop is run for a predefined fixed number of episodes where an episode terminates when the agent reaches the goal, hits an obstacle or exceeds a predefined maximum number of frames per episode. Both the policy and reward networks have a simple architecture with a single 256 dimensional hidden node with exponential linear unit (ELU) \cite{exponential-linear-unit} as the activation function and adaptive moment estimation (Adam) \cite{adaptive-moment-estimation} as the choice of optimizer. The learning rate for the policy and reward network are set to $0.001$ and $0.0005$ respectively.
+
 \subsubsection*{Description of the other feature extractors}
+To test for the efficacy of our features, we compare agents trained on our training pipeline with different existing feature representations. \cite{fahadLearningHowPedestrians2018a}, \cite{vasquezInverseReinforcementLearning2014a} We use a modified version of the feature representation as depicted b
+\textbf{Fahad}\\
+
+\textbf{Vasquez}\\
+
 \subsubsection*{Description of the metrics used}
 What do we want to show? 
 \begin{enumerate}
