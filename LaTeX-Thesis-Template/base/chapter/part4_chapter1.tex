@@ -1,8 +1,9 @@
 \subsection{Structure of the section}
 Overview stating the goals we want to convey though the experiment section. The what and how of the experiments.
+\section*{Experiments}
 \subsubsection*{Overview}
 In this chapter we perform various qualitative and quantitative evaluations to showcase a comprehensive performance comparison of our method to others. All the experiments are conducted in the in-house built simulator described in Section \ref{section}. There are a lot of choices regarding methods and features that has been made, and we try to evaluate each of these choices against the existing work.\\
-The first subsection provides a comparison among our IRL method, a classical agent and a RL based agent trained in similar setting using a simple yet dense hand-crafted reward function.\\
+The first subsection provides a comparison among our IRL method, a classical agent and a RL based agent trained in similar setting using a simple yet dense hand-crafted reward function. This helps in demonstrating the difference in performance of agents coming from different training methods.\\
  Feature representations play a vital role in an IRL pipeline and so, the following section compares the performance of IRL agents trained in similar setting but different feature representations.\\
 This is followed by a set of experiments to evaluate the generalizability of our setup, where the performance of an agent is compared between a known and an unknown environment. Here "known" is defined as the environment from which the expert demonstrations have been collected.\\
 
@@ -39,12 +40,7 @@ There are a few key properties that makes this environment challenging: dense cr
 
 The MEDIRL pipeline is run for 100 epochs. The AC2 \cite{ac2} training for the inner loop is run for a predefined fixed number of episodes where an episode terminates when the agent reaches the goal, hits an obstacle or exceeds a predefined maximum number of frames per episode. Both the policy and reward networks have a simple architecture with a single 256 dimensional hidden node with exponential linear unit (ELU) \cite{exponential-linear-unit} as the activation function and adaptive moment estimation (Adam) \cite{adaptive-moment-estimation} as the choice of optimizer. The learning rate for the policy and reward network are set to $0.001$ and $0.0005$ respectively.
 
-\subsubsection*{Description of the other feature extractors}
-To test for the efficacy of our proposed risk-based feature representation, we test agents trained on our training pipeline with different existing feature representations. For this, we use feature representations proposed in \cite{fahadLearningHowPedestrians2018a} and \cite{vasquezInverseReinforcementLearning2014a} with some minor modifications and adjustments.\\
-\textbf{Fahad}\\
-Due to an underwhelming performance of the originally proposed SAM feature representation from \cite{fahadLearningHowPedestrians2018a} in our environmental setup, we substitute the part of the feature representation accommodating the goal information originally proposed by the authors with our goal representation. We call this modified version the 'Goal conditioned SAM'.
-\textbf{Vasquez}\\
-We use the feature sets $\mathcal{F}_1$, $\mathcal{F}_2$ and $\mathcal{F}_3$ from \cite{vasquezInverseReinforcementLearning2014a} and as before substitute their goal information with our goal information.
+
 \subsubsection*{Description of the metrics used}
 %What do we want to show? 
 %\begin{enumerate}
@@ -73,12 +69,87 @@ To get a comprehensive comparison of the performance of the agents, we compare t
         \item \textbf{Traced trajectory of multiple agents for a particular pedestrian:} Primarily a visual tool to see how an agent performs in comparison to the ground truth.
 \end{itemize}
 
+\section*{Results and discussion}
 \subsection*{Testing the performance against other methods}
+Here we compare an agent trained using our IRL pipeline to two different agents: a data driven RL agent and a model based potential-field controller. The RL agent is trained in the same environment as the IRL using similar training hyper-parameters and network architecture with a dense reward function shown in Table  \ref{table:reward-function-summarization}.
+\begin{table}
+	\caption{Summary of reward function for RL agent}
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+		\hline
+		Condition & Reward assigned \\
+		\hline
+		Reach goal & 1 \\
+		Hit obstacle & -1 \\
+		Move towards goal & $0.01 \times \text{length of the step}$ \\
+		Move away from goal & $ -0.01 \times \text{length of the step}$\\
+		\hline
+		\end{tabular}
+	\end{center}
+	\label{tab:reward-function-summarization}
+\end{table}\\
+\vspace{5cm}
+The implementation of the potential field controller is based on \cite{khatib-potential-field}.\\  
+\begin{figure}
+	\centering
+	\caption{Reaching the goal metric comparing the performance of RL v PF v IRL}
+		\includegraphics[width=0.6\linewidth]{plots/inter_method/goal_reached.png}
+	\label{fig:inter-method-reach-goal}
+\end{figure}\\
+In Figure \ref{image1} we see that
+\begin{figure}
+	\centering
+	\caption{Comparison of the number of runs in which an agents hits a pedestrian}
+	\includegraphics[width=0.6\linewidth]{plots/inter_method/hit_pedestrian.png}
+	\label{fig:inter_method-hit_pedestrian}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\caption{Total change in orientation of different agents.}
+	\includegraphics[width=0.6\linewidth]{plots/inter_method/change_in_orientation_total.png}
+	\label{fig:inter_method-change_in_orientation_total}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+	\caption{Average change in orientation per frame of different agents}
+	\includegraphics[width=0.6\linewidth]{plots/inter_method/change_in_orientation_avg.png}
+	\label{fig:inter_method-change_in_orientation_avg}
+\end{figure}
+
+
+\begin{figure}[!htbp]
+	\centering
+	\caption{Drift analysis}
+	\includegraphics[width=0.6\linewidth]{plots/inter_method/drift_pf_irl_rl.png}
+	\label{fig:inter_method-drift_analysis}
+\end{figure}
 
 \subsection*{Testing the performance of our feature representation against pre existing ones}
+\subsubsection*{Description of the other feature extractors}
+To test for the efficacy of our proposed risk-based feature representation, we test agents trained on our training pipeline with different existing feature representations. For this, we use feature representations proposed in \cite{fahadLearningHowPedestrians2018a} and \cite{vasquezInverseReinforcementLearning2014a} with some minor modifications and adjustments.\\
+\textbf{Fahad}\\
+Due to an underwhelming performance of the originally proposed SAM feature representation from \cite{fahadLearningHowPedestrians2018a} in our environmental setup, we substitute the part of the feature representation accommodating the goal information originally proposed by the authors with our goal representation. We call this modified version the 'Goal conditioned SAM'.
+\textbf{Vasquez}\\
+We use the feature sets $\mathcal{F}_1$, $\mathcal{F}_2$ and $\mathcal{F}_3$ from \cite{vasquezInverseReinforcementLearning2014a} and as before substitute their goal information with our goal information.\\
+\textbf{Discuss the results}
+
+\begin{figure}[!htbp]
+	\centering
+	\caption{text}
+	\label{feature-rep-comparison-reach-goal}
+	\includegraphics[width=0.7\linewidth]{plots/inter_IRL/drift_analysis_irl.png}
+\end{figure}
+
+
+
 
 \subsection*{Testing for generalization}
-
+Description of the other dataset.
+Discussion of the results.
 \subsection*{Testing on custom scenarios}
 
 \subsection*{Understanding the reward function}
