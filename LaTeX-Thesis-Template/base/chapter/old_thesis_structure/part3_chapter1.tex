@@ -1,0 +1,101 @@
+\section{The environment}
+
+\textbf{General description of the environment:}\\
+
+We present a highly customizable environment for social navigation and portray the world as a rectangular area of land viewed from a top-down perspective (bird's eye view). It adopts the template of a regular OpenAI gym environment and is built using Pygame.
+The size of the map and can be set by altering the rows and columns during initialization. These values denote the size of the map in pixels.
+
+The environment follows the image coordinate system: with the center at the top left corner and each position on the map is indicated by a 2-dimensional vector containing the row and column value respectively.\\
+
+3 key components that populate the environment map are 
+\begin{itemize}
+	\item The agent.
+	\item The goal.
+	\item The obstacles.
+\end{itemize}
+\subsubsection*{The agent}
+The agent represents the entity being controlled by an external controller. At any given moment, the state of the agent has three properties: position, speed, and orientation.
+\begin{enumerate}
+	\item Position: The current coordinates of the agent (in pixel coordinates) on the map.
+	\item Speed: The current speed of the agent.
+	\item Orientation: A unit vector along the velocity vector of the agent.
+\end{enumerate}
+To navigate the environment the agent can control two aspects of its motion. Its speed and its orientation
+Unlike most stock environments, this supports both continuous and discrete action space. 
+For continuous action space:
+In the continuous action space, the agent takes in a 2-dimensional vector which contains the change in the speed and change in the orientation respectively. This, along with the information from the current state of the agent is used to compute the position, velocity, and orientation of the agent for the next state.
+**Equation to calculate the new agent state**
+The range of the control, for both change in speed and orientation for the continuous action space, is shown in table 1
+For the discrete action space:
+In the discrete action space, the range of change in speed and orientation is divided into 7 and 5 equal bins respectively. \textcolor{red}{Some sort of graphical/tabular representation of the action spaces}
+Although the underlying control is similar, in the discrete action space, the control action is provided in the form of  a single scalar value and the change in speed and orientation is retrieved from it as follows:
+Scalar/number of speed divisions = speed bin
+scalar%number of speed divisions = orientation bin.
+The desired change in the speed and orientation is given by the value of the respective bins. 
+
+\subsubsection*{The goal:}
+The goal is a pre-designated area of the map where once the agent reaches it is deemed as the end of the episode with a success. It is represented by a green rectangle. Like the agent, the size of the goal area can be customized as per the requirement of the experiment. For now, the environment just has provision for static goals, ie. once the position of the goal is defined at the start of the state, it does not change during the episode. That being said, the environment does come with the provision to alter the position of the goal at the end of each episode.
+
+
+\subsubsection*{The obstacles:}
+There are 3 ways of putting the obstacles in the map each of them serving a different purpose.
+\begin{enumerate}
+\item \textbf{Via a list:}
+The information for the placement of the obstacles can be passed in the form of a list, where each element of the list is a Numpy array containing the pixel coordinate ([row, col]) of the obstacle. This is primarily useful when the number of obstacles to be deployed is small. Although it severely limits the number and the configuration of the obstacles that can be placed in the map, it is ideal for performing a quick initialization or a brief sanity test of a controller in a short time without investing in the making an obstacle map or an annotation file.
+\item \textbf{Via an obstacle map:}
+This is the primary way of initializing the environment with static obstacles. In this case, the path to an image file is provided during initialization. This image is then read by the environment to obtain the size of the map and the obstacle configuration. 
+The dimensions of the image determine the size of the map and are equal to the image. Comprehending the obstacle configuration is also straight forward. Any red pixel, pixel falling in the color range of (150, 0, 0) to (255, 0, 0) is categorized as an obstacle. While defining each pixel as an individual obstacle renders the most accurate recreation of the obstacle configuration from a given image, it is inefficient as it generates an unnecessarily large number of obstacles on the map.
+This is redundant as for most of the cases, instead of having pixel-sized obstacles,  these obstacles can be grouped into bigger cells often without loosing too much information or diverging too much from the original configuration. The grouping can be adjusted by tuning the obstacle-width parameter in the environment.  Setting the width to one sets the size of an individual obstacle to 1. This retains the highest amount of information (basically pixel-by-pixel information) from the obstacle map. Increasing the width groups pixels in the image to form obstacles of the given width, which drastically reduces the number of obstacles at the cost of introducing a pixelation effect in the final obstacle map.
+\textbf{A set of 3 images: obstacle image, and its comparison with changing obstacle size}
+\item \textbf{Via an annotation file.}
+This is used to populate the environment with dynamic obstacles. The annotation file is a text file containing frame-by-frame information of all the obstacles and is commonly used to recreate pedestrian motion captured in the real-world. An annotation file should adhere to this particular format: 4 columns frame, id, y-coordinate, and x-coordinate, in that order, and separated by blank spaces.
+\begin{itemize}
+	\item frame id: The serial number of a given frame, with respect to the first frame.
+	\item id: A unique id assigned to each of the obstacles in the video. This helps in keeping track of the obstacles from one frame to the next.
+	\item y-coordinate: The position of the obstacle in column space.
+	\item x-coordinate: The position of the obstacle in row space.
+\end{itemize}
+\end{enumerate}
+\subsubsection*{Input spaces and observation:}
+The environment has provisions for both discrete and continuous action space.
+\begin{enumerate}
+	\item \textbf{For continuous action space:} the action space is implemented using the Box class from OpenAI gym whose upper and lower bounds are equal to the maximum and minimum change in speed and orientation allowed by the environment. For the current version of the environment, the version that has been used throughout the project the bounds are as shown in table 
+	\item \textbf{For discrete action space:} the action space is implemented using the Discrete class from OpenAI gym and the agent can take in one out of the 35 actions at its disposal to interact with the environment.
+\end{enumerate}
+\subsubsection*{The Observation:}
+The observation from the environment also follows the format of a standard gym environment returning a tuple of 4 elements: state, reward, done-flag, and info.
+The state:
+The state publishes information relating to the agent, goal and the obstacles in the form of a dictionary.
+The reward:
+The reward obtained at a given time step.
+The done-flag:
+A flag that indicates the completion of an episode.
+Info:
+\subsection*{Additional features}
+In addition to the hallmarks of a regular gym environment, the environment comes with a set of options that provide added flexibility and customizations while training and evaluating IRL agents.
+\subsubsection*{Training modes:}
+The environment supports 3 types of training modes depending on the need of the experiment. 
+\begin{enumerate}
+	\item \textbf{Fixed respawn:} The starting and goal position of the agent remains the same throughout the training process.
+	\item \textbf{Random respawn:} For every episode, the agent and the goal spawn at random positions on the map. 
+	\item \textbf{Replace a pedestrian:} For every episode, the agent assumes the role of a randomly selected pedestrian. Once a pedestrian is selected, the pedestrian is ignored as an obstacle for that episode. The initial position of the agent is set to the coordinated of the pedestrian in its first frame of appearance. Similarly, the goal is set to the coordinates of the pedestrian in the final frame.
+	This mode is especially useful for training IRL models because demonstrations from expert for navigation are the optimal demonstrations for a particular setting of goal and obstacle. Placing the agent in the exact context enables the agent observe a similar state distribution as the expert, which helps maintaining the effectiveness of the expert demonstrations. 
+\end{enumerate}
+
+Features available for testing of the environment:
+As this environment was designed primarily for the development of IRL methods for navigation, it also comes with some built-in tools to test IRL methods.
+\subsubsection*{Deployment of the ghost}
+We know, IRL agents in a way learn from demonstrations. And creating meaning metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. This shadow or 'ghost' does not in any way impact the state of the agent and can be used for both qualitative and quantitative analysis of the performance of the agent in comparison to the actual expert. 
+
+\subsubsection*{User control}
+The environment also has a provision to let an external user control and agent and navigate the crowds. There might be cases where there are not enough expert demonstrations available to perform proper training. In that case, the size of the expert demonstration set can be bolstered by letting humans take control of the agent and generate more expert demonstrations. 
+
+The agent can be controlled by a mouse pointer and action is registered only at the time of the click of the left mouse button. Once a click is registered on the map, the direction and magnitude of the vector joining the current position and the location of the click are taken as the desired orientation and speed respectively.  
+The orientation action is then calculated based on the difference between the current direction of heading of the agent and comparing that with the desired direction. If there is a difference between the two, and a change in the current heading direction of the agent is warranted, then the action to inflict the change is then decided based on the magnitude and sign of the change needed relative to the current heading direction of the agent to minimize the difference.
+The speed action is also calculated in a similar manner, where the magnitude of the difference vector is treated as the desired speed, and based on the current speed of the agent action is taken to minimize the difference.
+
+\subsubsection*{Creating custom scenarios:}
+The environment has provisions to create custom dynamic scenarios, where the motion of each of the pedestrians can be predefined. This is a very handy tool for creating and testing the agents in situations that are hard to come across or simply unavailable in the available datasets.\\
+\textbf{Any need for elaboration on this?}
+
+
