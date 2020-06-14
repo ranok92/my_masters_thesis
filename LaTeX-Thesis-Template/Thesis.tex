@@ -46,7 +46,6 @@
 \usepackage{calc}
 \usepackage{moresize}
 %\usepackage[ruled]{algorithm2e}
-\usepackage[caption=false]{subfig}
 \usepackage{url}
 \usepackage{multirow}
 \usepackage[bf,rm,medium,compact]{titlesec}
@@ -66,7 +65,8 @@
 \usepackage[grey]{latex-pkg/quotchap}
 \usepackage{latex-pkg/TexShade}
 %\usepackage[ruled]{algorithm2e}
-\usepackage[caption=false]{subfig}
+%\usepackage[caption=false]{subfig}
+\usepackage{subcaption}
 \usepackage{url}
 \usepackage{multirow}
 \usepackage[bf,rm,medium,compact]{titlesec} % nice section titles
@@ -82,10 +82,11 @@
 \usepackage{latex-pkg/TexShade}
 \usepackage{longtable}
 \usepackage{ltcaption}
+
 % The ltcaption package supports \CaptionLabelFont & \CaptionTextFont
 % introduced by the NTG document classes
-\renewcommand\CaptionLabelFont{\normalsize}
-\renewcommand\CaptionTextFont{\normalsize}
+%\renewcommand\CaptionLabelFont{\normalsize}
+%\renewcommand\CaptionTextFont{\normalsize}
 
 %
 %  Brown  Maroon  NavyBlue  MidnightBlue  
@@ -282,31 +283,29 @@
 %\part{Scalable Cheat-Resistant Multiplayer Online Games}
 %\label{part:intro}
 
-\input{base/intro/intro.tex}
 
-\part{Literature Review}
-\label{part:part1}
-\chapter{Classical path planning}
-\label{ch:chapter1}
-\input{base/chapter/chapter1.tex}
-\chapter{Data driven approach}
+\chapter{Introduction}
+\label{ch:intro}
+\input{base/intro/intro.tex}
+\chapter{Literature review: Classical path planning}
 \label{ch:chapter2}
 \input{base/chapter/chapter2.tex}
+\chapter{Literature review: Data driven approach}
+\label{ch:chapter3}
+\input{base/chapter/chapter3.tex}
 
-\part{Social Navigation using Inverse RL}
+\chapter{Design and Methodology}
+\label{ch:chapter4}
+\input{base/chapter/chapter4.tex}
+
 \chapter{The environment}
-\label{ch:part3_chapter1}
-\input{base/chapter/part3_chapter1.tex}
-
-\chapter{Methodology}
-\label{ch:part3_chapter2}
-\input{base/chapter/part3_chapter2.tex}
+\label{ch:chapter5}
+\input{base/chapter/chapter5.tex}
 
 \chapter{Experiments and results}
-\label{ch:part4_chapter1}
-\input{base/chapter/part4_chapter1.tex}
+\label{ch:chapter6}
+\input{base/chapter/chapter6.tex}
 
-\part{Final Conclusion \& Future Work}
 \chapter{Final Conclusion \& Future Work}
 \label{part:conclusion}
 \input{base/conclusion/conclusion.tex}
