@@ -1,56 +1,57 @@
 \label{ch:introduction}
 \section{Overview}
-Society is diving headfirst towards a future where humans and machines coexist. Robots have been deployed in the vicinity of humans since as early as 1998, when Nourbaksh et al installed a tour guide robot Mobot as a permanent member of the Carnegie Museum of Natural History for a period of 5 years, till 2002. Other notable examples: Robox, [4] which was deployed for a period of 157 days at the Swiss international exhibition in 2002 where it was assigned the task of giving tours, taking pictures, and providing entertainment to the visitors, Minerva [96], deployed in 1998 at the Smithsonian Museum of American History again as a tour guide for a period of 14 days, Rhino [9], deployed at the Deutsches Museum Bonn for a period of 6 days in 1997, Rackham[15] and CiceRobot [55] both of which served the role of a tour guide at a museum. \\
-
-Other than guiding people in museums and exhibitions, mobile robots have also been deployed in the field of healthcare (Pollack et al A Mobile Robotic Assistant for the Elderly. In AAAI, Kim and Pineau, and Kretzchmar et al) and shopping malls (Shopbot and Toomas) who provided interactive support and guidance to people. 
+In this work, we present a learning-based pipeline using deep inverse reinforcement learning methods to train an artificial agent in the art of moving through densely populated social spaces in an acceptable manner or in short social navigation.\\
+Society is diving headfirst towards a future where humans and machines coexist. Robots have been deployed in the vicinity of humans since as early as 1998, when Nourbaksh et al installed a tour guide robot Mobot as a permanent member of the Carnegie Museum of Natural History for 5 years, till 2002. Other notable examples: Robox, [4] which was deployed for 157 days at the Swiss international exhibition in 2002 where it was assigned the task of giving tours, taking pictures, and providing entertainment to the visitors, Minerva [96], deployed in 1998 at the Smithsonian Museum of American History again as a tour guide for 14 days, Rhino [9], deployed at the Deutsches Museum Bonn for 6 days in 1997, Rackham[15] and CiceRobot [55] both of which served the role of a tour guide at a museum. \\
+\\Pictures of robots that have been deployed in the real world.
+Other than guiding people in museums and exhibitions, mobile robots have also been deployed in the field of healthcare (Pollack et al A Mobile Robotic Assistant for the Elderly. In AAAI, Kim and Pineau, and Kretzschmar et al) and shopping malls (Shopbot and Toomas) who provided interactive support and guidance to people. 
 
 %With some of the more recent works done by Kim and Pineau and Kretzschmar et al take a different approach. Instead of working with helper robots to guide others, the choose robotic wheelchairs as their platform to help disabled individuals navigate through human crowds. \\
 
 %Today, we are surrounded by machines of varying complexity, competence, and autonomy, all with the common goal of making human life easier. Some common use cases include but are not limited to: giving museum tours, guiding people at the airport, assisting the elderly and needful.   \\
 
-Navigation is one of the fundamental problems of mobile robotics with decades of research flowing into it. In its simplest form, it is defined as a process that enables a robot to move from its current position (stating position) to a desired position( goal position) while avoiding collisions. Works on artificial potential field by khatib (potential field) and various flavours of graph-based search algorithms address this problem.\\
+Navigation is one of the fundamental problems of mobile robotics with decades of research flowing into it. In its simplest form, it is defined as a process that enables a robot to move from its current position (stating position) to the desired position( goal position) while avoiding collisions. Works on artificial potential field by khatib (potential field) and various flavors of graph-based search algorithms address this problem.\\
 
-But deploying mobile robots in the presence of humans introduces a new set of challenges. This revises the objectives of a navigation algorithm. Avoiding collisions and reaching a given destination is no longer sufficient, now these must be achieved in a 'socially acceptable' manner. The abstract nature of this additional objective of being socially acceptable makes this problem challenging. This is primarily because there is no strict definition of what is 'socially acceptable' and is highly dependent on the socio-cultural background of the people in the crowd and the situation at hand. This warrants and subsequently has led to research specifically geared towards socially compliant navigation or in short social navigation.\\
+But deploying mobile robots in the presence of humans introduces a new set of challenges. This revises the objectives of a navigation algorithm. Avoiding collisions and reaching a given destination is no longer sufficient, now these must be achieved in a 'socially acceptable' manner. The abstract nature of this additional objective of being socially acceptable makes this problem challenging. This is primarily because there is no strict definition of what is 'socially acceptable' and is highly dependent on the socio-cultural background of the people in the crowd and the situation at hand. This warrants and subsequently has led to research specifically geared towards socially compliant navigation.\\
 
 Concretely structuring a loosely defined problem as socially compliant navigation can be difficult, but Kruse et al identify 3 broad areas of improvement the existing literature addresses to make a robot more acceptable in a social context. They define the three areas as follows:
 
 \begin{enumerate}
-	\item \textbf{Comfort}: how comfortable people are around a robot. 
-	\item \textbf{Naturalness}: how natural the movement of a robot is. This is synonymous to predictability and interpretability of the robot's movements.
-	\item \textbf{Sociability}: respecting cultural norms like: preferring the right side of a hallway and, not cutting through a group of people to name a few. %These fall into the category of what we like to call 'common courtesy'
+    \item \textbf{Comfort}: how comfortable people are around a robot. 
+    \item \textbf{Naturalness}: how natural the movement of a robot is. This is synonymous with the predictability and interpretability of the robot's movements.
+    \item \textbf{Sociability}: respecting cultural norms like preferring the right side of a hallway and, not cutting through a group of people to name a few. %These fall into the category of what we like to call 'common courtesy'
 \end{enumerate}
 
 \subsubsection{Work on comfort}
 This has been one of the more researched areas in the field of social navigation: making people feel safe/comfortable around autonomous mobile robots. Relative distance from a person has been the primary gauge to measure comfort. These works are largely based on the works of Edward T. Hall [32] in proxemics. Proxemics deals with the study of personal territory. While this is dependent on the socio-cultural background of an individual, and the context of the scene, Hall divides the personal territory into 4 spaces: public, social, personal, and intimate, each reserved for a different purpose as described in Table \ref{tab:proxemics}
 \begin{table}
-	\label{tab:proxemics}
-	\caption{Proxemic distances}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|c|}
-			\hline
-			Name of zone & Distance & Use case \\
-			\hline\hline
-			Intimate space & 0 - 45cm & \\
-			Personal space & 45 -120cm & \\
-			Social space & 1.2 - 3.6m & \\
-			Public space & > 3.6m & \\
-			\hline
-		\end{tabular}
-	\end{center}
+    \label{tab:proxemics}
+    \caption{Proxemic distances}
+    \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            Name of zone & Distance & Use case \\
+            \hline\hline
+            Intimate space & 0 - 45cm & \\ Interacting with close friends and intimates. Generally involving physical contact.
+            Personal space & 45 -120cm & \\  For interaction with close friends and family.
+            Social space & 1.2 - 3.6m & \\ Interacting with acquaintances and people one is familiar with.
+            Public space & > 3.6m & \\ Interacting with a crowd of people
+            \hline
+        \end{tabular}
+    \end{center}
 \end{table}
 Other works exploring the comfort aspect of human-robot communication focuses on specific cases like:
 \begin{enumerate}
-	\item \textbf{Approaching a person:} [Dautenhahn et al 17] study different ways to approach people who are seated. They find that the best way is to approach from the side and not from the front.
-	[Koay et al 46]  find that $58\%$ of participants preferred a frontal approach by the robot while $75\%$ preferred a frontal approach when robot was handing them something.
-	\item \textbf{Passing a person:} [Pacchierotti et al 67, 68] show that proper signaling while approaching a person, and maintaining a healthy distance it is desired.
-	\item \textbf{Moving in the vicinity of a person:}  Butler and Agah [10] test on different approaching speeds, trajectories taken by a robot to avoid a person and exploratory movements of robots in general and find that in general people prefer slower speed, and greater gap maintained by the robot while passing.
+    \item \textbf{Approaching a person:} [Dautenhahn et al 17] study different ways to approach people who are seated. They find that the best way is to approach from the side and not from the front.
+    [Koay et al 46]  find that $58\%$ of participants preferred a frontal approach by the robot while $75\%$ preferred a frontal approach when the robot was handing them something.
+    \item \textbf{Passing a person:} [Pacchierotti et al 67, 68] show that proper signaling while approaching a person and maintaining a healthy distance is desired.
+    \item \textbf{Moving in the vicinity of a person:}  Butler and Agah [10] test on different approaching speeds, trajectories taken by a robot to avoid a person and exploratory movements of robots in general and find that in general people prefer slower speed, and greater gap maintained by the robot while passing.
 \end{enumerate}
 
-A majority of the existing work aiming to increase comfort design cost maps aligned to the aforementioned studies, which in general translates to maintaining a healthy distance from nearby people. Studies have shown that people do not approve of robots sneaking up on them. So, other works aim to reduce the surprise factor in their robot navigation by structuring penalty functions that emphasize motion in the sights of the people. [71, 83, 89]
+A majority of the existing work aiming to increase comfort design cost maps aligned to the aforementioned studies, which in general translates to maintaining a healthy distance from nearby people. Studies have shown that people do not approve of robots sneaking upon them. So, other works aim to reduce the surprise factor in their robot navigation by structuring penalty functions that emphasize motion in the sights of the people. [71, 83, 89]
 Other works concentrate on other aspects like approaching, tracking, and following people.\\
 
-Recent works using reinforcement learning algorithms also fall in this category. They primarily focus on two things: the structure of the reward, and the representation of the environment. \\
+Recent works using reinforcement learning algorithms also fall into this category. They primarily focus on two things: the structure of the reward, and the representation of the environment. \\
 
 Rewards are engineered focusing on collision avoidance and maintaining proxemics distances from nearby pedestrians [8, 10 Tsai]. Other works incorporate a more intricately designed reward function that captured rudimentary social norms like overtaking from the left, passing from the right, etc[9 Tsai]. \\
 
@@ -61,22 +62,22 @@ While comfort is necessary, on its own it is not sufficient. Naturalness in the 
 
 Factors that help perceive a mobile robot as natural include:
 \begin{enumerate}
-	\item Smooth motion: Humans prefer gradual, consistent change in orientation and velocity. This traces smooth paths that optimize for the energy spent in the execution of the trajectory [3]. Sudden changes in orientation and speed while moving in a crowd makes a robot unpredictable and thus seem unnatural. [71, 70] works on smoothing trajectories.
-	\item Natural interaction: A large portion of the time we spend during navigation in groups involve interaction with other. Some of the traits we commonly exhibit that has been the focus of research are following people moving in the general desired direction [27], maintaining a formation while interacting with nearby people [1], and non-verbal communication with people nearby [82]. 
-	
+    \item Smooth motion: Humans prefer a gradual, consistent change in orientation and velocity. This traces smooth paths that optimize for the energy spent in the execution of the trajectory [3]. Sudden changes in orientation and speed while moving in a crowd makes a robot unpredictable and thus seem unnatural. [71, 70] works on smoothing trajectories.
+    \item Natural interaction: A large portion of the time we spend during navigation in groups involves interaction with others. Some of the traits we commonly exhibit that has been the focus of research are following people moving in the general desired direction [27], maintaining a formation while interacting with nearby people [1], and non-verbal communication with people nearby [82]. 
+    
 \end{enumerate}
 
 \subsubsection{Work on sociability}
-Social and cultural norms are the collection of explicit and tacit rules that we as a member of the society agree up to maintain harmony. Examples of this would includes but not limited to waiting in a queue, passing thought a particular side of a passage, and waiting for people to leave an elevator before entering. While the presence of these traits might not be of the utmost importance, the lack of adherence to social norms can create discomfort to nearby human beings. Some of the works in the existing literature address some of these problems.[44] Kirby encodes within its cost function the preference to the right side of a corridor. [71 Pandey et al] make the robot overtake a pedestrian from the right.\\
+Social and cultural norms are the collection of explicit and tacit rules that we as a member of the society agree up to maintain harmony. Examples of this would include but not limited to waiting in a queue, preferring a particular side of a pathway, and waiting for people to exit an elevator before entering. While the presence of these traits is not vital, the lack of adherence to social norms can cause discomfort and evoke mistrust among people nearby. Some of the works in the existing literature address some of these problems.[44] Kirby encodes within its cost function the preference to the right side of a corridor. [71 Pandey et al] make the robot overtake a pedestrian from the right.\\
 
 While most of the approaches produce reliable controllers on and off the simulator, they optimize for a set of goals that are geared towards optimizing for navigation using a smartly engineered reward function which in turn relies on proxemic distances and in some cases a few of the obvious social norms.\\
 
 \section{Inverse reinforcement learning in social navigation}
-One of the primary issues with formulating a reward function for social navigation is the vast variety and elusiveness of the 'social rules'. Inverse reinforcement learning (IRL) or inverse optimal control is a class of problems put forward by Russell (98) that does exactly that. The goal of IRL is to find an optimal controller that performs similar to an expert and in the process recover the underlying reward function using demonstrations from the expert. \\
+One of the primary issues associated with formulating a reward function for social navigation is the vast variety and elusiveness of the 'social rules'. Inverse reinforcement learning (IRL) or inverse optimal control is a class of problems put forward by Russell (98) that circumvents this step. The goal of IRL is to obtain an optimal controller that performs like an expert and in the process recover the underlying reward function using demonstrations from the expert. \\
 
-Abbeel and Ng (2004) show that matching the feature expectation of the agent to that of the expert translates to a similarity in the performance of the expert and the agent in the context of solving an MDP. But the problem of IRL remains an underconstrained one(ill-posed) as different reward functions (including degenerate ones) can declare the expert demonstrations as optimal. Moreover, the idea of feature matching is also ambiguous, as a single policy can be optimal for different reward functions and different policies can lead to similar feature expectations. \\
+Abbeel and Ng (2004) show that matching the feature expectation of the agent to that of the expert translates to a similarity in their performance in the context of a Markov decision process(MDP). But the problem remains under constrained (ill-posed) as multiple reward functions (including degenerate ones) can lead to the expert demonstrations being optimal. Additionally, the idea of feature matching is ambiguous, as a single policy can be optimal for different reward functions and different policies can lead to similar feature expectations. \\
 
-Ziebart (08) takes an entropy-based approach to resolve the ambiguity. They say that the probability of a given trajectory is proportional to the exponential of the reward it obtains. This produces a stochastic policy that has equal preference over trajectories yielding similar rewards. Some of the more recent works in IRL include using neural networks to bolster the expressive power of the reward function (Wulfmeier 2015). \\
+Ziebart (08) takes an entropy-based approach to resolve this ambiguity. They use an energy-based model where the probability of a given trajectory is proportional to the exponential of the reward it obtains. This produces stochastic policies that have equal preference over trajectories yielding similar rewards. Recent developments in IRL introduce the use of neural networks bolstering the expressive power of the reward function (Wulfmeier 2015). \\
 
 Due to the nature of the problem, IRL has been heavily explored in the field of social navigation (Krueder et al, Kretzschmar ). Shiarlis et al, Okal et al use IRL in conjunction with more traditional graph-based navigation methods to train agents. Here they use the IRL to infer the underlying rewards, which is then used to estimate the cost of different paths during the planning phase. Kim and pineau use IRL in a hierarchical navigation architecture, where they divide the task of navigation into a long term global planner based on ?, a short term controller based on IRL and a low-level collision avoidance module. Kretzschmar et al use a spline-based representation of the trajectory and use a maxent IRL formulation to train an agent using feature matching. 
 \\
