@@ -1,9 +1,10 @@
 
 \section{Conclusion}
-In this work, we present a data-driven approach to creating a controller that can navigate through human crowds in a socially acceptable manner. The need for 'socially acceptable' navigators is important as if it is not socially acceptable, then robots deployed in the vicinity of humans will make others uncomfortable. 
-We propose a novel feature representation that better captures the world around the agent and introduce a smoothing technique in the DeepIRL training pipeline, that leads faster and more stable training. 
-The model we train perform better than the other non-model-based methods and other feature representations sharing similar training frameworks and are closest to that of the actual pedestrians 
-We also introduce a simulator that is customized to go with the task of social navigation with a lot of bells and whistles. 
+In this work, we improve on existing MEDIRL based navigation pipelines by introducing a new 'risk-based' feature representation and a sampling technique to operate in a model-free environment. \\
+Unlike the majority of the existing literature that focuses on navigation in fairly restricted environments such as narrow hallways or synthetically created scenarios, we opt for a more general and therefore challenging setting: a busy university campus which includes pedestrians with a wide range of people in the vicinity. With no hard restriction on the pathways, the only constraint posed is in the form of social interaction. Additionally, we use a small dataset: 430 trajectories extracted from a three and a half minute video showcasing the capability of the pipeline to learn using a relatively small set of expert demonstrations.\\
+Next, we present a detailed analysis comparing both qualitative and quantitative performance of agents trained using different methods: artificial potential fields, reinforcement learning(actor-critic), inverse reinforcement learning(MEDIRL); and different feature representations from the existing literature in tandem with IRL showcasing the strengths and weaknesses of different approaches.\\
+Lastly, in the process, we present a lightweight OpenAI-based environment using Pygame specifically designed for navigation tasks in a social environment which includes features like using annotation files from real-world videos to populate the environment, creating custom navigation scenarios and user control of the agent to collect expert demonstrations among others. \\
+There are a few caveats from MEDIRL that trickle-down in the proposed navigation pipeline. Although it leads to improved performance, we are still relying on handcrafted feature representations to make sense of our agent's surroundings. \\
 
 \section{Future Work}
 The controller can also be used for prediction.
