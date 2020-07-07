@@ -1,24 +1,21 @@
-In this work, we present a data-driven IRL-based social navigation pipeline.\\
+In this section, we describe our data-driven IRL-based social navigation pipeline.\\
 An overview of the pipeline:
-\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor and the other components}
-We will describe each component of the pipeline in greater detail.
-\section*{The IRL block:}
-Inverse reinforcement learning(IRL) or inverse optimal control(IOC) has been in vogue in recent years when it comes to training robots to perform real-world tasks. This is understandable as assigning rewards to individual states to illicit out desired behaviors is challenging. IRL provides a better alternative of obtaining the underlying reward function as well as a trained agent on the obtained reward function using demonstrations from the expert.
+\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor, and the other components}
+\section{The IRL block:}
+Inverse reinforcement learning(IRL) or inverse optimal control(IOC) has been greatly explored to train robots in real-world tasks. One of the appeals of IRL is that there is no need to specify a guiding 'reward function' that dictates the optimal behavior of an agent. Instead, the optimal or desired behavior can be obtained from a set of expert demonstrations which is more readily available compared to an artificially constructed reward structure needed for reinforcement learning(RL).
 
-To keep the chapter self-contained, we will briefly go over the definition of a Markov decision process, which is at the base of reinforcement and inverse reinforcement learning.
+To keep the chapter self-contained, we will revisit the definition of a Markov decision process (MDP), which is at the core of RL and IRL.
 A Markov decision process or MDP can be defined as a tuple ($\mathcal{S}$,$\mathcal{A}$,T,$\gamma$, $\mathcal{R}$)  where,
 \begin{itemize}
-	\item $\mathcal{S}$ is the set of all possible states.
-	\item $\mathcal{A}$ is the set of all possible actions.
-	\item T is the state transition dynamics, i.e. the probability of moving to a state given its previous state and action, $P(s^{'}|s,a)$ .
-	\item $\gamma$ is the discounting factor.
-	\item $\mathcal{R}$ is the set of rewards $R:  \mathcal{S} \mapsto \mathbb{R} $ is the reward function. In practice, instead of using the raw states, hand engineered features are extracted from the states with are then used to calculate the reward of a particular state. This alleviates a lot of complexity when dealing with large continuous state-spaces. 
-	\end{itemize}  
+    \item $\mathcal{S}$ is the set of all possible states.
+    \item $\mathcal{A}$ is the set of all possible actions.
+    \item T is the state transition dynamics, i.e. the probability of moving to a state given its previous state and action, $P(s^{'}|s, a)$.
+    \item $\gamma$ is the discounting factor.
+    \item $\mathcal{R}$ is the set of rewards $R:  \mathcal{S} \mapsto \mathbb{R} $ is the reward function. In practice, instead of using the raw states, hand-engineered features are extracted from the states which are then used to calculate the reward of a particular state. This alleviates a lot of complexity when dealing with large continuous state-spaces. 
+    \end{itemize}  
 The goal of the IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $D = \{ \tau_1, \tau_2, \tau_3, \dots, 
-\tau_{M} \}$ in the context of navigation. Each of these trajectories, in turn, can be further broken down into a collection of states $\tau_{i} = \{ s_{0}, s_{1}, s_{2}, \dots, s_{T} \}$ as visited by the expert in the trajectory. 
-
-We base our work on Wulfmeier's paper, which in turn is a neural network adaptation of the work done by Ziebart 2008. 
-According to the max entropy formulation, the probability of the occurrence of a trajectory is directly proportional to the reward it receives.
+\tau_{M} \}$ in the context of navigation. Each of these trajectories, in turn, can be further broken down into a collection of states $\tau_{i} = \{ s_{0}, s_{1}, s_{2}, \dots, s_{T} \}$ as visited by the expert in the trajectory. \\
+\textcolor{red}{apprenticeship-learning-2004} shows that solving the Bellman equations for an analytic solution to obtain the reward R is under-constrained. \textcolor{red}{ziebart} addresses this by introducing an entropy-based constraint \textcolor{red}{entropy formulation paper} on the distribution of the trajectories: the probability of the occurrence of a trajectory is directly proportional to the reward it receives.
 \begin{align}
 Entropy equation - Ziebart equation 2
 \end{align}
@@ -30,35 +27,36 @@ Given a set of expert demonstrations, an optimal reward structure should maximiz
 \begin{align}
 the equation for the loglikelihood-Ziebart equation 6
 \end{align}
-The original paper by Ziebart used a linear combination of weights as reward functions. But linear representations have limited capabilities when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier 2015 where they restructure the maxent IRL formulation using neural networks. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can encapsulate.
+The original paper by Ziebart used a linear combination of weights as reward functions. But linear representations are limiting when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier 2015 where they restructure the maxent IRL formulation using neural networks. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can encapsulate.
 
 \begin{align}
 derive the gradient expression in equation 3 of iros paper
 \end{align}
 
-The original formulation of MEDIRL was in the context of a model-based setting and the state transition matrix was used to calculate the agent SVF. While this produces an exact value of the agent SVF, assuming the availability of the state transition matrix is fairly optimistic for most real-world tasks including navigation. In an attempt to make things less constrained we take the model-free approach and focus on calculating the SVF using sampling-based methods. 
+The original formulation of maximum entropy deep inverse reinforcement learning (MEDIRL) is in a model-based setting and the state transition matrix is used to calculate the state visitation frequency (SVF) of the agent. While this produces an exact value of the agent's SVF, assuming the availability of the state transition matrix is fairly optimistic for most real-world tasks including navigation. In an attempt to make things less constrained we take the model-free approach and focus on calculating the SVF using a sampling-based method. 
 The SVF calculation:
-The main challenge going model free is the calculation of the Z value, which previously could be calculated using dynamic programming [citation of the paper]. 
-Under the assumption of a model-free but deterministic environment, the SVF of a deterministic policy can be reasonably computed by taking trajectory samples of the policy from the context of all the existing pedestrians in the scene. 
+The main challenge of going model-free is the calculation of the normalizing factor(Z), which in the presence of a state transition matrix could be calculated using dynamic programming [citation of the paper]. 
+Under the assumption of a model-free but deterministic environment, the SVF of a policy can be reasonably computed by taking trajectory samples from the starting context of each of the existing pedestrians in the scene once. 
 \begin{align}
 equation 4 from iros2020
 \end{align}
-where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1. (Taken word-to-word from iros manuscript)}
+where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1. (Taken word-to-word from IROS manuscript)}
 \begin{algorithm}
-	algorithm 1 from iros2020
+    algorithm 1 from iros2020
 \end{algorithm}
 
-For solving the MDP, we employ actor-critic methods, which we will describe in detail in the next section.
+
+We solve the MDP in the inner loop using an actor-critic method \textcolor{red}{cite A2C}, which we will describe in detail in the next section.
 
 %\subsection*{Overview of the algorithm used}
 %The algorithm trains for two networks, the reward network that, given the features of a state returns the reward associated with it,\\
 %\textbf{equation}\\ stating this.
 %and the policy network, which given the same, returns the best possible action.\\
 %\textbf{equation}\\
-%The method starts with randomly initializing the weights of the reward network. This reward network is then used in the  RL block to train an agent which is optimal for the current reward structure. Once, an optimal policy is obtained, the policy is then sampled from, in the environment to obtain roll outs or trajectories in this case. A trajectory is given by the sequence of states visited by the agent {s1, s2, ... sn}.
+%The method starts with randomly initializing the weights of the reward network. This reward network is then used in the  RL block to train an agent which is optimal for the current reward structure. Once, an optimal policy is obtained, the policy is then sampled from, in the environment to obtain roll-outs or trajectories in this case. A trajectory is given by the sequence of states visited by the agent {s1, s2, ... sn}.
 %Once the trajectories are obtained, they are used to calculate the state visitation frequency. The difference between the expert and the agent SVF is used to calculate the loss
 %\textbf{equation}
-%This loss is then back propagated through the reward network to update the weights.
+%This loss is then backpropagated through the reward network to update the weights.
 %Once the weights are updated, the new network is again fed into the RL block. This iterative process continues until completion.
 %Explanation of the L1 regularization over l2 regularization 
 
@@ -68,7 +66,7 @@ Actor-critic methods are a class of reinforcement learning algorithms that are b
 In policy-gradient methods, the goal is to iteratively improve the performance of a given policy which is achieved by maximizing the expected return of the policy. Mathematically, the objective of a policy gradient method can be expressed as:
 \begin{align}
 maximize \;\; J( \theta )  &\; = \; \mathbb{E} [ R | \pi_{\theta} ] \\
-					   & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\theta}] 
+                       & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\theta}] 
 \end{align}
 where, $r_{t}$ is the reward obtained at time $t$ and $\pi_{\theta}$ is the policy with parameters $\theta$.\\
 This leads to an update function:
@@ -80,25 +78,24 @@ baseline.
 \begin{align}
 Equation with the baseline to the vanilla policy gradient.
 \end{align}
-The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm, which we use to solve our MDP.
+The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm, which we use in our pipeline.
 The A2C method:
 Two symbiotic agents at play here. The actor and the critic. 
 The critic estimates the value function of a given state.
 The actor uses this information to update its policy distribution.
 \begin{algorithm}
-	The actor-critic algorithm.
+    The actor-critic algorithm.
 \end{algorithm}
 
 
-\section*{The feature extractor}
-The feature extractor is a vital component in the navigation pipeline. It acts as a medium that enables the learning algorithm to interact with the environment. The performance of a learning agent is highly contingent on the design of the feature extractor. \cite{vasquez_et_al}\\
-
-The feature vector generated by the feature extractor can be broken down into 2 broad components: local and global components.
+\section{The feature extractor}
+The feature extractor is a vital component in the navigation pipeline. It is the medium that facilitates interaction between the learning algorithm and the environment and heavily influences the performance of the agent \cite{vasquez_et_al}. We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the pedestrians present in the frame. Although we have access to information about all the pedestrians, the feature representations are designed to be calculated from a partial observation of the environment.\\
+The feature representation consists of the following components:
 \begin{itemize}
-	\item The \textbf{local component}, as the name suggests, comprises of the information from nearby surroundings of the agent captured in the form of a binary feature vector. This provides an approximate idea of the obstacles in the vicinity.
-	\item The \textbf{global component}, on the other hand, provides a rough direction of where the goal is with respect to the agent. This provides the agent with a purpose of navigation, preventing it from just rambling around the map.
+    \item The \textbf{local component} contains information from the vicinity of the agent captured in the form of a binary feature vector. This provides an approximate idea of the nearby obstacles and an estimate of a likely collision. Hence the term: 'risk-features'. 
+    \item The \textbf{global component}, on the other hand, provides an approximation of the goal location on the map. 
 \end{itemize}
- The environment, by design, publishes a detailed description of obstacles in the map, including their location, orientation, and velocity, and the goal. Having access to such a detailed picture of the surroundings on a mobile robot navigating any given scene in the real world is highly unlikely and difficult to obtain. This is additionally addressed by the feature extractor, which also acts as an information moderator, receiving raw information from the environment and packaging it in a feature vector that can be readily constructed by a mobile robot on the go using off-the-shelf sensors.\\
+ We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the obstacles (pedestrians) in the current frame.  Having access to all this information using sensors on a mobile robot navigating the real world is highly unlikely and difficult to obtain. This is additionally addressed by the feature extractor, which also acts as an information moderator, receiving raw information from the environment and packaging it in a feature vector that can be readily constructed by a mobile robot on the go using off-the-shelf sensors.\\
  Both the local and the global components along with their subcomponents are described in greater detail below.
 Talk about the relative orientation calculation
 
@@ -107,169 +104,170 @@ Talk about the relative orientation calculation
 The global information is further comprised of 3 elements:
 
 \subsubsection*{Relative goal orientation} 
-This acts as a compass, providing a rough estimate of the location of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ one-hot vector, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent are divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal. The structuring of the bins is shown below. 
+This acts as a compass, providing a rough estimate of the direction of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ one-hot vector, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent is divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal. The structuring of the bins is shown below. 
 \begin{figure}[!htbp]
-	Figure showing the relative goal orientation
+    Figure showing the relative goal orientation
 \end{figure}
 
 \subsubsection*{Change in orientation}
-Represented by a $5 \times 1$ one-hot vector, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The value ranges between $0 \degree$ -  $ 180 \degree$. This value is binned in one of 5 asymmetric bins. The rationale behind the uneven distribution is that empirically we have observed that human motion is smooth. So, the bins are constructed in a way to have a finer resolution in the lower range. This helps capture the nuances in the human motion in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown below.
+Represented by a $5 \times 1$ one-hot vector, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The value ranges between $0 \degree$ -  $ 180 \degree$. This value is binned in one of 5 asymmetric bins. The rationale behind the uneven distribution is that empirically we have observed that human motion is smooth. So, the bins are constructed in a way to put greater emphasis on smaller changes in orientation. This helps capture the nuances in human motion in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown below.
 
 \begin{table}[htbp]
-	\caption{Bin thresholds orientation change features.}
-	\label{orientation-change-bins}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|}
-			\hline
-			Feature & Threshold \\
-			\hline
-			$\phi_{O1}$ & $\alpha_{OC} \in \left[ 0 , \frac{\pi}{9} \right)$ \\
-			
-			$\phi_{O2}$ & $\alpha_{OC} \in \left[ \frac{\pi}{9} , \frac{2\pi}{9} \right)$ \\
-			
-			$\phi_{O3}$ & $\alpha_{OC} \in \left[ \frac{2\pi}{9} , \frac{3\pi}{9} \right)$ \\
-	
-			
-			$\phi_{O5}$ & $\alpha_{OC} \in \left[ \frac{3\pi}{9} , \frac{4\pi}{9} \right)$ \\
-			
-			$\phi_{O6}$ & $\alpha_{OC} \in \left[ \frac{4\pi}{9} , \pi \right)$ \\
-			\hline
-		\end{tabular}
-	\end{center}
+    \caption{Bin thresholds orientation change features.}
+    \label{orientation-change-bins}
+    \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|c|}
+            \hline
+            Feature & Threshold \\
+            \hline
+            $\phi_{O1}$ & $\alpha_{OC} \in \left[ 0 , \frac{\pi}{9} \right)$ \\
+            
+            $\phi_{O2}$ & $\alpha_{OC} \in \left[ \frac{\pi}{9} , \frac{2\pi}{9} \right)$ \\
+            
+            $\phi_{O3}$ & $\alpha_{OC} \in \left[ \frac{2\pi}{9} , \frac{3\pi}{9} \right)$ \\
+    
+            
+            $\phi_{O5}$ & $\alpha_{OC} \in \left[ \frac{3\pi}{9} , \frac{4\pi}{9} \right)$ \\
+            
+            $\phi_{O6}$ & $\alpha_{OC} \in \left[ \frac{4\pi}{9} , \pi \right)$ \\
+            \hline
+        \end{tabular}
+    \end{center}
 \end{table}
 \subsection*{Deviation from the goal}
-Represented by a $4 \times 1$ one-hot vector, the deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins, with greater emphasis is laid on the lower degrees due to reasons mentioned earlier.
+The deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins ($4 \times 1$ one-hot vector), with greater emphasis is laid on the lower degrees due to reasons mentioned earlier. 
 
 \begin{table}[htbp]
-	\caption{Bin thresholds for deviation from the goal.}
-	\label{deviation-from-goal-bins}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|}
-			\hline
-			Feature & Threshold \\
-			\hline
-			$\phi_{GA1}$ & $\alpha_{GA} \in \left[ 0 , \frac{\pi}{8} \right)$ \\
-			
-			$\phi_{GA2}$ & $\alpha_{GA} \in \left[ \frac{\pi}{8} , \frac{\pi}{4} \right)$ \\
-			
-			$\phi_{GA3}$ & $\alpha_{GA} \in \left[ \frac{\pi}{4} , \frac{3\pi}{4} \right)$ \\
-			
-			$\phi_{GA4}$ & $\alpha_{GA} \in \left[ \frac{3\pi}{4} , \pi \right]$ \\
-			\hline
-		\end{tabular}
-	\end{center}
+    \caption{Bin thresholds for deviation from the goal.}
+    \label{deviation-from-goal-bins}
+    \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|c|}
+            \hline
+            Feature & Threshold \\
+            \hline
+            $\phi_{GA1}$ & $\alpha_{GA} \in \left[ 0 , \frac{\pi}{8} \right)$ \\
+            
+            $\phi_{GA2}$ & $\alpha_{GA} \in \left[ \frac{\pi}{8} , \frac{\pi}{4} \right)$ \\
+            
+            $\phi_{GA3}$ & $\alpha_{GA} \in \left[ \frac{\pi}{4} , \frac{3\pi}{4} \right)$ \\
+            
+            $\phi_{GA4}$ & $\alpha_{GA} \in \left[ \frac{3\pi}{4} , \pi \right]$ \\
+            \hline
+        \end{tabular}
+    \end{center}
 \end{table}
 
 \subsubsection*{Speed}
-The entire range of all possible speed values are divided into 6 divisions and the current speed of the agent is represented by a $ 6 \times 1$ one-hot feature vector. The entire range of possible speeds are divided into 6 divisions with each division corresponding to an element of the one-hot vector.
+The current speed of the agent is quantized and represented in the form of a $6 \times 1$ one-hot vector. The thresholds of the quantization are mentioned in \autoref{tab:speed-quantization}
 
 %\begin{table}[htbp]
-%	\caption{Thresholds for the qantization of the speed of the agent.}
-%	\label{deviation-from-goal-bins}
-%	\begin{center}
-%		\renewcommand{\arraystretch}{1.3}
-%		\begin{tabular}{|c|c|}
-%			\hline
-%			Raw speed & Speed bin \\
-%			\hline
-%			0 - 0.2 & 0 \\
-%			0.2 - 0.4 & 1 \\
-%			0.4 - 0.6 & 2 \\
-%			\hline
-%		\end{tabular}
-%	\end{center}
-%	\end{table}
+%    \caption{Thresholds for the qantization of the speed of the agent.}
+%    \label{tab:speed-quantization}
+%    \begin{center}
+%        \renewcommand{\arraystretch}{1.3}
+%        \begin{tabular}{|c|c|}
+%            \hline
+%            Raw speed & Speed bin \\
+%            \hline
+%            0 - 0.2 & 0 \\
+%            0.2 - 0.4 & 1 \\
+%            0.4 - 0.6 & 2 \\
+%            \hline
+%        \end{tabular}
+%    \end{center}
+%    \end{table}
 
 \subsection*{The local information}
-Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively break the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
+Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively divide the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
 
 \subsubsection*{Creation of the bins}
-There are 16 spatial bins surrounding the agent. They are arranged in two concentric circles around the agent. The region between the agent and the inner circle is then broken into 8 equal divisions. These form bins from 1 - 8. Similarly, the region between the first and the second bin is again divided into 8 equal divisions which form bins 9 - 16.
+There are 16 spatial bins surrounding the agent arranged in two concentric circles. 8 equal divisions of the region between the agent and the inner circle form bin 1-8. Similarly, the divisions in the region between the first and the second concentric circle form bins 9 - 16.
 \subsubsection*{Calculation of the risk}
-'Risk' is a term we label the 'threat' the agent faces at a given time from any of these bins. Here 'threat' can loosely be seen as a measure of the possibility of hitting an obstacle. The higher the threat, the greater the chance that if the agent and the obstacles continue on their current course it will end in a collision.
-The 'risk factor' is divided in 3 levels: high, low and something in between.
+Oxford learner's dictionary defines 'risk' as "a person or thing that is likely to cause problems or danger at some time in the future" \textcolor{red}{cite oxford learners' dictionary}. In this context, 'risk' can be loosely correlated to the likelihood of a collision with a nearby obstacle/pedestrian. As a property of the spatial bins, it implies the possibility of a collision with an obstacle located in the given bin. 
+The 'risk' is divided into 3 levels: high, low, and medium.
 \begin{itemize}
-	\item High risk:
+    \item High risk:
 When the relative motion of an obstacle is towards the agent and can lead to a collision if not intervened.
-	\item Low risk:
+    \item Low risk:
 When the relative motion of an obstacle is away from the agent.
-	\item Med risk:
-Anything in between
+    \item Med risk:
+Anything in between.
 \end{itemize}
 The calculation of the risk values are based on the following entities:
 \begin{align}
-	\vec{o}_{rel} = & \;\; \vec{o}_{obs} - \vec{o}_{agent}  \\
-	\vec{d}_{rel} =  &\;\; \vec{d}_{agent} - \vec{d}_{obs} \\
-	\theta_{risk} =  & \;\; \angle (\vec{o}_{rel}, \vec{o}_{rel}) \\
-	\mathbf{s}_{obs} = & \;\; \tan(\theta_{risk}) \times |\vec{d_{rel}}| \\
-	\mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
+    \vec{o}_{rel} = & \;\; \vec{o}_{obs} - \vec{o}_{agent}  \\
+    \vec{d}_{rel} =  &\;\; \vec{d}_{agent} - \vec{d}_{obs} \\
+    \theta_{risk} =  & \;\; \angle (\vec{o}_{rel}, \vec{o}_{rel}) \\
+    \mathbf{s}_{obs} = & \;\; \tan(\theta_{risk}) \times |\vec{d_{rel}}| \\
+    \mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
 \end{align}
 where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated \textbf{safety margin} between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
 An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
 
 \begin{table}[htbp]
-	\caption{Categorization of the risk.}
-	\label{risk-categorization-table}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|}
-			\hline
-			Risk value & Risk condition \\
-			\hline
-			High & $\theta < 90\degree$ \&  $\mathbf{s}_{obs}$ < $\mathbf{T}$   \\
-			
-			Low & $\theta > 90\degree$\\
-			
-			Medium & otherwise \\
-			\hline
-		\end{tabular}
-	\end{center}
+    \caption{Categorization of the risk.}
+    \label{risk-categorization-table}
+    \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|c|}
+            \hline
+            Risk value & Risk condition \\
+            \hline
+            High & $\theta < 90\degree$ \&  $\mathbf{s}_{obs}$ < $\mathbf{T}$   \\
+            
+            Low & $\theta > 90\degree$\\
+            
+            Medium & otherwise \\
+            \hline
+        \end{tabular}
+    \end{center}
 \end{table}
-The risk value of each bin is represented using a $3 \times 1$ one-hot vector. One thing to note is the risk is calculated for individual obstacles present in the bin separately. And it is not uncommon to have more than one obstacle falling in different risk divisions from the same spatial bin. In that case, the risk value assigned to that bin is the highest risk posed among all the obstacles that fall under that spatial bin.
+The risk value of each bin is represented using a $3 \times 1$ one-hot vector. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
 \begin{figure}[!htbp]
-	\text{Graphics that shows each of the risk conditions}
+    \text{Graphics that shows each of the risk conditions}
 \end{figure}
 
 \section*{The SVF calculation}
-One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (svf) of a given agent. (equation x). In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier-deepirl}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. \textbf{Explanation as to why this is a reasonable assumption} This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians in general are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
+One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (svf) of the agent. (equation x). In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier-deepirl}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians, in general, are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
 
-Due to the lack of state dynamics we use sampling techniques to get a \textbf{good} estimate of the svf. While this can be time consuming and computationally expensive, the problem is drastically simplified when using greedy policies. (greedy soft actor critic).\textbf{Why?} 
-Svf calculation for an agent following a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \ref{agent-approx}
+We use sampling to get an estimate of the svf. While this can be time-consuming and computationally expensive, the task is drastically simplified when using greedy policies, especially in a deterministic environment. (greedy soft actor-critic).\textbf{Why?} 
+Svf calculation for an agent following a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory (due to the deterministic nature of the environment) for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \ref{agent-approx}
 \begin{align}
 \label{agent-approx}
 \text{Equation to calculate the state visitation frequency}
 \end{align}
-Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
-\textbf{What is smoothing?}\\
-In the traditional way of calculating the SVF, the observation of a given state contributes to the increment of the visitation frequency of that state by 1. 
-Instead for a single observation, we opt for the increment in the visitation frequency of a set of neighboring states based on the closeness of the neighboring states to the state observed. Here smoothing is defined as the distribution of the visitation weight of a state over its set of neighboring states based on their spatial similarity.\\
-\textbf{Why smoothing?}
-Having a 1 to 1 mapping between the observation and the increment of the SVF misses out on the fact that not all states \textit{are equally different.} \textbf{differ from each other in equal magnitude} \\
-\textbf{For example:} consider 3 different states, which differ only in their goal location component. Now, if two of the states indicated the goal to be in the $2^{nd}$ spatial bin and $3^{rd}$ spatial bin, then the difference between these two states are smaller than a $3^{rd}$ state where the goal is in the $6^{th}$ bin.
-This inequality in the differences among different states are accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only. \\ 
-\textbf{How smoothing?}
-The state vector comprises of different components, and the 'smoothed' state is obtained by convolving a smoothing kernel to each of them separately. The values used in the kernel, and the type of convolution applied depends on the nature of the spatial division the feature represents and is summarised in the Table \ref{conv-table}.
 
-\begin{table}
-	\caption{Table showing the details of the convolution used for smoothing the state feature vector.}
-	\label{conv-table}
-	\begin{center}
-		\renewcommand{\arraystretch}{1.3}
-		\begin{tabular}{|c|c|c|}
-			\hline
-			Feature component & Convolution Kernel & Convolution type\\
-			\hline
-			Relative goal orientation & $ [0.1, \;0.8, \; 0.1 ]$ & Wrap  \\
-			
-			Change in orientation & $[ 0.1, \; 0.8; \;0.1 ]$ & Same \\
-			
-			Deviation from goal & $[0.9,\; 0.1]$, $[0.1,\; 0.9]$,
-									      $[0.05, \; 0.9, \; 0.05]$, $[0.1,\; 0.9]$ & Same \\
-			Local spatial bins & $[ 0.1, \; 0.8,\;0.1 ]$ & Wrap \\
-			Speed info & $[ 0.1, \; 0.8,\;0.1 ]$  & Same \\
-			\hline
-		\end{tabular}
-	\end{center}
-\end{table}
+%Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
+%\textbf{What is smoothing?}\\
+%In the traditional way of calculating the SVF, the observation of a given state contributes to the increment of the visitation frequency of that state by 1. 
+%Instead for a single observation, we opt for the increment in the visitation frequency of a set of neighboring states based on the closeness of the neighboring states to the state observed. Here smoothing is defined as the distribution of the visitation weight of a state over its set of neighboring states based on their spatial similarity.\\
+%\textbf{Why smoothing?}
+%Having a 1 to 1 mapping between the observation and the increment of the SVF misses out on the fact that not all states \textit{are equally different.} \textbf{differ from each other in equal magnitude} \\
+%\textbf{For example:} consider 3 different states, which differ only in their goal location component. Now, if two of the states indicated the goal to be in the $2^{nd}$ spatial bin and $3^{rd}$ spatial bin, then the difference between these two states is smaller than a $3^{rd}$ state where the goal is in the $6^{th}$ bin.
+%This inequality in the differences among different states is accounted for in the smoothing, by increasing the weighted increment of a set of neighboring states of the observed state (based on their similarity) rather than increasing the value of the observed state only. \\ 
+%\textbf{How smoothing?}
+%The state vector comprises of different components, and the 'smoothed' state is obtained by convolving a smoothing kernel to each of them separately. The values used in the kernel, and the type of convolution applied depends on the nature of the spatial division the feature represents and is summarised in the Table \ref{conv-table}.
+%
+%\begin{table}
+%    \caption{Table showing the details of the convolution used for smoothing the state feature vector.}
+%    \label{conv-table}
+%    \begin{center}
+%        \renewcommand{\arraystretch}{1.3}
+%        \begin{tabular}{|c|c|c|}
+%            \hline
+%            Feature component & Convolution Kernel & Convolution type\\
+%            \hline
+%            Relative goal orientation & $ [0.1, \;0.8, \; 0.1 ]$ & Wrap  \\
+%            
+%            Change in orientation & $[ 0.1, \; 0.8; \;0.1 ]$ & Same \\
+%            
+%            Deviation from goal & $[0.9,\; 0.1]$, $[0.1,\; 0.9]$,
+%                                          $[0.05, \; 0.9, \; 0.05]$, $[0.1,\; 0.9]$ & Same \\
+%            Local spatial bins & $[ 0.1, \; 0.8,\;0.1 ]$ & Wrap \\
+%            Speed info & $[ 0.1, \; 0.8,\;0.1 ]$  & Same \\
+%            \hline
+%        \end{tabular}
+%    \end{center}
+%\end{table}
