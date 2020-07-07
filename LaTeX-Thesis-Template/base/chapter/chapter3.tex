@@ -14,7 +14,8 @@ In contrast, in an inverse reinforcement learning problem setting, there is no r
 
 
 \subsection*{RL based approaches}
- In their work, \textbf{Socially aware motion planning with Deep RL, Chen et. al.}\cite{chen_socially_2017} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent. The reward function primarily focuses on three different aspects of interaction: overtaking, passing and crossing as shown in the figure below.
+ With their remarkable success in the field of video games and a suite of tasks of similar anatomy, RL has been one of the go-to tools in the field of social navigation in recent years. \\
+Chen et al. \cite{chen_socially_2017} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent. The reward function primarily focuses on three different aspects of interaction: overtaking, passing, and crossing as shown in the figure below.
  \begin{figure}[!htbp]
      \centering
     \includegraphics[width=.6\linewidth]{figures/chapter2_rl_based_approach}
@@ -73,7 +74,7 @@ For path planning, the authors maintain a hierarchical path planner consisting o
 The global planner chalks out a global path from the starting position of the robot to the goal state. The entire path is broken down into multiple sub-goals and the responsibility of moving from one sub-goal to the next falls on the local planner. During the run, the planner maintains a collision detector based on handcrafted rules.
 The authors test their method on different scenarios including one that involves the robot operating in a crowded corridor.\\
 
-In one of the more recent works by \textbf{Fahad et. al.} \cite{fahad_learning_2018}, they present a navigation framework to train agents from demonstrations using maximum entropy Deep IRL where the objective is to maximize the likelihood of the states visited by the expert.
+\textbf{Fahad et. al.} \cite{fahad_learning_2018}, present a navigation framework to train agents from demonstrations using maximum entropy Deep IRL where the objective is to maximize the likelihood of the states visited by the expert.
 This is achieved by dividing each demonstration, or trajectory, in this case, into a sum of the individual states encountered by the expert. and minimizing the difference in the state visitation frequency (SVF) of the agent and the expert.\\
 The authors present a feature representation consisting of 4 parts:
 \begin{enumerate}
