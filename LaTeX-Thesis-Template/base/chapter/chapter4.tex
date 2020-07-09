@@ -13,40 +13,79 @@ A Markov decision process or MDP can be defined as a tuple ($\mathcal{S}$,$\math
     \item $\gamma$ is the discounting factor.
     \item $\mathcal{R}$ is the set of rewards $R:  \mathcal{S} \mapsto \mathbb{R} $ is the reward function. In practice, instead of using the raw states, hand-engineered features are extracted from the states which are then used to calculate the reward of a particular state. This alleviates a lot of complexity when dealing with large continuous state-spaces. 
     \end{itemize}  
-The goal of the IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $D = \{ \tau_1, \tau_2, \tau_3, \dots, 
+The goal of IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $D = \{ \tau_1, \tau_2, \tau_3, \dots, 
 \tau_{M} \}$ in the context of navigation. Each of these trajectories, in turn, can be further broken down into a collection of states $\tau_{i} = \{ s_{0}, s_{1}, s_{2}, \dots, s_{T} \}$ as visited by the expert in the trajectory. \\
-\textcolor{red}{apprenticeship-learning-2004} shows that solving the Bellman equations for an analytic solution to obtain the reward R is under-constrained. \textcolor{red}{ziebart} addresses this by introducing an entropy-based constraint \textcolor{red}{entropy formulation paper} on the distribution of the trajectories: the probability of the occurrence of a trajectory is directly proportional to the reward it receives.
+\cite{abbeel_apprenticeshiplearning_2004} shows that solving the Bellman equations for an analytic solution to obtain the reward R is under-constrained. \cite{ziebart_maxent_2008} addresses this by introducing an entropy-based constraint \cite{jaynes1957information} on the distribution of the trajectories: the probability of the occurrence of a trajectory is directly proportional to the reward it receives which is equal to the summation over the reward it receives at each state in the trajectory.
 \begin{align}
-Entropy equation - Ziebart equation 2
+P(\tau_{i}| \theta) = \frac{1}{Z(\theta)}\exp^{\theta^{T}\mathbf{f}_{\tau_{i}}} = \frac{1}{Z(\theta)}\exp^{\sum_{s_{j}\in\tau_{i}}\theta^{T}\mathbf{f}_{s_{j}}}
 \end{align}
-and is equal to:
 \begin{align}
-equation with z
+Z = \sum_{\tau_{i}\in \mathbf{D}}\exp{\theta^{T}\mathbf{f}_{\tau_{i}}}
 \end{align}
-Given a set of expert demonstrations, an optimal reward structure should maximize the probability of the occurrence of the expert demonstrations and their associated states. Mathematically, this is given by 
+where, $Z$ is the normalizing term, and $\mathbf{D}$ is the set of all possible trajectories.\\
+Given a set of expert demonstrations, an optimal reward structure should maximize the probability of the occurrence of the expert demonstrations and their associated states. Mathematically, this is given by: 
 \begin{align}
-the equation for the loglikelihood-Ziebart equation 6
+\label{eq:loglikelihood-IRL}
+\theta^{*} = \argmax_{\theta} \mathbf{L}(\theta) = \argmax_{\theta} \sum_{\tau \in D} \log{P(\tau| \theta, T)}
 \end{align}
-The original paper by Ziebart used a linear combination of weights as reward functions. But linear representations are limiting when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier 2015 where they restructure the maxent IRL formulation using neural networks. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can encapsulate.
+\cite{ziebart_maxent_2008} uses a linear combination of weights as reward functions which are limiting when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier et al. where they restructure the maximum entropy IRL formulation using neural networks \cite{wulfmeier2015maximum}. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can express.\\
+Now, $\theta$, represents the parameters of a neural network which can be found using gradient descent methods. The  update term for the reward network parameters w.r.t. the loss term $\mathbf{L}$ is equal to the difference in the state visitation frequencies (SVF) of the expert demonstrations and the policy $\pi_{\psi} : \mathcal{S} \mapsto \mathcal{A} $ trained on the parameters of the current reward network $R_{\theta}$:
+\begin{align}
+	\label{eq:IRL-parameter-update-states}
+	\frac{\partial L}{\partial \theta} = \left(\sum_{\tau_{i} \in D}\sum_{s_{j} \in \tau{i}}s_{j} - \sum_{\hat{\tau} \in \hat{D}}\sum_{s_{k} \in \hat{\tau}}s_{k}\right)
+\end{align}
+where, $\hat{\tau}$ is a trajectory sampled by the policy $\pi_{\psi}$.\\
+A state $s_{i}$ can be represented by its features, $\phi(s_{i})$. Thus \autoref{eq:IRL-parameter-update-states} can be re-written as:
+\begin{align}
+	\label{eq:IRL-parameter-update-features}
+	\frac{\partial L}{\partial \theta} = \left(\expectval_{s \sim P(s|\mathcal{D})} \phi(s) - \expectval_{s \sim P(s|\pi_\psi)} \phi(s)\right) \frac{\partial R_\theta}{\partial \theta} 
+\end{align}
+\subsection{The SVF calculation}
+One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (SVF) of a policy $\phi_{\psi}$. In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier2015maximum}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians, in general, are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
+
+We use sampling to get an estimate of the SVF. While this can be time-consuming and computationally expensive, the task is drastically simplified when using greedy policies, especially in a deterministic environment. SVF calculation of a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory (due to the deterministic nature of the environment) for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \autoref{eq:svf-sampling}
 
 \begin{align}
-derive the gradient expression in equation 3 of iros paper
+\label{eq:svf-sampling}
+   \expectval_{s \sim P(s|\pi_\psi)} \phi(s) \approx \sum_{s_0 \in p_0} \sum_{t=0}^{T} \phi(\hat{P}(s_{t+1}|s_t, a_t)\pi_\psi(a_t|s_t))
 \end{align}
-
-The original formulation of maximum entropy deep inverse reinforcement learning (MEDIRL) is in a model-based setting and the state transition matrix is used to calculate the state visitation frequency (SVF) of the agent. While this produces an exact value of the agent's SVF, assuming the availability of the state transition matrix is fairly optimistic for most real-world tasks including navigation. In an attempt to make things less constrained we take the model-free approach and focus on calculating the SVF using a sampling-based method. 
-The SVF calculation:
-The main challenge of going model-free is the calculation of the normalizing factor(Z), which in the presence of a state transition matrix could be calculated using dynamic programming [citation of the paper]. 
-Under the assumption of a model-free but deterministic environment, the SVF of a policy can be reasonably computed by taking trajectory samples from the starting context of each of the existing pedestrians in the scene once. 
-\begin{align}
-equation 4 from iros2020
-\end{align}
-where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1. (Taken word-to-word from IROS manuscript)}
-\begin{algorithm}
-    algorithm 1 from iros2020
+where, $\hat{P}(s_{t+1}| s_{t}, a_{t})$ are the state transitions observed during the process of sampling the trajectories from the environment, and not from a known state transition model.
+%The original formulation of maximum entropy deep inverse reinforcement learning (MEDIRL) is in a model-based setting and the state transition matrix is used to calculate the state visitation frequency (SVF) of the agent. While this produces an exact value of the agent's SVF, assuming the availability of the state transition matrix is fairly optimistic for most real-world tasks including navigation. In an attempt to make things less constrained we take the model-free approach and focus on calculating the SVF using a sampling-based method. 
+%The SVF calculation:
+%The main challenge of going model-free is the calculation of the normalizing factor(Z), which in the presence of a state transition matrix could be calculated using dynamic programming [citation of the paper]. 
+%Under the assumption of a model-free but deterministic environment, the SVF of a policy can be reasonably computed by taking trajectory samples from the starting context of each of the existing pedestrians in the scene once. 
+%\begin{align}
+%equation 4 from iros2020
+%\end{align}
+%where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1. (Taken word-to-word from IROS manuscript)}
+\begin{algorithm}[tbhp]
+	\caption{Deterministic Maximum Entropy IRL}
+	\label{deterministic-medirl}
+	
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	
+	\Input{$D, \gamma, p_0$}
+	
+	\SetKwComment{Comment}{$\triangleright$\ }{}
+	\SetKwFunction{Backprop}{Backprop}
+	\SetKwFunction{UpdateWeight}{UpdateWeight}
+	\SetKwFunction{SolveMDP}{SolveMDP}
+	\BlankLine
+	$\theta, \psi \gets \theta_0, \psi_0$ \DontPrintSemicolon \Comment*[r]{Initialize parameters} 
+	$\mu_e= \expectval_{s \sim D}{\phi(s)}$ \DontPrintSemicolon \Comment*[r]{Calculate expert svf}
+	\For{$m \gets 1$ \KwTo M}{
+		$\pi_\psi^m \gets \SolveMDP(R_\theta^m,\mathcal{S}, \mathcal{A}, \mathcal{T}, \gamma)$\\
+		$\mu_{\text{svf}} = \mu_e - \expectval_{s \sim P(s|\pi_\psi^m)} \phi(s)$ \Comment*[r]{from \autoref{eq:svf-sampling}} 
+		$\frac{\partial L}{\partial \theta^m} = $ \Backprop($\theta^m, \mu_{\text{svf}}$) \\
+		$\theta^{m+1} \gets $ \UpdateWeight($\frac{\partial L}{\partial \theta^m}, \theta^m$) 
+	}
+	\BlankLine
+	\Output{optimal parameters $\theta, \psi$}
+	
 \end{algorithm}
 
-
-We solve the MDP in the inner loop using an actor-critic method \textcolor{red}{cite A2C}, which we will describe in detail in the next section.
+The expert policy needs to be retrained every time the parameters of the reward network are updated. We solve the MDP using an actor-critic method \textcolor{red}{cite A2C}.
 
 %\subsection*{Overview of the algorithm used}
 %The algorithm trains for two networks, the reward network that, given the features of a state returns the reward associated with it,\\
@@ -65,26 +104,55 @@ We solve the MDP in the inner loop using an actor-critic method \textcolor{red}{
 Actor-critic methods are a class of reinforcement learning algorithms that are built upon policy gradient methods. 
 In policy-gradient methods, the goal is to iteratively improve the performance of a given policy which is achieved by maximizing the expected return of the policy. Mathematically, the objective of a policy gradient method can be expressed as:
 \begin{align}
-maximize \;\; J( \theta )  &\; = \; \mathbb{E} [ R | \pi_{\theta} ] \\
-                       & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\theta}] 
+maximize \;\; J( \psi )  &\; = \; \mathbb{E} [ R | \pi_{\psi} ] \\
+                       & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\psi}] 
 \end{align}
-where, $r_{t}$ is the reward obtained at time $t$ and $\pi_{\theta}$ is the policy with parameters $\theta$.\\
+where, $r_{t}$ is the reward obtained at time $t$ and $\pi_{\psi}$ is the policy with parameters $\psi$.\\
 This leads to an update function:
 \begin{align}
-\delta J ( \theta ) = 
+\label{eq:policy-gradient-update}
+\nabla_{\psi} J (\psi) = \sum_{t=0}^{T-1} \nabla_{\theta}\log \pi_{\psi}(a_{t}|s_{t})\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}
 \end{align} 
-Vanilla policy gradient methods suffer from high biases because they do not have a normalizing factor for the second term. This is addressed by introducing a 
-baseline. 
+where, $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$ is the cumulative discounted reward obtained by following the policy $\pi_{\psi}$ from time $t'$.\\
+Vanilla policy gradient methods suffer from high variance because they do not have a normalizing factor for the second term. This is addressed by introducing a baseline. The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm, where the 'advantage' is the difference between the estimated value of a state at time $t$, $V(s_t)$ and the discounted cumulative reward obtained by following the policy: $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$. \\
+Instead of having two separate networks for the actor(policy) and the critic(value), we design the network in a way that the actor, $\psi_{a}$, and the critic, $\psi_{c}$, share parameters in input and the hidden layers, with a dedicated output layer for the action and value respectively.
 \begin{align}
-Equation with the baseline to the vanilla policy gradient.
-\end{align}
-The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm, which we use in our pipeline.
-The A2C method:
-Two symbiotic agents at play here. The actor and the critic. 
-The critic estimates the value function of a given state.
-The actor uses this information to update its policy distribution.
-\begin{algorithm}
-    The actor-critic algorithm.
+\label{eq:advantage-actor-update}
+\nabla_{\psi} J (\psi_{a}) = & \sum_{t=0}^{T-1} \nabla_{\theta}\log \pi_{\psi}(a_{t}|s_{t}) \left(\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'} - V_{v}(s_{t})\right)\\
+\label{eq:advantage-critic-update}
+\nabla_{\psi} J (\psi_{c}) = & \sum_{t=0}^{T-1} \left(\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'} - V_{v}(s_{t})\right)
+\end{align} 
+where \autoref{eq:advantage-actor-update} is the update for the parameters of the actor network $\psi_{a}$, and \autoref{eq:advantage-critic-update} is for the critic network $\psi_{c}$. 
+%The A2C method:
+%Two symbiotic agents at play here. The actor and the critic. 
+%The critic estimates the value function of a given state.
+%The actor uses this information to update its policy distribution.
+Summarizing the RL algorithm:
+\begin{algorithm}[tbhp]
+	\caption{Actor Critic}
+	\label{alg:actor-critic}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\Input{$R, \gamma, p_0$}
+	
+	\SetKwComment{Comment}{$\triangleright$\ }{}
+	\SetKwFunction{Backprop}{Backprop}
+	\SetKwFunction{UpdateWeight}{UpdateWeight}
+	\SetKwFunction{SolveMDP}{SolveMDP}
+	\BlankLine
+	$\psi \gets \psi_0$ \DontPrintSemicolon \Comment*[r]{Initialize parameters} 
+
+	\For{$m \gets 1$ \KwTo M}{
+		Sample $\{s_{i}, a_{i} \}$ from $\pi_{\psi}$ till termination of an episode.\\
+		$\hat{A}(s_{i}, a_{i})$ = $\sum_{t'=i+1}^{T} \gamma^{t'-i-1} r_{t'} - \pi_{\psi_{c}}(s_{i})$ \Comment*[r]{Calculate advantage}
+		$\mathbf{L_{act}}$ = $\sum \log{\pi_{\psi_{a}}(a_{i}| s_{i})}\hat{A}(s_{i}, a_{i})$  \Comment*[r] {Calculate actor loss}
+$\mathbf{L_{crit}}$ = $\sum \hat{A}(s_{i}, a_{i})$ \Comment*[r]{Calculate critic loss}
+		$\frac{\partial \mathbf{L}}{\partial \psi^m} \gets $ \Backprop($\mathbf{L}_{act} + \mathbf{L}_{crit}$) \\
+		$\psi^{m+1} \gets $ \UpdateWeight($\frac{\partial \mathbf{L}}{\partial \psi^m}, \psi^m$) 
+	}	
+	\BlankLine
+	\Output{optimal parameters $\psi$}
+	
 \end{algorithm}
 
 
@@ -160,7 +228,7 @@ The deviation from goal captures the magnitude of the angle between the vector t
 \end{table}
 
 \subsubsection*{Speed}
-The current speed of the agent is quantized and represented in the form of a $6 \times 1$ one-hot vector. The thresholds of the quantization are mentioned in \autoref{tab:speed-quantization}
+The current speed of the agent is quantized and represented in the form of a $6 \times 1$ one-hot vector. 
 
 %\begin{table}[htbp]
 %    \caption{Thresholds for the qantization of the speed of the agent.}
@@ -180,7 +248,7 @@ The current speed of the agent is quantized and represented in the form of a $6 
 %    \end{table}
 
 \subsection*{The local information}
-Taking inspiration from previous works in this field \cite{fahad-et-al} \cite{vasquez-et-al}, we use spatial bins to effectively divide the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
+Taking inspiration from previous works in this field \cite{fahad_learning_2018} \cite{vasquez_inverse_2014}, we use spatial bins to effectively divide the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
 
 \subsubsection*{Creation of the bins}
 There are 16 spatial bins surrounding the agent arranged in two concentric circles. 8 equal divisions of the region between the agent and the inner circle form bin 1-8. Similarly, the divisions in the region between the first and the second concentric circle form bins 9 - 16.
@@ -229,15 +297,6 @@ The risk value of each bin is represented using a $3 \times 1$ one-hot vector. T
     \text{Graphics that shows each of the risk conditions}
 \end{figure}
 
-\section*{The SVF calculation}
-One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (svf) of the agent. (equation x). In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier-deepirl}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians, in general, are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
-
-We use sampling to get an estimate of the svf. While this can be time-consuming and computationally expensive, the task is drastically simplified when using greedy policies, especially in a deterministic environment. (greedy soft actor-critic).\textbf{Why?} 
-Svf calculation for an agent following a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory (due to the deterministic nature of the environment) for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \ref{agent-approx}
-\begin{align}
-\label{agent-approx}
-\text{Equation to calculate the state visitation frequency}
-\end{align}
 
 %Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
 %\textbf{What is smoothing?}\\
