@@ -2,7 +2,15 @@
 \section{Overview}
 In this work, we present a learning-based pipeline using deep inverse reinforcement learning methods to train an artificial agent in the art of moving through densely populated social spaces in an acceptable manner or in short social navigation.\\
 Society is diving headfirst towards a future where humans and machines coexist. Robots have been deployed in the vicinity of humans since as early as 1998 \cite{Nourbaksh2003Movot}, when Nourbaksh et al. installed a tour guide robot Mobot as a permanent member of the Carnegie Museum of Natural History for 5 years, till 2002. Other notable examples: Robox, \cite{siciliano_robox_2003} which was deployed for 157 days at the Swiss international exhibition in 2002 where it was assigned the task of giving tours, taking pictures, and providing entertainment to the visitors, Minerva \cite{minerva_thrun_2000}, deployed in 1998 at the Smithsonian Museum of American History again as a tour guide for 14 days, Rhino \cite{fox_dynamic_1997}, deployed at the Deutsches Museum Bonn for 6 days in 1997, Rackham \cite{rackham_clodic_2006} and CiceRobot \cite{chella_perception_2009} both of which served the role of a tour guide at a museum.\\
-\\Pictures of robots that have been deployed in the real world.
+%\\Pictures of robots that have been deployed in the real world.
+\vspace{3cm}
+\begin{figure}
+	\label{fig:real-world-robots}
+	\centering
+	\includegraphics[width=\linewidth]{figures/minerva_cice_rhino_robox_rackham.jpg}
+	\caption{Some robots that have been deployed in the real world. From the left to right: Minerva, CiceRobot, Rhino, Robox and Rackham.}
+\end{figure}
+
 Other than guiding people in museums and exhibitions, mobile robots have also been deployed in the field of healthcare: \cite{pearl_pollack_2002}, \cite{kim_socially_2016}, and \cite{kuderer_feature-based_nodate} and shopping malls: Shopbot \cite{shopbot_kanada} and Toomas \cite{toomas_gross_2009} who provided interactive support and guidance to people. 
 
 %With some of the more recent works done by Kim and Pineau and Kretzschmar et al take a different approach. Instead of working with helper robots to guide others, the choose robotic wheelchairs as their platform to help disabled individuals navigate through human crowds. \\
@@ -63,7 +71,7 @@ While comfort is necessary, on its own it is not sufficient. Naturalness in the 
 Factors that help perceive a mobile robot as natural include:
 \begin{enumerate}
     \item Smooth motion: Humans prefer a gradual, consistent change in orientation and velocity. This traces smooth paths that optimize for the energy spent in the execution of the trajectory \cite{arechavaleta_nonholonomic_2008}. Sudden changes in orientation and speed while moving in a crowd makes a robot unpredictable and thus seem unnatural. \cite{pandey_alami_robot_guide_2009, pandey_2010_human_centered_nav } works on smoothing trajectories.
-    \item Natural interaction: A large portion of the time we spend during navigation in groups involves interaction with others. Some of the traits we commonly exhibit that has been the focus of research are following people moving in the general desired direction \cite{gockley_natual_person_following_2007}, maintaining a formation while interacting with nearby people \cite{althaus_nav_for_human_robot_interaction_2004}, and non-verbal communication with people nearby \cite{sauliner_minimal_nonverbal_interruption_2011}. 
+    \item Natural interaction: A large portion of the time we spend during navigation in groups involves interaction with others. Some of the traits we commonly exhibit that has been the focus of research are following people moving in the general desired direction \cite{gockley_natural_person_following_2007}, maintaining a formation while interacting with nearby people \cite{althaus_nav_for_human_robot_interaction_2004}, and non-verbal communication with people nearby \cite{sauliner_minimal_nonverbal_interruption_2011}. 
     
 \end{enumerate}
 
@@ -77,13 +85,13 @@ One of the primary issues associated with formulating a reward function for soci
 
 Abbeel and Ng \cite{abbeel_apprenticeshiplearning_2004} show that matching the feature expectation of the agent to that of the expert translates to a similarity in their performance in the context of a Markov decision process(MDP). But the problem remains under constrained (ill-posed) as multiple reward functions (including degenerate ones) can lead to the expert demonstrations being optimal. Additionally, the idea of feature matching is ambiguous, as a single policy can be optimal for different reward functions and different policies can lead to similar feature expectations. \\
 
-Ziebart et al. \cite{ziebart_maxent_2008} takes an entropy-based approach to resolve this ambiguity. They use an energy-based model where the probability of a given trajectory is proportional to the exponential of the reward it obtains. This produces stochastic policies that have equal preference over trajectories yielding similar rewards. Recent developments in IRL introduce the use of neural networks bolstering the expressive power of the reward function \cite{wulfmeier2015maxmium}. \\
+Ziebart et al. \cite{ziebart_maxent_2008} takes an entropy-based approach to resolve this ambiguity. They use an energy-based model where the probability of a given trajectory is proportional to the exponential of the reward it obtains. This produces stochastic policies that have equal preference over trajectories yielding similar rewards. Recent developments in IRL introduce the use of neural networks bolstering the expressive power of the reward function \cite{wulfmeier2015maximum}. \\
 
-Due to the nature of the problem, IRL has been heavily explored in the field of social navigation \cite{kuderer_socially_nodate , kretzschmar_socially_2016 }. \cite{shiarlis_rapidly_2017, okal_efcient_nodate} use IRL in conjunction with more traditional graph-based navigation methods to train agents. Here they use the IRL to infer the underlying rewards, which is then used to estimate the cost of different paths during the planning phase. \cite{kim_socially_2016} use IRL in a hierarchical navigation architecture, where they divide the task of navigation into a long term global planner based on \textcolor{red}{?}, a short term controller based on IRL and a low-level collision avoidance module. \cite{kretzschmar_socially_2016} use a spline-based representation of the trajectory and use a maxent IRL formulation to train an agent using feature matching. 
+Due to the nature of the problem, IRL has been heavily explored in the field of social navigation \cite{kuderer_socially_nodate, kretzschmar_socially_2016}. \cite{shiarlis_rapidly_2017, okal_efcient_nodate} use IRL in conjunction with more traditional graph-based navigation methods to train agents. Here they use the IRL to infer the underlying rewards, which is then used to estimate the cost of different paths during the planning phase. \cite{kim_socially_2016} use IRL in a hierarchical navigation architecture, where they divide the task of navigation into a long term global planner based on \textcolor{red}{?}, a short term controller based on IRL and a low-level collision avoidance module. \cite{kretzschmar_socially_2016} use a spline-based representation of the trajectory and use a maxent IRL formulation to train an agent using feature matching. 
 \\
 Both,\cite{kim_socially_2016, kretzschmar_socially_2016} implement their method on real-world robots. \cite{vasquez_inverse_2014} provide a comparative analysis of different IRL based learning algorithms and the importance of feature representation in the context of IRL. More recent works include deep learning-based methods to solve the problem of social navigation \cite{fahad_learning_2018, wulfmeier2015maximum}
 
-\textbf{Your contibution}\\
+
 In this thesis, we propose an efficient sampling-based approximation to enable model-free deep-network based inverse reinforcement learning. We also propose a goal conditioned risk-based feature representation for the social navigation problem that captures local information surrounding the agent. 
 
 \section{Thesis outline}
