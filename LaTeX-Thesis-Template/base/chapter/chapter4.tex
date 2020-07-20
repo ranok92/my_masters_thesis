@@ -366,9 +366,12 @@ An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and 
     \end{center}
 \end{table}
 The risk value of each bin is represented using a $3 \times 1$ one-hot vector. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
-%\begin{figure}[!htbp]
-%    \text{Graphics that shows each of the risk conditions}
-%\end{figure}
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=.8\linewidth]{figures/risk_picture.png}
+    \label{fig:risk-calculation}
+    \caption{A pictorial representation of how the risk is classified. Pedestrian $1$, $2$ and $3$ falls under the category of 'high risk', 'medium' and 'low' risk.}
+\end{figure}
 
 
 %Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
