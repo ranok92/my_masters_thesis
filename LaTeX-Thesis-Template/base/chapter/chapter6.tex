@@ -16,9 +16,22 @@ The MEDIRL pipeline is run for 100 epochs. The reinforcement learning algorithm 
 \begin{figure}
 	\caption {A diagram of the network architecture the reward network and the policy network.}
 \end{figure}
+
 To train our agent we select demonstrations from the UCY university students dataset \cite{ucy-dataset-university-students}. It consists of trajectories of 430 different pedestrians on a relatively busy area captured over 3 minutes and 37 seconds. The video is captured at 25 fps resulting in a total of 5400 frames. The length of the trajectories varies from $the min$  to $the max$ with an average of 406 frames per trajectory. 
 \begin{figure}
-    \caption {Distribution of pedestrian based on trajectory length}
+    	\begin{subfigure}[b]{.5\textwidth}
+    	\centering
+    	\includegraphics[width=.9\linewidth]{figures/policy_network.png}
+    	\caption{The structure of the policy network.}
+    	\label{fig:policy-network}
+    \end{subfigure}%
+    \begin{subfigure}[b]{.5\textwidth}
+    	\centering
+    	\includegraphics[width=.9\linewidth]{figures/reward_network.png}
+    	\caption{The structure of the reward network.}
+    	\label{fig:reward-network}
+    \end{subfigure}%
+\caption{A graphical representation of the networks used in the training.}
 \end{figure}
 \begin{figure}
     \caption {Distribution of pedestrian based on obstacles in the vicinity}

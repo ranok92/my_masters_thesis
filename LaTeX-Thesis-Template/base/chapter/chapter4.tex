@@ -1,6 +1,14 @@
 In this section, we describe our data-driven IRL-based social navigation pipeline.\\
 An overview of the pipeline:
-\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor, and the other components}
+%\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor, and the other components}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/irl_pipeline.png}
+	\caption{An overview of the proposed navigation pipeline.}
+	\label{fig:irl_pipeline}
+\end{figure}
+
 \section{The IRL block:}
 Inverse reinforcement learning(IRL) or inverse optimal control(IOC) has been greatly explored to train robots in real-world tasks. One of the appeals of IRL is that there is no need to specify a guiding 'reward function' that dictates the optimal behavior of an agent. Instead, the optimal or desired behavior can be obtained from a set of expert demonstrations which is more readily available compared to an artificially constructed reward structure needed for reinforcement learning(RL).
 
@@ -172,9 +180,74 @@ Talk about the relative orientation calculation
 The global information is further comprised of 3 elements:
 
 \subsubsection*{Relative goal orientation} 
-This acts as a compass, providing a rough estimate of the direction of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ one-hot vector, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent is divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal. The structuring of the bins is shown below. 
-\begin{figure}[!htbp]
-    Figure showing the relative goal orientation
+This acts as a compass, providing a rough estimate of the direction of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ one-hot vector, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent is divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal.
+\begin{table}[tbhp]
+	\label{tab:goal-vector-bins}
+	\begin{center}
+		\begin{tabular}{|c|c|}
+			\hline
+			Feature & Threshold \\
+			\hline
+			$\phi_{GV1}$ & $\alpha_{GV} \in \left[ \frac{15\pi}{8} , 2\pi \right) \cup \left[ 0, 2\pi \right)$ \\
+			
+			$\phi_{GV2}$ & $\alpha_{GV} \in \left[ \frac{\pi}{8} , \frac{3\pi}{8} \right)$ \\
+			
+			$\phi_{GV3}$ & $\alpha_{GV} \in \left[ \frac{3\pi}{8} , \frac{5\pi}{8} \right)$ \\
+			
+			$\phi_{GV4}$ & $\alpha_{GV} \in \left[ \frac{5\pi}{8} , \frac{7\pi}{8} \right)$ \\
+			
+			$\phi_{GV5}$ & $\alpha_{GV} \in \left[ \frac{7\pi}{8} , \frac{9\pi}{8} \right)$ \\
+			
+			$\phi_{GV6}$ & $\alpha_{GV} \in \left[ \frac{9\pi}{8} , \frac{11\pi}{8} \right)$ \\
+			
+			$\phi_{GV7}$ & $\alpha_{GV} \in \left[ \frac{11\pi}{8} , \frac{13\pi}{8} \right)$ \\
+			
+			$\phi_{GV8}$ & $\alpha_{GV} \in \left[ \frac{13\pi}{8} , \frac{15\pi}{8} \right)$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Bin thresholds for goal vector features.}
+\end{table}
+
+\begin{figure}[tbhp]
+	\centering
+	\begin{tikzpicture}[scale=2.5]
+	
+	\fill [fill=green, opacity=0.0] (0.0,0.0) circle [radius=1.5];
+	\draw [fill=green, opacity=0.3] 
+	(0,0) -- (-1.5,0) arc(180:135:1.5) -- cycle;
+	
+	\draw [fill=black] (0,0) circle [radius=0.1];
+	\draw [->, ultra thick] (0,0) -- (22.5:1.5);
+	
+	\draw [fill=green] (-0.6,0.3) circle [radius=0.1];
+	\draw [->, ultra thick, green] (0,0) -- (-0.6,0.3);
+	
+	\draw [dashed, thick] (0,0) -- (0:1.5);
+	\draw [dashed, thick] (0,0) -- (45:1.5);
+	\draw [dashed, thick] (0,0) -- (90:1.5);
+	\draw [dashed, thick] (0,0) -- (135:1.5);
+	\draw [dashed, thick] (0,0) -- (180:1.5);
+	\draw [dashed, thick] (0,0) -- (225:1.5);
+	\draw [dashed, thick] (0,0) -- (270:1.5);
+	\draw [dashed, thick] (0,0) -- (315:1.5);
+	
+	
+	
+	
+	\node at (15.5:1.2) {$\phi_{GV1}$};
+	\node at (67.5:1.2) {$\phi_{GV2}$};
+	\node at (115.5:1.2) {$\phi_{GV3}$};
+	\node at (155.5:1.2) {$\phi_{GV4}$};
+	\node at (205.5:1.2) {$\phi_{GV5}$};
+	\node at (247.5:1.2) {$\phi_{GV6}$};
+	\node at (295.5:1.2) {$\phi_{GV7}$};
+	\node at (340.5:1.2) {$\phi_{GV8}$};
+	
+	\end{tikzpicture}
+	
+	\caption{Goal vector bin representation. The black disk at the center of the diagram and the black arrow represents the agent's position and heading respectively. The green disk depicts the goal position, and since it lies in $\phi_{GV4}$ that bin is currently active. Note that the features are relative to the agent's orientation and are thus turning with the agent.}
+	\label{fig:goal-vector-diagram}
 \end{figure}
 
 \subsubsection*{Change in orientation}
@@ -293,9 +366,9 @@ An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and 
     \end{center}
 \end{table}
 The risk value of each bin is represented using a $3 \times 1$ one-hot vector. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
-\begin{figure}[!htbp]
-    \text{Graphics that shows each of the risk conditions}
-\end{figure}
+%\begin{figure}[!htbp]
+%    \text{Graphics that shows each of the risk conditions}
+%\end{figure}
 
 
 %Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
