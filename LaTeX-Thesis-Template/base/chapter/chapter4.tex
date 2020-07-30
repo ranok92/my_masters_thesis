@@ -370,9 +370,32 @@ The risk value of each bin is represented using a $3 \times 1$ one-hot vector. T
 	\centering
 	\includegraphics[width=.8\linewidth]{figures/risk_picture.png}
     \label{fig:risk-calculation}
-    \caption{A pictorial representation of how the risk is classified. Pedestrian $1$, $2$ and $3$ falls under the category of 'high risk', 'medium' and 'low' risk.}
+    \caption{A pictorial representation of how the risk is classified. Pedestrian $1$, $2$ and $3$ falls under the category of 'high risk', 'medium' and 'low' risk respectively.}
 \end{figure}
 
+
+\begin{figure}
+	\label{fig:agent-perspective-risk-features}
+	\begin{subfigure}[t]{.5\linewidth}
+
+		\includegraphics[width=.95\textwidth]{figures/screenshot_video_frame_agent_perspective.png}
+		\label{fig:agent-perspective_screenshot}
+		\caption{A frame from the UCY dataset. The pedestrian which is the acting agent for the current episode is marked with a blue triangle.}
+	\end{subfigure}
+	\begin{subfigure}[t]{.5\linewidth}
+		\centering
+		\includegraphics[width=.95\textwidth]{figures/env_screenshot_agent_perspective.png}
+		\label{fig:agent-perspective_env}
+		\centering
+		\caption{Representation of the video frame in the in-house built environment. The blue square represents the acting agent, the red squares represent other pedestrians (obstacles), and the green square represents the goal. The yellow circle around the agent is the area around the agent taken into consideration while computing the local information used by the agent.} 
+	\end{subfigure}
+	\begin{subfigure}[b]{\linewidth}
+		\centering
+		\includegraphics[width=.4\textwidth]{figures/agent_perspective_recreated.png}
+		\label{fig:agent-perspective_agent-perspective}
+		\caption{The local information from the frame as perceived by the agent using the risk features. The spatial bins are represented by the concentric circles around the agent (black square) and the dotted lines. The squares in green mark pedestrians which pose low risk, while the ones in blue denote medium risk.}
+	\end{subfigure}
+\end{figure}
 
 %Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
 %\textbf{What is smoothing?}\\
