@@ -91,7 +91,7 @@ To get a comprehensive comparison of the performance of the agents, we compare t
 %        \item \textbf{Minimum distance over time graphs:} Indicates the minimum distance maintained by an agent throughout its entire trajectory. It can be thought of as a measure of how 'dangerously' or 'cautiously' an agent behaves while interacting with neighboring obstacles. (line graphs over time frame)
         \item \textbf{Trajectory smoothness:} Trajectories traced by people are smooth with rare occurrences of drastic change in the heading direction. This metric measures how much an agent changes its heading direction, thus the smoothness of its trajectory while negotiating obstacles or navigating in general. (bar plots with error bars.)
         \item \textbf{Drift analysis plots: }The main aim of the work is to obtain agents that navigate and interact with crowds like a human being, which is why the drift analysis is one of the most important metrics we use to evaluate the agents. This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian and is calculated as the mean squared error (MSE) between the points on the trajectory of the agent and the pedestrian (ground truth) at each time frame. The comparison is performed over a range of trajectory segment lengths to showcase the short to medium term navigation capabilities of the agents. It is a measure of how much the trajectory traced by an agent conforms to the original trajectory of the pedestrian when subjected to similar conditions. (line graphs with error bars)\\
-        \textbf{\textcolor{red}{Navigation is an under-constrained problem}}. This is especially true for sparsely populated regions with more than one paths to a given destination. To better understand the 'drift' of the agents from the ground truth, we classify the pedestrians into 3 different classes: easy, medium, and hard, based on the average number of pedestrians in the vicinity and perform separate drift analysis on the pedestrians of each class. \textcolor{red}{the criteria for classification}. The idea is that a pedestrian from the "easier" class encounters relatively less crowd along its path, which in turn provides a wider choice of 'good' trajectories, that does not necessarily conform to the ground truth. 
+        \textbf{\textcolor{red}{Navigation is an under-constrained problem}}. This is especially true for sparsely populated regions with more than one paths to a given destination. To better understand the 'drift' of the agents from the ground truth, we classify the pedestrians into 3 different classes: easy, moderate, and difficult, based on the average number of pedestrians in the vicinity and perform separate drift analysis on the pedestrians of each class. \textcolor{red}{the criteria for classification}. The idea is that a pedestrian from the "easier" class encounters relatively less crowd along its path, which in turn provides a wider choice of 'good' trajectories, that does not necessarily conform to the ground truth. 
         %\item \textbf{Traced trajectory of multiple agents for a particular pedestrian:} Primarily a visual tool to see how an agent performs in comparison to the ground truth.
 \end{itemize}
 
@@ -229,14 +229,14 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth, height=6cm]{plots/ucy_inter_irl_new/goal_reached_ucy_inter_irl.png}
-		\label{fig:inter_IRL-goal_reached}
 		\caption{Fraction of the runs where the agent succeeds in reaching the goal}
+		\label{fig:inter_IRL-goal_reached}
 	\end{subfigure}
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth, height=6cm]{plots/ucy_inter_irl_new/count_collisions_ucy_inter_irl.png}
-		\label{fig:inter_IRL-collision_counts}
 		\caption{Average number of collisions encountered by the agent per trajectory.}
+		\label{fig:inter_IRL-collision_counts}
 	\end{subfigure}
 	\caption{Comparing the fundamental requirements for navigation of different feature representations }
 \end{figure}
@@ -264,7 +264,7 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 %	\caption{Comparing the efficiency of the path taken by the different agents to reach their goals}
 %\end{figure}
 
-We carry out a similar performance analysis as before. Figure \ref{fig:inter_IRL-goal_reached} and \ref{fig:inter_IRL-collision_counts} show that in both the fundamental tasks, the risk features outperforms the others with a considerable margin, reaching the goal $71.73\%$ of the times as compared to $16.17$, $40.05\%$ and $56.16\%$ of Vasquez $\mathcal{F}1$, Vasquez $\mathcal{F}3$ and Goal conditioned SAM respectively and encountering significantly less collision counts, $0.41$, compared to $2.10$, $1.25$ and $0.72$ from the other  representations. In qualitative evaluation metrics, the risk feature based agent produces comparable results in terms of trajectory smoothness (Figure. \ref{fig:inter_IRL-change_in_orientation_avg}). %and outperforms the others at making efficient navigation choices producing shorter paths to the goal while avoiding obstacles (Figure. \ref{fig:inter_IRL-distance_disp_ratio_histplot}). 
+We carry out a similar performance analysis as before. \autoref{fig:inter_IRL-goal_reached} and \autoref{fig:inter_IRL-collision_counts} show that in both the fundamental tasks, the risk features outperforms the others with a considerable margin, reaching the goal $71.73\%$ of the times as compared to $16.17$, $40.05\%$ and $56.16\%$ of Vasquez $\mathcal{F}1$, Vasquez $\mathcal{F}3$ and Goal conditioned SAM respectively and encountering significantly less collision counts, $0.41$, compared to $2.10$, $1.25$ and $0.72$ from the other  representations. In qualitative evaluation metrics, the risk feature based agent produces comparable results in terms of trajectory smoothness (\autoref{fig:inter_IRL-change_in_orientation_avg}). %and outperforms the others at making efficient navigation choices producing shorter paths to the goal while avoiding obstacles (Figure. \ref{fig:inter_IRL-distance_disp_ratio_histplot}). 
 Table \ref{tab:inter_irl_numerical_comparison} summarizes the scores obtained by the different feature representations.
 \begin{table}[htbp]
 	\begin{center}
@@ -289,31 +289,31 @@ Table \ref{tab:inter_irl_numerical_comparison} summarizes the scores obtained by
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_irl_new/drift_easy_ucy_inter_irl.png}
-		\caption {Drift analysis easy}
+		\caption {Drift analysis over pedestrians of the easy class.}
 		\label{fig:inter_IRL-drift_analysis_easy}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_irl_new/drift_med_ucy_inter_irl.png}
-		\caption {Drift analysis medium}
+		\caption {Drift analysis over pedestrians of the moderate class.}
 		\label{fig:inter_IRL-drift_analysis_med}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_irl_new/drift_hard_ucy_inter_irl.png}
-		\caption {Drift analysis hard}
+		\caption {Drift analysis over pedestrians of the difficult class.}
 		\label{fig:inter_IRL-drift_analysis_hard}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_irl_new/drift_all_ucy_inter_irl.png}
-		\caption {Drift analysis all}
+		\caption {Drift analysis over all the pedestrians.}
 		\label{fig:inter_IRL-drift_analysis_all}
 	\end{subfigure}
-	\caption{Drift analysis inter IRL}
+	\caption{Drift analysis across different feature representations on the UCY university students dataset.}
 \end{figure}
 
-The difference is less pronounced as compared to the agents from different methods. Figures. \ref{fig:inter_IRL-drift_analysis_all}, \ref{fig:inter_IRL-drift_analysis_easy}, \ref{fig:inter_IRL-drift_analysis_med}), with the risk features consistently outperforming the other representations in all the difficulty levels. This show that the IRL in junction with the risk features is the combination to obtain agents that best reflect human behavior while moving through a social setting while respecting the fundamentals of navigation.
+The difference is less pronounced as compared to the agents from different methods. Figures. \ref{fig:inter_IRL-drift_analysis_easy}, \ref{fig:inter_IRL-drift_analysis_med}, \ref{fig:inter_IRL-drift_analysis_hard}), with the risk features consistently outperforming the other representations in all the difficulty levels. This show that the IRL in junction with the risk features is the combination to obtain agents that best reflect human behavior while moving through a social setting while respecting the fundamentals of navigation.
 
 \vspace{4cm}
 \section{Testing for generalization}
