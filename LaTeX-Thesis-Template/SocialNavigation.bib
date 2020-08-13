@@ -1,0 +1,652 @@
+
+@article{kretzschmar_socially_2016,
+	title = {Socially compliant mobile robot navigation via inverse reinforcement learning},
+	volume = {35},
+	issn = {0278-3649, 1741-3176},
+	url = {http://journals.sagepub.com/doi/10.1177/0278364915619772},
+	doi = {10.1177/0278364915619772},
+	abstract = {Mobile robots are increasingly populating our human environments. To interact with humans in a socially compliant way, these robots need to understand and comply with mutually accepted rules. In this paper, we present a novel approach to model the cooperative navigation behavior of humans. We model their behavior in terms of a mixture distribution that captures both the discrete navigation decisions, such as going left or going right, as well as the natural variance of human trajectories. Our approach learns the model parameters of this distribution that match, in expectation, the observed behavior in terms of user-deﬁned features. To compute the feature expectations over the resulting high-dimensional continuous distributions, we use Hamiltonian Markov chain Monte Carlo sampling. Furthermore, we rely on a Voronoi graph of the environment to efﬁciently explore the space of trajectories from the robot’s current position to its target position. Using the proposed model, our method is able to imitate the behavior of pedestrians or, alternatively, to replicate a speciﬁc behavior that was taught by tele-operation in the target environment of the robot. We implemented our approach on a real mobile robot and demonstrated that it is able to successfully navigate in an ofﬁce environment in the presence of humans. An extensive set of experiments suggests that our technique outperforms state-of-the-art methods to model the behavior of pedestrians, which also makes it applicable to ﬁelds such as behavioral science or computer graphics.},
+	language = {en},
+	number = {11},
+	urldate = {2019-01-24},
+	journal = {The International Journal of Robotics Research},
+	author = {Kretzschmar, Henrik and Spies, Markus and Sprunk, Christoph and Burgard, Wolfram},
+	month = sep,
+	year = {2016},
+	pages = {1289--1307},
+	file = {Kretzschmar et al. - 2016 - Socially compliant mobile robot navigation via inv.pdf:/home/abhisek/Zotero/storage/R3ENEDK3/Kretzschmar et al. - 2016 - Socially compliant mobile robot navigation via inv.pdf:application/pdf}
+}
+
+@incollection{leibe_learning_2016,
+	address = {Cham},
+	title = {Learning {Social} {Etiquette}: {Human} {Trajectory} {Understanding} {In} {Crowded} {Scenes}},
+	volume = {9912},
+	isbn = {978-3-319-46483-1 978-3-319-46484-8},
+	shorttitle = {Learning {Social} {Etiquette}},
+	url = {http://link.springer.com/10.1007/978-3-319-46484-8_33},
+	abstract = {Humans navigate crowded spaces such as a university campus by following common sense rules based on social etiquette. In this paper, we argue that in order to enable the design of new target tracking or trajectory forecasting methods that can take full advantage of these rules, we need to have access to better data in the ﬁrst place. To that end, we contribute a new large-scale dataset that collects videos of various types of targets (not just pedestrians, but also bikers, skateboarders, cars, buses, golf carts) that navigate in a real world outdoor environment such as a university campus. Moreover, we introduce a new characterization that describes the “social sensitivity” at which two targets interact. We use this characterization to deﬁne “navigation styles” and improve both forecasting models and state-of-the-art multi-target tracking - whereby the learnt forecasting models help the data association step.},
+	language = {en},
+	urldate = {2019-01-24},
+	booktitle = {Computer {Vision} – {ECCV} 2016},
+	publisher = {Springer International Publishing},
+	author = {Robicquet, Alexandre and Sadeghian, Amir and Alahi, Alexandre and Savarese, Silvio},
+	editor = {Leibe, Bastian and Matas, Jiri and Sebe, Nicu and Welling, Max},
+	year = {2016},
+	doi = {10.1007/978-3-319-46484-8_33},
+	pages = {549--565},
+	file = {Robicquet et al. - 2016 - Learning Social Etiquette Human Trajectory Unders.pdf:/home/abhisek/Zotero/storage/8UUU4CT6/Robicquet et al. - 2016 - Learning Social Etiquette Human Trajectory Unders.pdf:application/pdf}
+}
+
+@article{chen_socially_2017,
+	title = {Socially {Aware} {Motion} {Planning} with {Deep} {Reinforcement} {Learning}},
+	url = {http://arxiv.org/abs/1703.08862},
+	abstract = {For robotic vehicles to navigate safely and efﬁciently in pedestrian-rich environments, it is important to model subtle human behaviors and navigation rules (e.g., passing on the right). However, while instinctive to humans, socially compliant navigation is still difﬁcult to quantify due to the stochasticity in people’s behaviors. Existing works are mostly focused on using feature-matching techniques to describe and imitate human paths, but often do not generalize well since the feature values can vary from person to person, and even run to run. This work notes that while it is challenging to directly specify the details of what to do (precise mechanisms of human navigation), it is straightforward to specify what not to do (violations of social norms). Speciﬁcally, using deep reinforcement learning, this work develops a time-efﬁcient navigation policy that respects common social norms. The proposed method is shown to enable fully autonomous navigation of a robotic vehicle moving at human walking speed in an environment with many pedestrians.},
+	language = {en},
+	urldate = {2019-01-24},
+	journal = {arXiv:1703.08862 [cs]},
+	author = {Chen, Yu Fan and Everett, Michael and Liu, Miao and How, Jonathan P.},
+	month = mar,
+	year = {2017},
+	note = {arXiv: 1703.08862},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Human-Computer Interaction, Computer Science - Robotics},
+	file = {Chen et al. - 2017 - Socially Aware Motion Planning with Deep Reinforce.pdf:/home/abhisek/Zotero/storage/L244RP36/Chen et al. - 2017 - Socially Aware Motion Planning with Deep Reinforce.pdf:application/pdf}
+}
+
+@inproceedings{vasquez_inverse_2014,
+	address = {Chicago, IL, USA},
+	title = {Inverse {Reinforcement} {Learning} algorithms and features for robot navigation in crowds: {An} experimental comparison},
+	isbn = {978-1-4799-6934-0 978-1-4799-6931-9},
+	shorttitle = {Inverse {Reinforcement} {Learning} algorithms and features for robot navigation in crowds},
+	url = {http://ieeexplore.ieee.org/document/6942731/},
+	doi = {10.1109/IROS.2014.6942731},
+	abstract = {For mobile robots which operate in human pop­ ulated environments, modeling social interactions is key to understand and reproduce people's behavior. A promising approach to this end is Inverse Reinforcement Learning (IRL) as it allows to model the factors that motivate people's actions instead of the actions themselves. A crucial design choice in IRL is the selection of features that encode the agent's context. In related work, features are typically chosen ad hoc without systematic evaluation of the alternatives and their actual impact on the robot's task. In this paper, we introduce a new software framework to systematically investigate the effect features and learning algorithms used in the literature. We also present results for the task of socially compliant robot navigation in crowds, evaluating two different IRL approaches and several feature sets in large-scale simulations. The results are benchmarked according to a proposed set of objective and subjective performance metrics.},
+	language = {en},
+	urldate = {2019-01-24},
+	booktitle = {2014 {IEEE}/{RSJ} {International} {Conference} on {Intelligent} {Robots} and {Systems}},
+	publisher = {IEEE},
+	author = {Vasquez, Dizan and Okal, Billy and Arras, Kai O.},
+	month = sep,
+	year = {2014},
+	pages = {1341--1346},
+	file = {Vasquez et al. - 2014 - Inverse Reinforcement Learning algorithms and feat.pdf:/home/abhisek/Zotero/storage/VGBLXTM8/Vasquez et al. - 2014 - Inverse Reinforcement Learning algorithms and feat.pdf:application/pdf}
+}
+
+@inproceedings{alahi_social_2016,
+	address = {Las Vegas, NV, USA},
+	title = {Social {LSTM}: {Human} {Trajectory} {Prediction} in {Crowded} {Spaces}},
+	isbn = {978-1-4673-8851-1},
+	shorttitle = {Social {LSTM}},
+	url = {http://ieeexplore.ieee.org/document/7780479/},
+	doi = {10.1109/CVPR.2016.110},
+	abstract = {Pedestrians follow different trajectories to avoid obstacles and accommodate fellow pedestrians. Any autonomous vehicle navigating such a scene should be able to foresee the future positions of pedestrians and accordingly adjust its path to avoid collisions. This problem of trajectory prediction can be viewed as a sequence generation task, where we are interested in predicting the future trajectory of people based on their past positions. Following the recent success of Recurrent Neural Network (RNN) models for sequence prediction tasks, we propose an LSTM model which can learn general human movement and predict their future trajectories. This is in contrast to traditional approaches which use hand-crafted functions such as Social forces. We demonstrate the performance of our method on several public datasets. Our model outperforms state-of-the-art methods on some of these datasets . We also analyze the trajectories predicted by our model to demonstrate the motion behaviour learned by our model.},
+	language = {en},
+	urldate = {2019-01-24},
+	booktitle = {2016 {IEEE} {Conference} on {Computer} {Vision} and {Pattern} {Recognition} ({CVPR})},
+	publisher = {IEEE},
+	author = {Alahi, Alexandre and Goel, Kratarth and Ramanathan, Vignesh and Robicquet, Alexandre and Fei-Fei, Li and Savarese, Silvio},
+	month = jun,
+	year = {2016},
+	pages = {961--971},
+	file = {Alahi et al. - 2016 - Social LSTM Human Trajectory Prediction in Crowde.pdf:/home/abhisek/Zotero/storage/SWLIDMY6/Alahi et al. - 2016 - Social LSTM Human Trajectory Prediction in Crowde.pdf:application/pdf;Alahi et al. - 2016 - Social LSTM Human Trajectory Prediction in Crowde.pdf:/home/abhisek/Zotero/storage/P57PTPMY/Alahi et al. - 2016 - Social LSTM Human Trajectory Prediction in Crowde.pdf:application/pdf}
+}
+
+@misc{noauthor_social_nodate,
+	title = {Social {Robotics} {Lab}, {University} of {Freiburg}},
+	url = {http://srl.informatik.uni-freiburg.de/publications},
+	urldate = {2019-01-25},
+	file = {Social Robotics Lab, University of Freiburg:/home/abhisek/Zotero/storage/K8PSMVMD/publications.html:text/html}
+}
+
+@article{kim_socially_2016,
+	title = {Socially {Adaptive} {Path} {Planning} in {Human} {Environments} {Using} {Inverse} {Reinforcement} {Learning}},
+	volume = {8},
+	issn = {1875-4791, 1875-4805},
+	url = {http://link.springer.com/10.1007/s12369-015-0310-2},
+	doi = {10.1007/s12369-015-0310-2},
+	language = {en},
+	number = {1},
+	urldate = {2019-04-23},
+	journal = {International Journal of Social Robotics},
+	author = {Kim, Beomjoon and Pineau, Joelle},
+	month = jan,
+	year = {2016},
+	pages = {51--66},
+	file = {Kim and Pineau - 2016 - Socially Adaptive Path Planning in Human Environme.pdf:/home/abhisek/Zotero/storage/LBTYV3PG/Kim and Pineau - 2016 - Socially Adaptive Path Planning in Human Environme.pdf:application/pdf}
+}
+
+@inproceedings{luber_socially-aware_2012,
+	title = {Socially-aware robot navigation: {A} learning approach},
+	shorttitle = {Socially-aware robot navigation},
+	doi = {10.1109/IROS.2012.6385716},
+	abstract = {The ability to act in a socially-aware way is a key skill for robots that share a space with humans. In this paper we address the problem of socially-aware navigation among people that meets objective criteria such as travel time or path length as well as subjective criteria such as social comfort. Opposed to model-based approaches typically taken in related work, we pose the problem as an unsupervised learning problem. We learn a set of dynamic motion prototypes from observations of relative motion behavior of humans found in publicly available surveillance data sets. The learned motion prototypes are then used to compute dynamic cost maps for path planning using an any-angle A* algorithm. In the evaluation we demonstrate that the learned behaviors are better in reproducing human relative motion in both criteria than a Proxemics-based baseline method.},
+	booktitle = {2012 {IEEE}/{RSJ} {International} {Conference} on {Intelligent} {Robots} and {Systems}},
+	author = {Luber, M. and Spinello, L. and Silva, J. and Arras, K. O.},
+	month = oct,
+	year = {2012},
+	keywords = {any-angle A* algorithm, Computational modeling, Context, dynamic motion prototypes, Dynamics, Heuristic algorithms, Humans, learning approach, mobile robots, path length, Prototypes, Proxemics-based baseline method, Robots, social sciences, socially-aware robot navigation, travel time, unsupervised learning, unsupervised learning problem},
+	pages = {902--907},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/NWXBSM99/6385716.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/XKFWDY3C/Luber et al. - 2012 - Socially-aware robot navigation A learning approa.pdf:application/pdf}
+}
+
+@misc{noauthor_socially_nodate,
+	title = {Socially aware robot navigation system in human-populated and interactive environments based on an adaptive spatial density function and space affordances {\textbar} {Elsevier} {Enhanced} {Reader}},
+	url = {https://reader.elsevier.com/reader/sd/pii/S0167865518303052?token=E69B79AEC571617AAF92D06D163A0F84CE31D32CEEB04E778AB2BBBE5B969DD40C668CA0CE90994CB787DE7F49EAEA02},
+	language = {en},
+	urldate = {2019-04-23},
+	doi = {10.1016/j.patrec.2018.07.015},
+	file = {Snapshot:/home/abhisek/Zotero/storage/HESFAHND/S0167865518303052.html:text/html}
+}
+
+@incollection{agah_formalizing_2016,
+	address = {Cham},
+	title = {Formalizing {Normative} {Robot} {Behavior}},
+	volume = {9979},
+	isbn = {978-3-319-47436-6 978-3-319-47437-3},
+	url = {http://link.springer.com/10.1007/978-3-319-47437-3_7},
+	abstract = {We address the task of modeling, generating and evaluating normative behavior for interactive robots. Normative behavior is essential for coherent deployment of these robots in human populated spaces. We develop a ﬁrst unifying, intuitive and general formalism of the task that subsumes most previous approaches which have focused mainly on speciﬁc tasks. We present concrete and practical deﬁnitions of norms and show how to generate and evaluate behavior that adheres to such norms. We then demonstrate the formalism on a socially normative navigation task for service robots. Further, we discuss the key challenges in realizing such behaviors, and in particular, the role of perception and uncertainty.},
+	language = {en},
+	urldate = {2019-04-23},
+	booktitle = {Social {Robotics}},
+	publisher = {Springer International Publishing},
+	author = {Okal, Billy and Arras, Kai O.},
+	editor = {Agah, Arvin and Cabibihan, John-John and Howard, Ayanna M. and Salichs, Miguel A. and He, Hongsheng},
+	year = {2016},
+	doi = {10.1007/978-3-319-47437-3_7},
+	pages = {62--71},
+	file = {Okal and Arras - 2016 - Formalizing Normative Robot Behavior.pdf:/home/abhisek/Zotero/storage/Y5V79IUL/Okal and Arras - 2016 - Formalizing Normative Robot Behavior.pdf:application/pdf}
+}
+
+@inproceedings{tai_socially_2018,
+	title = {Socially {Compliant} {Navigation} {Through} {Raw} {Depth} {Inputs} with {Generative} {Adversarial} {Imitation} {Learning}},
+	doi = {10.1109/ICRA.2018.8460968},
+	abstract = {We present an approach for mobile robots to learn to navigate in dynamic environments with pedestrians via raw depth inputs, in a socially compliant manner. To achieve this, we adopt a generative adversarial imitation learning (GAIL) strategy, which improves upon a pre-trained behavior cloning policy. Our approach overcomes the disadvantages of previous methods, as they heavily depend on the full knowledge of the location and velocity information of nearby pedestrians, which not only requires specific sensors, but also the extraction of such state information from raw sensory input could consume much computation time. In this paper, our proposed GAIL-based model performs directly on raw depth inputs and plans in real-time. Experiments show that our GAIL-based approach greatly improves the safety and efficiency of the behavior of mobile robots from pure behavior cloning. The real-world deployment also shows that our method is capable of guiding autonomous vehicles to navigate in a socially compliant manner directly through raw depth inputs. In addition, we release a simulation plugin for modeling pedestrian behaviors based on the social force model.},
+	booktitle = {2018 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+	author = {Tai, L. and Zhang, J. and Liu, M. and Burgard, W.},
+	month = may,
+	year = {2018},
+	keywords = {mobile robots, behavior cloning policy, Cloning, Force, GAIL-based approach, generative adversarial imitation learning strategy, learning (artificial intelligence), Learning (artificial intelligence), Mobile robots, Navigation, path planning, raw depth inputs, raw sensory input, Sensors, social force model, socially compliant manner, socially compliant navigation, Visualization},
+	pages = {1111--1117},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/S74U7WXU/8460968.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/EAK2XVAH/Tai et al. - 2018 - Socially Compliant Navigation Through Raw Depth In.pdf:application/pdf}
+}
+
+@inproceedings{okal_learning_2016,
+	title = {Learning socially normative robot navigation behaviors with {Bayesian} inverse reinforcement learning},
+	doi = {10.1109/ICRA.2016.7487452},
+	abstract = {Mobile robots that navigate in populated environments require the capacity to move efficiently, safely and in human-friendly ways. In this paper, we address this task using a learning approach that enables a mobile robot to acquire navigation behaviors from demonstrations of socially normative human behavior. In the past, such approaches have been typically used to learn only simple behaviors under relatively controlled conditions using rigid representations or with methods that scale poorly to large domains. We thus develop a flexible graph-based representation able to capture relevant task structure and extend Bayesian inverse reinforcement learning to use sampled trajectories from this representation. In experiments with a real robot and a large-scale pedestrian simulator, we are able to show that the approach enables a robot to learn complex navigation behaviors of varying degrees of social normativeness using the same set of simple features.},
+	booktitle = {2016 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+	author = {Okal, B. and Arras, K. O.},
+	month = may,
+	year = {2016},
+	keywords = {mobile robots, Learning (artificial intelligence), Mobile robots, Navigation, path planning, Bayes methods, Bayesian inverse reinforcement learning, graph theory, graph-based representation, large-scale pedestrian simulator, learning systems, Measurement, socially normative human behavior, socially normative robot navigation behaviors, Trajectory},
+	pages = {2889--2895},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/ZLSHSJU8/7487452.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/EMLKE5IP/Okal and Arras - 2016 - Learning socially normative robot navigation behav.pdf:application/pdf}
+}
+
+@inproceedings{henry_learning_2010,
+	address = {Anchorage, AK},
+	title = {Learning to navigate through crowded environments},
+	isbn = {978-1-4244-5038-1},
+	url = {http://ieeexplore.ieee.org/document/5509772/},
+	doi = {10.1109/ROBOT.2010.5509772},
+	abstract = {The goal of this research is to enable mobile robots to navigate through crowded environments such as indoor shopping malls, airports, or downtown side walks. The key research question addressed in this paper is how to learn planners that generate human-like motion behavior. Our approach uses inverse reinforcement learning (IRL) to learn human-like navigation behavior based on example paths. Since robots have only limited sensing, we extend existing IRL methods to the case of partially observable environments. We demonstrate the capabilities of our approach using a realistic crowd ﬂow simulator in which we modeled multiple scenarios in crowded environments. We show that our planner learned to guide the robot along the ﬂow of people when the environment is crowded, and along the shortest path if no people are around.},
+	language = {en},
+	urldate = {2019-04-23},
+	booktitle = {2010 {IEEE} {International} {Conference} on {Robotics} and {Automation}},
+	publisher = {IEEE},
+	author = {Henry, Peter and Vollmer, Christian and Ferris, Brian and Fox, Dieter},
+	month = may,
+	year = {2010},
+	pages = {981--986},
+	file = {Henry et al. - 2010 - Learning to navigate through crowded environments.pdf:/home/abhisek/Zotero/storage/T53BR88U/Henry et al. - 2010 - Learning to navigate through crowded environments.pdf:application/pdf}
+}
+
+@article{kuderer_feature-based_nodate,
+	title = {Feature-{Based} {Prediction} of {Trajectories} for {Socially} {Compliant} {Navigation}},
+	abstract = {Mobile robots that operate in a shared environment with humans need the ability to predict the movements of people to better plan their navigation actions. In this paper, we present a novel approach to predict the movements of pedestrians. Our method reasons about entire trajectories that arise from interactions between people in navigation tasks. It applies a maximum entropy learning method based on features that capture relevant aspects of the trajectories to determine the probability distribution that underlies human navigation behavior. Hence, our approach can be used by mobile robots to predict forthcoming interactions with pedestrians and thus react in a socially compliant way. In extensive experiments, we evaluate the capability and accuracy of our approach and demonstrate that our algorithm outperforms the popular social forces method, a state-of-the-art approach. Furthermore, we show how our algorithm can be used for autonomous robot navigation using a real robot.},
+	language = {en},
+	author = {Kuderer, Markus and Kretzschmar, Henrik and Sprunk, Christoph and Burgard, Wolfram},
+	pages = {8},
+	file = {Kuderer et al. - Feature-Based Prediction of Trajectories for Socia.pdf:/home/abhisek/Zotero/storage/434MIX47/Kuderer et al. - Feature-Based Prediction of Trajectories for Socia.pdf:application/pdf}
+}
+
+@article{mombaur_human_2010,
+	title = {From human to humanoid locomotion—an inverse optimal control approach},
+	volume = {28},
+	issn = {0929-5593, 1573-7527},
+	url = {http://link.springer.com/10.1007/s10514-009-9170-7},
+	doi = {10.1007/s10514-009-9170-7},
+	abstract = {The purpose of this paper is to present inverse optimal control as a promising approach to transfer biological motions to robots. Inverse optimal control helps (a) to understand and identify the underlying optimality criteria of biological motions based on measurements, and (b) to establish optimal control models that can be used to control robot motion. The aim of inverse optimal control problems is to determine—for a given dynamic process and an observed solution—the optimization criterion that has produced the solution. Inverse optimal control problems are difﬁcult from a mathematical point of view, since they require to solve a parameter identiﬁcation problem inside an optimal control problem. We propose a pragmatic new bilevel approach to solve inverse optimal control problems which rests on two pillars: an efﬁcient direct multiple shooting technique to handle optimal control problems, and a state-of-the art derivative free trust region optimization technique to guarantee a match between optimal control problem solution and measurements. In this paper, we apply inverse optimal control to establish a model of human overall locomotion path generation to given target positions and orientations, based on newly collected motion capture data. It is shown how the optimal control model can be implemented on the humanoid robot HRP-2 and thus enable it to autonomously generate natural locomotion paths.},
+	language = {en},
+	number = {3},
+	urldate = {2019-04-23},
+	journal = {Autonomous Robots},
+	author = {Mombaur, Katja and Truong, Anh and Laumond, Jean-Paul},
+	month = apr,
+	year = {2010},
+	pages = {369--383},
+	file = {Mombaur et al. - 2010 - From human to humanoid locomotion—an inverse optim.pdf:/home/abhisek/Zotero/storage/KFYPNLSC/Mombaur et al. - 2010 - From human to humanoid locomotion—an inverse optim.pdf:application/pdf}
+}
+
+@article{okal_efcient_nodate,
+	title = {Efﬁcient {Inverse} {Reinforcement} {Learning} using {Adaptive} {State}-{Graphs}.},
+	abstract = {Inverse Reinforcement Learning (IRL) provides a powerful mechanism for learning complex behaviors from demonstration by rationalizing such demonstrations. Unfortunately its applicability has been largely hindered by lack of powerful representations that can take advantage of various task affordances while still admitting scalability. Inspired by the success of sampling based approaches in classical motion planning, we use adaptive state graphs to model the underlying Markov decision process (MDP) allowing us to further incorporate task speciﬁc constraints efﬁciently. We then develop a new Bayesian IRL (BIRL) algorithm to learn behaviors using sampled trajectories over the adaptive state graph. We demonstrate the effectiveness of this approach in the task of learning socially compliant robot navigation policies.},
+	language = {en},
+	author = {Okal, Billy and Gilbert, Hugo and Arras, Kai O},
+	pages = {2},
+	file = {Okal et al. - Efﬁcient Inverse Reinforcement Learning using Adap.pdf:/home/abhisek/Zotero/storage/BZTKLNAC/Okal et al. - Efﬁcient Inverse Reinforcement Learning using Adap.pdf:application/pdf}
+}
+
+@article{kavraki_probabilistic_1996,
+	title = {Probabilistic roadmaps for path planning in high-dimensional configuration spaces},
+	volume = {12},
+	issn = {1042-296X},
+	doi = {10.1109/70.508439},
+	abstract = {A new motion planning method for robots in static workspaces is presented. This method proceeds in two phases: a learning phase and a query phase. In the learning phase, a probabilistic roadmap is constructed and stored as a graph whose nodes correspond to collision-free configurations and whose edges correspond to feasible paths between these configurations. These paths are computed using a simple and fast local planner. In the query phase, any given start and goal configurations of the robot are connected to two nodes of the roadmap; the roadmap is then searched for a path joining these two nodes. The method is general and easy to implement. It can be applied to virtually any type of holonomic robot. It requires selecting certain parameters (e.g., the duration of the learning phase) whose values depend on the scene, that is the robot and its workspace. But these values turn out to be relatively easy to choose, Increased efficiency can also be achieved by tailoring some components of the method (e.g., the local planner) to the considered robots. In this paper the method is applied to planar articulated robots with many degrees of freedom. Experimental results show that path planning can be done in a fraction of a second on a contemporary workstation (/spl ap/150 MIPS), after learning for relatively short periods of time (a few dozen seconds).},
+	number = {4},
+	journal = {IEEE Transactions on Robotics and Automation},
+	author = {Kavraki, L. E. and Svestka, P. and Latombe, J.- and Overmars, M. H.},
+	month = aug,
+	year = {1996},
+	keywords = {mobile robots, Robots, learning (artificial intelligence), path planning, graph theory, collision-free configurations, Computer science, goal configurations, graph, high-dimensional configuration spaces, holonomic robot, Joining processes, Laboratories, Layout, learning phase, local planner, motion planning, Motion planning, multi-DOF planar articulated robots, Orbital robotics, Path planning, probabilistic roadmaps, probability, query phase, robots, start configurations, static workspaces, Workstations},
+	pages = {566--580},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/NCM275A6/508439.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/F29ZIWLS/Kavraki et al. - 1996 - Probabilistic roadmaps for path planning in high-d.pdf:application/pdf}
+}
+
+@inproceedings{shiarlis_rapidly_2017,
+	title = {Rapidly exploring learning trees},
+	doi = {10.1109/ICRA.2017.7989184},
+	abstract = {Inverse Reinforcement Learning (IRL) for path planning enables robots to learn cost functions for difficult tasks from demonstration, instead of hard-coding them. However, IRL methods face practical limitations that stem from the need to repeat costly planning procedures. In this paper, we propose Rapidly Exploring Learning Trees (RLT*), which learns the cost functions of Optimal Rapidly Exploring Random Trees (RRT*) from demonstration, thereby making inverse learning methods applicable to more complex tasks. Our approach extends Maximum Margin Planning to work with RRT* cost functions. Furthermore, we propose a caching scheme that greatly reduces the computational cost of this approach. Experimental results on simulated and real-robot data from a social navigation scenario show that RLT* achieves better performance at lower computational cost than existing methods. We also successfully deploy control policies learned with RLT* on a real telepresence robot.},
+	booktitle = {2017 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+	author = {Shiarlis, K. and Messias, J. and Whiteson, S.},
+	month = may,
+	year = {2017},
+	keywords = {learning (artificial intelligence), Learning (artificial intelligence), Mobile robots, path planning, Trajectory, caching scheme, computational cost reduction, control policies, Cost function, inverse reinforcement learning, maximum margin planning, optimal rapidly exploring random trees, optimal RRT*, Planning, rapidly exploring learning trees, real-robot data, RLT*, RRT* cost functions, social navigation scenario, telepresence robot, telerobotics, trees (mathematics)},
+	pages = {1541--1548},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/5T7ISVMK/7989184.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/P5PVPBGI/Shiarlis et al. - 2017 - Rapidly exploring learning trees.pdf:application/pdf}
+}
+
+@article{perez-higueras_teaching_2018,
+	title = {Teaching {Robot} {Navigation} {Behaviors} to {Optimal} {RRT} {Planners}},
+	volume = {10},
+	issn = {1875-4791, 1875-4805},
+	url = {http://link.springer.com/10.1007/s12369-017-0448-1},
+	doi = {10.1007/s12369-017-0448-1},
+	abstract = {This work presents an approach for learning navigation behaviors for robots using Optimal Rapidly-exploring Random Trees (RRT∗) as the main planner. A new learning algorithm combining both Inverse Reinforcement Learning and RRT∗ is developed to learn the RRT∗’s cost function from demonstrations. A comparison with other state-of-the-art algorithms shows how the method can recover the behavior from the demonstrations. Finally, a learned cost function for social navigation is tested in real experiments with a robot in the laboratory.},
+	language = {en},
+	number = {2},
+	urldate = {2019-04-24},
+	journal = {International Journal of Social Robotics},
+	author = {Pérez-Higueras, Noé and Caballero, Fernando and Merino, Luis},
+	month = apr,
+	year = {2018},
+	pages = {235--249},
+	file = {Pérez-Higueras et al. - 2018 - Teaching Robot Navigation Behaviors to Optimal RRT.pdf:/home/abhisek/Zotero/storage/JU5MBJG6/Pérez-Higueras et al. - 2018 - Teaching Robot Navigation Behaviors to Optimal RRT.pdf:application/pdf}
+}
+
+@incollection{kok_efficient_2007,
+	address = {Berlin, Heidelberg},
+	title = {Efficient {Continuous}-{Time} {Reinforcement} {Learning} with {Adaptive} {State} {Graphs}},
+	volume = {4701},
+	isbn = {978-3-540-74957-8 978-3-540-74958-5},
+	url = {http://link.springer.com/10.1007/978-3-540-74958-5_25},
+	abstract = {We present a new reinforcement learning approach for deterministic continuous control problems in environments with unknown, arbitrary reward functions. The diﬃculty of ﬁnding solution trajectories for such problems can be reduced by incorporating limited prior knowledge of the approximative local system dynamics. The presented algorithm builds an adaptive state graph of sample points within the continuous state space. The nodes of the graph are generated by an eﬃcient principled exploration scheme that directs the agent towards promising regions, while maintaining good online performance. Global solution trajectories are formed as combinations of local controllers that connect nodes of the graph, thereby naturally allowing continuous actions and continuous time steps. We demonstrate our approach on various movement planning tasks in continuous domains.},
+	language = {en},
+	urldate = {2019-04-25},
+	booktitle = {Machine {Learning}: {ECML} 2007},
+	publisher = {Springer Berlin Heidelberg},
+	author = {Neumann, Gerhard and Pfeiffer, Michael and Maass, Wolfgang},
+	editor = {Kok, Joost N. and Koronacki, Jacek and Mantaras, Raomon Lopez de and Matwin, Stan and Mladenič, Dunja and Skowron, Andrzej},
+	year = {2007},
+	doi = {10.1007/978-3-540-74958-5_25},
+	pages = {250--261},
+	file = {Neumann et al. - 2007 - Efficient Continuous-Time Reinforcement Learning w.pdf:/home/abhisek/Zotero/storage/EZXM3U49/Neumann et al. - 2007 - Efficient Continuous-Time Reinforcement Learning w.pdf:application/pdf}
+}
+
+@inproceedings{mehta_autonomous_2016,
+	title = {Autonomous navigation in dynamic social environments using {Multi}-{Policy} {Decision} {Making}},
+	doi = {10.1109/IROS.2016.7759200},
+	abstract = {In dynamic environments crowded with people, robot motion planning becomes difficult due to the complex and tightly-coupled interactions between agents. Trajectory planning methods, supported by models of typical human behavior and personal space, often produce reasonable behavior. However, they do not account for the future closed-loop interactions of other agents with the trajectory being constructed. As a consequence, the trajectories are unable to anticipate cooperative interactions (such as a human yielding), or adverse interactions (such as the robot blocking the way). In this paper, we propose a new method for navigation amongst pedestrians in which the trajectory of the robot is not explicitly planned, but instead, a planning process selects one of a set of closed-loop behaviors whose utility can be predicted through forward simulation. In particular, we extend Multi-Policy Decision Making (MPDM) [1] to this domain using the closed-loop behaviors Go-Solo, Follow-other, and Stop. By dynamically switching between these policies, we show that we can improve the performance of the robot as measured by utility functions that reward task completion and penalize inconvenience to other agents. Our evaluation includes extensive results in simulation and real-world experiments.},
+	booktitle = {2016 {IEEE}/{RSJ} {International} {Conference} on {Intelligent} {Robots} and {Systems} ({IROS})},
+	author = {Mehta, D. and Ferrer, G. and Olson, E.},
+	month = oct,
+	year = {2016},
+	keywords = {mobile robots, Robots, Force, Navigation, path planning, Trajectory, Planning, autonomous navigation, closed-loop behaviors, decision making, Decision making, dynamic social environments, MPDM, multipolicy decision making, robot motion planning, Uncertainty},
+	pages = {1190--1197},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/7Q2JJML8/7759200.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/F9NACL4K/Mehta et al. - 2016 - Autonomous navigation in dynamic social environmen.pdf:application/pdf}
+}
+
+@inproceedings{weinrich_prediction_2013,
+	title = {Prediction of human collision avoidance behavior by lifelong learning for socially compliant robot navigation},
+	doi = {10.1109/ICRA.2013.6630603},
+	abstract = {In order to act socially compliant with humans, mobile robots need to show several behaviors that require the prediction of people's motion. For example, when a robot avoids a person, it needs to respect the human's personal space [1] and the avoidance behavior needs to be smooth, so that it is understandable to the interaction partner. To achieve this, the robot needs to reason about future paths a person is likely to follow. Because humans adapt their avoidance behavior to the robot's motion, the proposed method performs lifelong learning of the people's behavior while it adapts its own behavior to their motion. The human avoidance behavior is modeled by a discrete, multi-modal, spatio-temporal distribution over the people's future occurrences. This prediction is based on the people's positions and their velocities relatively to the robot and the obstacle situation of the robot's environment. The proposed prediction method is significantly better than a simple linear prediction. Particularly, for tactical decisions, like whether to avoid a moving person on the left or on the right side, this approach is well suited. Furthermore, when the humans get used to a robot, also a long-term change of the human behavior towards the robot can be learned by our approach.},
+	booktitle = {2013 {IEEE} {International} {Conference} on {Robotics} and {Automation}},
+	author = {Weinrich, C. and Volkhardt, M. and Einhorn, E. and Gross, H.},
+	month = may,
+	year = {2013},
+	keywords = {mobile robots, Robots, Navigation, Trajectory, Cost function, collision avoidance, Collision avoidance, continuing professional development, Correlation, discrete multimodal spatiotemporal distribution, human collision avoidance behavior prediction, human personal space, human-robot interaction, lifelong learning, navigation, obstacle situation, people position, people velocities, robot environment, robot motion, socially compliant robot navigation, Tracking},
+	pages = {376--381},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/8CD8PVLJ/6630603.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/C893PF72/Weinrich et al. - 2013 - Prediction of human collision avoidance behavior b.pdf:application/pdf}
+}
+
+@article{wulfmeier_large-scale_2017,
+	title = {Large-scale cost function learning for path planning using deep inverse reinforcement learning},
+	volume = {36},
+	issn = {0278-3649, 1741-3176},
+	url = {http://journals.sagepub.com/doi/10.1177/0278364917722396},
+	doi = {10.1177/0278364917722396},
+	abstract = {We present an approach for learning spatial traversability maps for driving in complex, urban environments based on an extensive dataset demonstrating the driving behaviour of human experts. The direct end-to-end mapping from raw input data to cost bypasses the effort of manually designing parts of the pipeline, exploits a large number of data samples, and can be framed additionally to reﬁne handcrafted cost maps produced based on manual hand-engineered features. To achieve this, we introduce a maximum-entropy-based, non-linear inverse reinforcement learning (IRL) framework which exploits the capacity of fully convolutional neural networks (FCNs) to represent the cost model underlying driving behaviours. The application of a high-capacity, deep, parametric approach successfully scales to more complex environments and driving behaviours, while at deployment being run-time independent of training dataset size. After benchmarking against state-of-the-art IRL approaches, we focus on demonstrating scalability and performance on an ambitious dataset collected over the course of 1 year including more than 25,000 demonstration trajectories extracted from over 120 km of urban driving. We evaluate the resulting cost representations by showing the advantages over a carefully, manually designed cost map and furthermore demonstrate its robustness towards systematic errors by learning accurate representations even in the presence of calibration perturbations. Importantly, we demonstrate that a manually designed cost map can be reﬁned to more accurately handle corner cases that are scarcely seen in the environment, such as stairs, slopes and underpasses, by further incorporating human priors into the training framework.},
+	language = {en},
+	number = {10},
+	urldate = {2019-05-08},
+	journal = {The International Journal of Robotics Research},
+	author = {Wulfmeier, Markus and Rao, Dushyant and Wang, Dominic Zeng and Ondruska, Peter and Posner, Ingmar},
+	month = sep,
+	year = {2017},
+	pages = {1073--1087},
+	file = {Wulfmeier et al. - 2017 - Large-scale cost function learning for path planni.pdf:/home/abhisek/Zotero/storage/YV9HY9SQ/Wulfmeier et al. - 2017 - Large-scale cost function learning for path planni.pdf:application/pdf}
+}
+
+@inproceedings{vemula_social_2018,
+	title = {Social {Attention}: {Modeling} {Attention} in {Human} {Crowds}},
+	shorttitle = {Social {Attention}},
+	doi = {10.1109/ICRA.2018.8460504},
+	abstract = {Robots that navigate through human crowds need to be able to plan safe, efficient, and human predictable trajectories. This is a particularly challenging problem as it requires the robot to predict future human trajectories within a crowd where everyone implicitly cooperates with each other to avoid collisions. Previous approaches to human trajectory prediction have modeled the interactions between humans as a function of proximity. However, that is not necessarily true as some people in our immediate vicinity moving in the same direction might not be as important as other people that are further away, but that might collide with us in the future. In this work, we propose Social Attention, a novel trajectory prediction model that captures the relative importance of each person when navigating in the crowd, irrespective of their proximity. We demonstrate the performance of our method against a state-of-the-art approach on two publicly available crowd datasets and analyze the trained attention model to gain a better understanding of which surrounding agents humans attend to, when navigating in a crowd.},
+	booktitle = {2018 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+	author = {Vemula, A. and Muelling, K. and Oh, J.},
+	month = may,
+	year = {2018},
+	keywords = {Dynamics, mobile robots, Robots, learning (artificial intelligence), Navigation, path planning, Trajectory, robots, collision avoidance, Collision avoidance, human crowds, human predictable trajectories, human trajectory prediction, Predictive models, publicly available crowd datasets, Social Attention, Task analysis, trained attention model},
+	pages = {1--7},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/2QHGMLY4/8460504.html:text/html;IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/ZPXPIZCU/8460504.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/H9DCEXRK/Vemula et al. - 2018 - Social Attention Modeling Attention in Human Crow.pdf:application/pdf;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/XYGX9RQ5/Vemula et al. - 2018 - Social Attention Modeling Attention in Human Crow.pdf:application/pdf}
+}
+
+@inproceedings{fahad_learning_2018,
+	title = {Learning {How} {Pedestrians} {Navigate}: {A} {Deep} {Inverse} {Reinforcement} {Learning} {Approach}},
+	shorttitle = {Learning {How} {Pedestrians} {Navigate}},
+	doi = {10.1109/IROS.2018.8593438},
+	abstract = {Humans and mobile robots will be increasingly cohabiting in the same environments, which has lead to an increase in studies on human robot interaction (HRI). One important topic in these studies is the development of robot navigation algorithms that are socially compliant to humans navigating in the same space. In this paper, we present a method to learn human navigation behaviors using maximum entropy deep inverse reinforcement learning (MEDIRL). We use a large open dataset of pedestrian trajectories collected in an uncontrolled environment as the expert demonstrations. Human navigation behaviors are captured by a nonlinear reward function through deep neural network (DNN) approximation. The developed MEDIRL algorithm takes feature inputs including social affinity map (SAM) that are extracted from human motion trajectories. We perform simulation experiments using the learned reward function, and the performance is evaluated comparing it with the real measured pedestrian trajectories in the dataset. The evaluation results show that the proposed method has acceptable prediction accuracy compared to other state-of-the-art methods, and it can generate pedestrian trajectories similar to real human trajectories with natural social navigation behaviors such as collision avoidance, leader-follower, and split-and-rejoin.},
+	booktitle = {2018 {IEEE}/{RSJ} {International} {Conference} on {Intelligent} {Robots} and {Systems} ({IROS})},
+	author = {Fahad, M. and Chen, Z. and Guo, Y.},
+	month = oct,
+	year = {2018},
+	keywords = {mobile robots, Robots, learning (artificial intelligence), Navigation, Trajectory, collision avoidance, Collision avoidance, human-robot interaction, navigation, feature extraction, Neural networks, deep inverse reinforcement learning approach, deep neural network approximation, Entropy, human motion trajectories, human navigation behaviors, human robot interaction, learned reward function, maximum entropy deep inverse reinforcement learning, MEDIRL algorithm, natural social navigation behaviors, neural nets, nonlinear reward function, pedestrian trajectories, pedestrians navigation, Reinforcement learning, robot navigation algorithms, social affinity map, trajectory control},
+	pages = {819--826},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/HMSAT9K6/8593438.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/M34Z3QU5/Fahad et al. - 2018 - Learning How Pedestrians Navigate A Deep Inverse .pdf:application/pdf}
+}
+
+@article{lutjens_safe_2018,
+	title = {Safe {Reinforcement} {Learning} with {Model} {Uncertainty} {Estimates}},
+	url = {http://arxiv.org/abs/1810.08700},
+	abstract = {Many current autonomous systems are being designed with a strong reliance on black box predictions from deep neural networks (DNNs). However, DNNs tend to be overconﬁdent in predictions on unseen data and can give unpredictable results for far-from-distribution test data. The importance of predictions that are robust to this distributional shift is evident for safety-critical applications, such as collision avoidance around pedestrians. Measures of model uncertainty can be used to identify unseen data, but the state-of-theart extraction methods such as Bayesian neural networks are mostly intractable to compute. This paper uses MCDropout and Bootstrapping to give computationally tractable and parallelizable uncertainty estimates. The methods are embedded in a Safe Reinforcement Learning framework to form uncertainty-aware navigation around pedestrians. The result is a collision avoidance policy that knows what it does not know and cautiously avoids pedestrians that exhibit unseen behavior. The policy is demonstrated in simulation to be more robust to novel observations and take safer actions than an uncertaintyunaware baseline.},
+	language = {en},
+	urldate = {2019-06-03},
+	journal = {arXiv:1810.08700 [cs]},
+	author = {Lütjens, Björn and Everett, Michael and How, Jonathan P.},
+	month = oct,
+	year = {2018},
+	note = {arXiv: 1810.08700},
+	keywords = {Computer Science - Machine Learning, Computer Science - Artificial Intelligence, Computer Science - Robotics},
+	file = {Lütjens et al. - 2018 - Safe Reinforcement Learning with Model Uncertainty.pdf:/home/abhisek/Zotero/storage/FZ2ECX6Y/Lütjens et al. - 2018 - Safe Reinforcement Learning with Model Uncertainty.pdf:application/pdf}
+}
+
+@article{tsai_generative_nodate,
+	title = {A {Generative} {Approach} for {Socially} {Compliant} {Navigation}},
+	language = {en},
+	author = {Tsai, Chieh-En},
+	pages = {65},
+	file = {Tsai - A Generative Approach for Socially Compliant Navig.pdf:/home/abhisek/Zotero/storage/QC42RA7J/Tsai - A Generative Approach for Socially Compliant Navig.pdf:application/pdf;Tsai - A Generative Approach for Socially Compliant Navig.pdf:/home/abhisek/Zotero/storage/74ULXV3R/Tsai - A Generative Approach for Socially Compliant Navig.pdf:application/pdf}
+}
+
+@article{gupta_social_2018,
+	title = {Social {GAN}: {Socially} {Acceptable} {Trajectories} with {Generative} {Adversarial} {Networks}},
+	shorttitle = {Social {GAN}},
+	url = {http://arxiv.org/abs/1803.10892},
+	abstract = {Understanding human motion behavior is critical for autonomous moving platforms (like self-driving cars and social robots) if they are to navigate human-centric environments. This is challenging because human motion is inherently multimodal: given a history of human motion paths, there are many socially plausible ways that people could move in the future. We tackle this problem by combining tools from sequence prediction and generative adversarial networks: a recurrent sequence-to-sequence model observes motion histories and predicts future behavior, using a novel pooling mechanism to aggregate information across people. We predict socially plausible futures by training adversarially against a recurrent discriminator, and encourage diverse predictions with a novel variety loss. Through experiments on several datasets we demonstrate that our approach outperforms prior work in terms of accuracy, variety, collision avoidance, and computational complexity.},
+	language = {en},
+	urldate = {2019-07-19},
+	journal = {arXiv:1803.10892 [cs]},
+	author = {Gupta, Agrim and Johnson, Justin and Fei-Fei, Li and Savarese, Silvio and Alahi, Alexandre},
+	month = mar,
+	year = {2018},
+	note = {arXiv: 1803.10892},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition},
+	file = {Gupta et al. - 2018 - Social GAN Socially Acceptable Trajectories with .pdf:/home/abhisek/Zotero/storage/KXJYMPPJ/Gupta et al. - 2018 - Social GAN Socially Acceptable Trajectories with .pdf:application/pdf}
+}
+
+@misc{noauthor_toolkit_2019,
+	title = {A toolkit for developing and comparing reinforcement learning algorithms.: openai/gym},
+	shorttitle = {A toolkit for developing and comparing reinforcement learning algorithms.},
+	url = {https://github.com/openai/gym},
+	urldate = {2019-08-29},
+	publisher = {OpenAI},
+	month = aug,
+	year = {2019},
+	note = {original-date: 2016-04-27T14:59:16Z}
+}
+
+@phdthesis{mavrogiannis_motion_2019,
+	title = {Motion {Planning} for {Socially} {Competent} {Robot} {Navigation}},
+	abstract = {Crowded human environments such as pedestrian scenes constitute challenging domains for mobile robot navigation, for a variety of reasons including the heterogeneity of pedestrians’ decision-making mechanisms, the lack of channels of explicit communication among them and the lack of universal rules or social conventions regulating traffic. Despite these complications, humans exhibit socially competent navigation through coordination, realized with implicit communication via a variety of modalities such as path shape and body posture. Sophisticated mechanisms of inference and decision-making allow them to understand subtle communication signals and encode them into their own actions. Although the problem of planning socially competent robot navigation has received significant attention over the past three decades, state-of-the-art approaches tend to explicitly focus on reproducing selected social norms or directly imitating observed human behaviors, while often lack of extensive and thorough validation procedures, thus raising questions about their generalization and reproducibility.
+
+This thesis introduces a family of planning algorithms, inspired by studies on human navigation. Our algorithms are designed to produce socially competent robot navigation behaviors by leveraging the existing mechanisms of implicit coordination in humans. We model multi-agent motion coordination through a series of data structures, based on mathematical abstractions from low-dimensional topology and physics, that capture fundamental properties of multi-agent collision avoidance. These models enable a robot to anticipate the effects of its actions on the inference and decision-making processes of nearby agents and allow for the generation of motion that is compliant with the unfolding evolution of the scene and consistent with the robot’s intentions.
+
+The introduced planning algorithms are supported by extensive simulated and experimental validation. Key findings include: (1) evidence extracted from a series of simulated studies, suggesting that the outlined planning architecture indeed results in effective coordination within groups of non-communicating agents in a variety of simulated scenarios; (2) evidence extracted from an online, video-based user study with more than 180 participants, indicating that humans perceive the motion generated by our framework as intent-expressive; (3) evidence extracted from an experimental study, conducted in a controlled lab environment with 105 human participants, suggesting that humans follow low-acceleration paths when navigating next to a robot running our framework.},
+	author = {Mavrogiannis, Christoforos},
+	month = apr,
+	year = {2019},
+	file = {Full Text PDF:/home/abhisek/Zotero/storage/Z3QY4XMV/Mavrogiannis - 2019 - Motion Planning for Socially Competent Robot Navig.pdf:application/pdf}
+}
+
+@article{helbing_social_1998,
+	title = {Social {Force} {Model} for {Pedestrian} {Dynamics}},
+	volume = {51},
+	doi = {10.1103/PhysRevE.51.4282},
+	abstract = {It is suggested that the motion of pedestrians can be described as if they would be subject to `social forces'. These `forces' are not directly exerted by the pedestrians' personal environment, but they are a measure for the internal motivations of the individuals to perform certain actions (movements). The corresponding force concept is discussed in more detail and can be also applied to the description of other behaviors. In the presented model of pedestrian behavior several force terms are essential: First, a term describing the acceleration towards the desired velocity of motion. Second, terms reflecting that a pedestrian keeps a certain distance to other pedestrians and borders. Third, a term modeling attractive effects. The resulting equations of motion are nonlinearly coupled Langevin equations. Computer simulations of crowds of interacting pedestrians show that the social force model is capable of describing the self-organization of several observed collective effects of pedestrian behavior very realistically. Comment: For related work see http://www.theo2.physik.uni-stuttgart.de/helbing.html},
+	journal = {Physical Review E},
+	author = {Helbing, Dirk and Molnar, Peter},
+	month = may,
+	year = {1998},
+	file = {Full Text PDF:/home/abhisek/Zotero/storage/T5I6K3SV/Helbing and Molnar - 1998 - Social Force Model for Pedestrian Dynamics.pdf:application/pdf}
+}
+
+@inproceedings{mavrogiannis_effects_2019,
+	title = {Effects of {Distinct} {Robot} {Navigation} {Strategies} on {Human} {Behavior} in a {Crowded} {Environment}},
+	doi = {10.1109/HRI.2019.8673115},
+	abstract = {State-of-the-art social robot navigation algorithms often lack a thorough experimental validation in human environments: simulated evaluations are often conducted under unrealistically strong assumptions that prohibit deployment in real world environments; experimental demonstrations that are limited in sample size do not provide adequate evidence regarding the user experience and the robot behavior; field studies may suffer from the noise imposed by uncontrollable factors from the environment; controlled lab experiments often fail to properly enforce challenging interaction settings. This paper contributes a first step towards addressing the outlined gaps in the literature. We present an original experiment, designed to test the implicit interaction between a mobile robot and a group of navigating human participants, under challenging settings in a controlled lab environment. We conducted a large-scale, within-subjects design study with 105 participants, exposed to three different conditions, corresponding to three distinct navigation strategies, executed by a telepresence robot (two autonomous, one teleoperated). We analyzed observed human and robot trajectories, under close interaction settings and participants' impressions regarding the robot's behavior. Key findings, extracted from a comparative statistical analysis include: (1) evidence that human acceleration is lower when navigating around an autonomous robot compared to a teleoperated one; (2) the lack of evidence to support the conventional expectation that teleoperation would be humans' preferred strategy. To the best of our knowledge, our study is unique in terms of goals, settings, thoroughness of evaluation and sample size.},
+	booktitle = {2019 14th {ACM}/{IEEE} {International} {Conference} on {Human}-{Robot} {Interaction} ({HRI})},
+	author = {Mavrogiannis, C. and Hutchinson, A. M. and Macdonald, J. and Alves-Oliveira, P. and Knepper, R. A.},
+	month = mar,
+	year = {2019},
+	keywords = {mobile robots, Mobile robots, Navigation, path planning, Trajectory, Planning, telepresence robot, telerobotics, Collision avoidance, human-robot interaction, autonomous robot, Autonomous robots, controlled lab environment, crowded environment, human acceleration, human behavior, human environments, human participants, implicit interaction, mobile robot, Motion Planning, robot behavior, robot navigation strategies, robot trajectories, social robot navigation algorithms, Social Robotics, user experience, within-subjects design study},
+	pages = {421--430},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/I7HY5WTU/8673115.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/5E5BJLX4/Mavrogiannis et al. - 2019 - Effects of Distinct Robot Navigation Strategies on.pdf:application/pdf}
+}
+
+@article{kruse_human-aware_2013,
+	title = {Human-aware robot navigation: {A} survey},
+	volume = {61},
+	issn = {09218890},
+	shorttitle = {Human-aware robot navigation},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0921889013001048},
+	doi = {10.1016/j.robot.2013.05.007},
+	abstract = {Navigation is a basic skill for autonomous robots. In the last years human-robot interaction has become an important research ﬁeld that spans all of the robot capabilities including perception, reasoning, learning, manipulation and navigation. For navigation, the presence of humans requires novel approaches that take into account the constraints of human comfort as well as social rules. Besides these constraints, putting robots among humans opens new interaction possibilities for robots, also for navigation tasks, such as robot guides. This paper provides a survey of existing approaches to human-aware navigation and oﬀers a general classiﬁcation scheme for the presented methods.},
+	language = {en},
+	number = {12},
+	urldate = {2019-09-23},
+	journal = {Robotics and Autonomous Systems},
+	author = {Kruse, Thibault and Pandey, Amit Kumar and Alami, Rachid and Kirsch, Alexandra},
+	month = dec,
+	year = {2013},
+	pages = {1726--1743},
+	file = {Kruse et al. - 2013 - Human-aware robot navigation A survey.pdf:/home/abhisek/Zotero/storage/SSHXBNV6/Kruse et al. - 2013 - Human-aware robot navigation A survey.pdf:application/pdf}
+}
+
+@article{reif_social_1999,
+	title = {Social potential fields: {A} distributed behavioral control for autonomous robots},
+	volume = {27},
+	issn = {09218890},
+	shorttitle = {Social potential fields},
+	url = {https://linkinghub.elsevier.com/retrieve/pii/S0921889099000044},
+	doi = {10.1016/S0921-8890(99)00004-4},
+	abstract = {A Very Large Scale Robotic (VLSR) system may consist of from hundreds to perhaps tens of thousands or more autonomous robots. The costs of robots are going down, and the robots are getting more compact, more capable, and more flexible. Hence, in the near future, we expect to see many industrial and military applications of VLSR systems in tasks such as assembling, transporting, hazardous inspection, patrolling, guarding and attacking. In this paper, we propose a new approach for distributed autonomous control of VLSR systems. We define simple artificial force laws between pairs of robots or robot groups. The force laws are inverse-power force laws, incorporating both attraction and repulsion. The force laws can be distinct and to some degree they reflect the 'social relations' among robots. Therefore we call our method social potential fields. An individual robot's motion is controlled by the resultant artificial force imposed by other robots and other components of the system. The approach i.s distributed in that the force calculations and motion control can be done in an asynchronous and distributed manner. We also extend the social potential fields model to use spring laws as force laws. This paper presents the first and a preliminary study on applying potential fields to distributed autonomous multi-robot control. We describe the generic framework of our social potential fields method. We show with computer simulations that the method can yield interesting and useful behaviors among robots, and we give examples of possible industrial and military applications. We also identify theoretical problems for future studies. © 1999 Published by Elsevier Science B.V. All rights reserved.},
+	language = {en},
+	number = {3},
+	urldate = {2019-10-28},
+	journal = {Robotics and Autonomous Systems},
+	author = {Reif, John H. and Wang, Hongyan},
+	month = may,
+	year = {1999},
+	pages = {171--194},
+	file = {Reif and Wang - 1999 - Social potential fields A distributed behavioral .pdf:/home/abhisek/Zotero/storage/AH7L5Z8S/Reif and Wang - 1999 - Social potential fields A distributed behavioral .pdf:application/pdf}
+}
+
+@article{bennewitz_mobile_nodate,
+	title = {Mobile {Robot} {Navigation} in {Dynamic} {Environments}},
+	language = {de},
+	author = {Bennewitz, Maren},
+	pages = {164},
+	file = {Bennewitz - Mobile Robot Navigation in Dynamic Environments.pdf:/home/abhisek/Zotero/storage/NIFWSUSR/Bennewitz - Mobile Robot Navigation in Dynamic Environments.pdf:application/pdf}
+}
+
+@article{fox_dynamic_1997,
+	title = {The dynamic window approach to collision avoidance},
+	volume = {4},
+	issn = {1070-9932, 1558-223X},
+	doi = {10.1109/100.580977},
+	abstract = {This approach, designed for mobile robots equipped with synchro-drives, is derived directly from the motion dynamics of the robot. In experiments, the dynamic window approach safely controlled the mobile robot RHINO at speeds of up to 95 cm/sec, in populated and dynamic environments.},
+	number = {1},
+	journal = {IEEE Robotics Automation Magazine},
+	author = {Fox, D. and Burgard, W. and Thrun, S.},
+	month = mar,
+	year = {1997},
+	keywords = {Humans, mobile robots, Mobile robots, Motion planning, Orbital robotics, collision avoidance, Collision avoidance, 0.95 m/s, Acceleration, dynamic window approach, Motion control, motion dynamics, position control, RHINO, Robot control, Robot sensing systems, Robotics and automation, synchro-drives, synchros},
+	pages = {23--33},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/KPP7WUKF/580977.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/XZPK4KBE/Fox et al. - 1997 - The dynamic window approach to collision avoidance.pdf:application/pdf}
+}
+
+@article{sisbot_human_2007,
+	title = {A {Human} {Aware} {Mobile} {Robot} {Motion} {Planner}},
+	volume = {23},
+	issn = {1552-3098, 1941-0468},
+	doi = {10.1109/TRO.2007.904911},
+	abstract = {Robot navigation in the presence of humans raises new issues for motion planning and control when the humans must be taken explicitly into account. We claim that a human aware motion planner (HAMP) must not only provide safe robot paths, but also synthesize good, socially acceptable and legible paths. This paper focuses on a motion planner that takes explicitly into account its human partners by reasoning about their accessibility, their vision field and their preferences in terms of relative human-robot placement and motions in realistic environments. This planner is part of a human-aware motion and manipulation planning and control system that we aim to develop in order to achieve motion and manipulation tasks in the presence or in synergy with humans.},
+	number = {5},
+	journal = {IEEE Transactions on Robotics},
+	author = {Sisbot, Emrah Akin and Marin-Urias, Luis F. and Alami, Rachid and Simeon, Thierry},
+	month = oct,
+	year = {2007},
+	keywords = {mobile robots, Mobile robots, Navigation, path planning, motion planning, Motion planning, Motion control, Cognitive robotics, Control systems, human aware mobile robot, human aware motion planner, human partners, Human robot interaction, Human–robot interaction (HRI), man-machine systems, manipulation planning, manipulators, mobile robot motion planner, Production facilities, robot navigation, safe robot paths, social interaction},
+	pages = {874--883},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/5GQFBBZE/4339546.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/ENUT9UY9/Sisbot et al. - 2007 - A Human Aware Mobile Robot Motion Planner.pdf:application/pdf}
+}
+
+@article{lam_human-centered_2011,
+	title = {Human-{Centered} {Robot} {Navigation}—{Towards} a {Harmoniously} {Human}–{Robot} {Coexisting} {Environment}},
+	volume = {27},
+	issn = {1552-3098, 1941-0468},
+	doi = {10.1109/TRO.2010.2076851},
+	abstract = {This paper proposes a navigation algorithm that considers the states of humans and robots in order to achieve harmonious coexistence between them. A robot navigation in the presence of humans and other robots is rarely considered in the field of robotics. When navigating through a space filled with humans and robots with different functions, a robot should not only pay attention to obstacle avoidance and goal seeking, it should also take into account whether it interferes with other people or robots. To deal with this problem, we propose several harmonious rules, which guarantee a safe and smooth navigation in a human-robot environment. Based on these rules, a practical navigation method-human-centered sensitive navigation (HCSN)-is proposed. HCSN considers the fact that both humans and robots have sensitive zones, depending on their security regions or on a human's psychological state. We model these zones as various sensitive fields with priorities, whereby robots tend to yield socially acceptable movements.},
+	number = {1},
+	journal = {IEEE Transactions on Robotics},
+	author = {Lam, Chi-Pang and Chou, Chen-Tun and Chiang, Kuo-Hung and Fu, Li-Chen},
+	month = feb,
+	year = {2011},
+	keywords = {Humans, mobile robots, Navigation, collision avoidance, Collision avoidance, human-robot interaction, navigation, Robot sensing systems, robot navigation, goal seeking, Harmonious rules, harmoniously human-robot coexisting environment, human centered sensitive navigation, human psychological state, human-centered sensitive navigation (HCSN), navigation algorithm, obstacle avoidance, Robot kinematics, Safety, social human–robot interaction},
+	pages = {99--112},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/37EAJEQP/5604706.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/ADDB43JH/Lam et al. - 2011 - Human-Centered Robot Navigation—Towards a Harmonio.pdf:application/pdf}
+}
+
+@inproceedings{svenstrup_trajectory_2010,
+	title = {Trajectory planning for robots in dynamic human environments},
+	doi = {10.1109/IROS.2010.5651531},
+	abstract = {This paper presents a trajectory planning algorithm for a robot operating in dynamic human environments. Environments such as pedestrian streets, hospital corridors, train stations or airports. We formulate the problem as planning a minimal cost trajectory through a potential field, defined from the perceived position and motion of persons in the environment. A Rapidly-exploring Random Tree (RRT) algorithm is proposed as a solution to the planning problem, and a new method for selecting the best trajectory in the RRT, according to the cost of traversing a potential field, is presented. The RRT expansion is enhanced to account for the kinodynamic robot constraints by using a robot motion model and a controller to add a reachable vertex to the tree. Instead of executing a whole trajectory, when planned, the algorithm uses a Model Predictive Control (MPC) approach, where only a short segment of the trajectory is executed while a new iteration of the RRT is computed. The planning algorithm is demonstrated in a simulated pedestrian street environment.},
+	booktitle = {2010 {IEEE}/{RSJ} {International} {Conference} on {Intelligent} {Robots} and {Systems}},
+	author = {Svenstrup, Mikael and Bak, Thomas and Andersen, Hans Jørgen},
+	month = oct,
+	year = {2010},
+	note = {ISSN: 2153-0866, 2153-0858, 2153-0858},
+	keywords = {Heuristic algorithms, Humans, mobile robots, Robots, Navigation, path planning, Trajectory, Planning, trees (mathematics), Aerospace electronics, dynamic human environment, iterative method, iterative methods, kinodynamic robot constraint, model predictive control, motion control, MPC, predictive control, rapidly-exploring random tree algorithm, robot dynamics, robot kinematics, robot motion model, RRT algorithm, trajectory planning},
+	pages = {4293--4298},
+	file = {IEEE Xplore Abstract Record:/home/abhisek/Zotero/storage/B5PF8BHK/5651531.html:text/html;IEEE Xplore Full Text PDF:/home/abhisek/Zotero/storage/BM87ALJQ/Svenstrup et al. - 2010 - Trajectory planning for robots in dynamic human en.pdf:application/pdf}
+}
+
+@article{everett_collision_2019,
+	title = {Collision {Avoidance} in {Pedestrian}-{Rich} {Environments} with {Deep} {Reinforcement} {Learning}},
+	url = {http://arxiv.org/abs/1910.11689},
+	abstract = {Collision avoidance algorithms are essential for safe and efﬁcient robot operation among pedestrians. This work proposes using deep reinforcement (RL) learning as a framework to model the complex interactions and cooperation with nearby, decision-making agents (e.g., pedestrians, other robots). Existing RL-based works assume homogeneity of agent policies, use speciﬁc motion models over short timescales, or lack a mechanism to consider measurements taken with a large number (possibly varying) of nearby agents. Therefore, this work develops an algorithm that learns collision avoidance among a variety of types of non-communicating, dynamic agents without assuming they follow any particular behavior rules. It extends our previous work by introducing a strategy using Long Short-Term Memory (LSTM) that enables the algorithm to use observations of an arbitrary number of other agents, instead of a small, ﬁxed number of neighbors. The proposed algorithm is shown to outperform a classical collision avoidance algorithm, another deep RL-based algorithm, and scales with the number of agents better (fewer collisions, shorter time to goal) than our previously published learning-based approach. Analysis of the LSTM provides insights into how observations of nearby agents affect the hidden state and quantiﬁes the performance impact of various agent ordering heuristics. The learned policy generalizes to several applications beyond the training scenarios: formation control (arrangement into letters), an implementation on a ﬂeet of four multirotors, and an implementation on a fully autonomous robotic vehicle capable of traveling at human walking speed among pedestrians.},
+	language = {en},
+	urldate = {2019-11-05},
+	journal = {arXiv:1910.11689 [cs]},
+	author = {Everett, Michael and Chen, Yu Fan and How, Jonathan P.},
+	month = oct,
+	year = {2019},
+	note = {arXiv: 1910.11689},
+	keywords = {Computer Science - Artificial Intelligence, Computer Science - Robotics},
+	file = {Everett et al. - 2019 - Collision Avoidance in Pedestrian-Rich Environment.pdf:/home/abhisek/Zotero/storage/BA4YK6HS/Everett et al. - 2019 - Collision Avoidance in Pedestrian-Rich Environment.pdf:application/pdf;Everett et al. - 2019 - Collision Avoidance in Pedestrian-Rich Environment.pdf:/home/abhisek/Zotero/storage/Q3UGNN4S/Everett et al. - 2019 - Collision Avoidance in Pedestrian-Rich Environment.pdf:application/pdf}
+}
+
+@misc{noauthor_vita-epfl/crowdnav_2019,
+	title = {vita-epfl/{CrowdNav}},
+	url = {https://github.com/vita-epfl/CrowdNav},
+	abstract = {[ICRA19] Crowd-aware Robot Navigation with Attention-based Deep Reinforcement Learning},
+	urldate = {2019-11-11},
+	publisher = {VITA lab at EPFL},
+	month = nov,
+	year = {2019},
+	note = {original-date: 2018-07-04T13:57:07Z},
+	keywords = {collision-avoidance, crowd-navigation, reinforcement-learning}
+}
+
+@article{kuderer_socially_nodate,
+	title = {Socially {Compliant} {Mobile} {Robot} {Navigation}},
+	language = {de},
+	author = {Kuderer, Markus},
+	pages = {156},
+	file = {Kuderer - Socially Compliant Mobile Robot Navigation.pdf:/home/abhisek/Zotero/storage/EA5YGBJT/Kuderer - Socially Compliant Mobile Robot Navigation.pdf:application/pdf}
+}
+
+@inproceedings{pellegrini_youll_2009,
+	address = {Kyoto},
+	title = {You'll never walk alone: {Modeling} social behavior for multi-target tracking},
+	isbn = {978-1-4244-4420-5},
+	shorttitle = {You'll never walk alone},
+	url = {http://ieeexplore.ieee.org/document/5459260/},
+	doi = {10.1109/ICCV.2009.5459260},
+	abstract = {Object tracking typically relies on a dynamic model to predict the object’s location from its past trajectory. In crowded scenarios a strong dynamic model is particularly important, because more accurate predictions allow for smaller search regions, which greatly simpliﬁes data association. Traditional dynamic models predict the location for each target solely based on its own history, without taking into account the remaining scene objects. Collisions are resolved only when they happen. Such an approach ignores important aspects of human behavior: people are driven by their future destination, take into account their environment, anticipate collisions, and adjust their trajectories at an early stage in order to avoid them. In this work, we introduce a model of dynamic social behavior, inspired by models developed for crowd simulation. The model is trained with videos recorded from birds-eye view at busy locations, and applied as a motion model for multi-people tracking from a vehicle-mounted camera. Experiments on real sequences show that accounting for social interactions and scene knowledge improves tracking performance, especially during occlusions.},
+	language = {en},
+	urldate = {2020-01-16},
+	booktitle = {2009 {IEEE} 12th {International} {Conference} on {Computer} {Vision}},
+	publisher = {IEEE},
+	author = {Pellegrini, S and Ess, A and Schindler, K and van Gool, L},
+	month = sep,
+	year = {2009},
+	pages = {261--268},
+	file = {Pellegrini et al. - 2009 - You'll never walk alone Modeling social behavior .pdf:/home/abhisek/Zotero/storage/5SMGKQNU/Pellegrini et al. - 2009 - You'll never walk alone Modeling social behavior .pdf:application/pdf}
+}
+
+@article{tsai_generative_nodate-1,
+	title = {A {Generative} {Approach} for {Socially} {Compliant} {Navigation}},
+	abstract = {Robots navigating in human crowds need to optimize their paths not only for their task performance but also for their compliance to social norms. One of the key challenges in this context is the lack of standard metrics for evaluating and optimizing a socially compliant behavior. Existing works in social navigation can be grouped according to the differences in their optimization objectives. For instance, the reinforcement learning approaches tend to optimize on the comfort aspect of the socially compliant navigation, whereas the inverse reinforcement learning approaches are designed to achieve natural behavior. In this paper, we propose NaviGAN, a generative navigation algorithm that jointly optimizes both of the comfort and naturalness aspects. Our approach is designed as an adversarial training framework that can learn to generate a navigation path that is both optimized for achieving a goal and for complying with latent social rules. A set of experiments has been carried out on multiple datasets to demonstrate the strengths of the proposed approach quantitatively. We also perform extensive experiments using a physical robot in a realworld environment to qualitatively evaluate the trained social navigation behavior. The video recordings of the robot experiments can be found in the link: https://youtu.be/61blDymjCpw.},
+	language = {en},
+	author = {Tsai, Chieh-En and Oh, Jean},
+	pages = {7},
+	file = {Tsai and Oh - A Generative Approach for Socially Compliant Navig.pdf:/home/abhisek/Zotero/storage/63YKILQ3/Tsai and Oh - A Generative Approach for Socially Compliant Navig.pdf:application/pdf}
+}
+
+
+@InProceedings{mnih_actor_critic_2016,
+  title = 	 {Asynchronous Methods for Deep Reinforcement Learning},
+  author = 	 {Volodymyr Mnih and Adria Puigdomenech Badia and Mehdi Mirza and Alex Graves and Timothy Lillicrap and Tim Harley and David Silver and Koray Kavukcuoglu},
+  booktitle = 	 {Proceedings of The 33rd International Conference on Machine Learning},
+  pages = 	 {1928--1937},
+  year = 	 {2016},
+  editor = 	 {Maria Florina Balcan and Kilian Q. Weinberger},
+  volume = 	 {48},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {New York, New York, USA},
+  month = 	 {20--22 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v48/mniha16.pdf},
+  url = 	 {http://proceedings.mlr.press/v48/mniha16.html},
+  abstract = 	 {We propose a conceptually simple and lightweight framework for deep reinforcement learning that uses asynchronous gradient descent for optimization of deep neural network controllers. We present asynchronous variants of four standard reinforcement learning algorithms and show that parallel actor-learners have a stabilizing effect on training allowing all four methods to successfully train neural network controllers. The best performing method, an asynchronous variant of actor-critic, surpasses the current state-of-the-art on the Atari domain while training for half the time on a single multi-core CPU instead of a GPU. Furthermore, we show that asynchronous actor-critic succeeds on a wide variety of continuous motor control problems as well as on a new task of navigating random 3D mazes using a visual input.}
+}
