@@ -1,9 +1,8 @@
 \label{Ch:4}
-In this section, we describe our data-driven IRL-based social navigation pipeline.\\
-An overview of the pipeline:
+In this section, we describe our data-driven inverse reinforcement learning based social navigation pipeline.\\
 %\\ \textbf{An image showing the block diagram of the pipeline including the environment, the feature extractor, and the other components}
 
-\begin{figure}
+\begin{figure}[!htbp]
 	\centering
 	\includegraphics[width=\linewidth]{figures/irl_pipeline.png}
 	\caption{An overview of the proposed navigation pipeline.}
@@ -11,9 +10,9 @@ An overview of the pipeline:
 \end{figure}
 
 \section{The IRL block:}
-Inverse reinforcement learning(IRL) or inverse optimal control(IOC) has been greatly explored to train robots in real-world tasks. One of the appeals of IRL is that there is no need to specify a guiding 'reward function' that dictates the optimal behavior of an agent. Instead, the optimal or desired behavior can be obtained from a set of expert demonstrations which is more readily available compared to an artificially constructed reward structure needed for reinforcement learning(RL).
+Inverse reinforcement learning(IRL) or inverse optimal control (IOC) has been greatly explored to train robots in real-world tasks.The appeal of IRL is that there is no need to specify a reward function that dictates the optimal behavior of an agent. Instead, the optimal or desired behavior can be obtained from a set of expert demonstrations which is more readily available compared to an artificially constructed reward structure as needed in reinforcement learning (RL).
 
-To keep the chapter self-contained, we will revisit the definition of a Markov decision process (MDP), which is at the core of RL and IRL.
+To keep the chapter self-contained, we will recap our definition of a Markov decision process (MDP):
 A Markov decision process or MDP can be defined as a tuple ($\mathcal{S}$,$\mathcal{A}$,T,$\gamma$, $\mathcal{R}$)  where,
 \begin{itemize}
     \item $\mathcal{S}$ is the set of all possible states.
@@ -22,9 +21,9 @@ A Markov decision process or MDP can be defined as a tuple ($\mathcal{S}$,$\math
     \item $\gamma$ is the discounting factor.
     \item $\mathcal{R}$ is the set of rewards $R:  \mathcal{S} \mapsto \mathbb{R} $ is the reward function. In practice, instead of using the raw states, hand-engineered features are extracted from the states which are then used to calculate the reward of a particular state. This alleviates a lot of complexity when dealing with large continuous state-spaces. 
     \end{itemize}  
-The goal of IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $D = \{ \tau_1, \tau_2, \tau_3, \dots, 
+The goal of IRL is to infer a reward function that best explains the behavior of the expert. The expert behavior is represented in terms of expert demonstrations or trajectories, $\mathbf{D} = \{ \tau_1, \tau_2, \tau_3, \dots, 
 \tau_{M} \}$ in the context of navigation. Each of these trajectories, in turn, can be further broken down into a collection of states $\tau_{i} = \{ s_{0}, s_{1}, s_{2}, \dots, s_{T} \}$ as visited by the expert in the trajectory. \\
-\cite{abbeel_apprenticeshiplearning_2004} shows that solving the Bellman equations for an analytic solution to obtain the reward R is under-constrained. \cite{ziebart_maxent_2008} addresses this by introducing an entropy-based constraint \cite{jaynes1957information} on the distribution of the trajectories: the probability of the occurrence of a trajectory is directly proportional to the reward it receives which is equal to the summation over the reward it receives at each state in the trajectory.
+\cite{abbeel_apprenticeshiplearning_2004} shows that solving the Bellman equations for an analytic solution to obtain the reward $\mathcal{R}$ is under-constrained. \cite{ziebart_maxent_2008} addresses this by introducing an entropy-based constraint \cite{jaynes1957information} on the distribution of the trajectories which state that the probability of the occurrence of a trajectory is directly proportional to the reward it receives which is equal to the summation over the reward it receives at each state in the trajectory.
 \begin{align}
 P(\tau_{i}| \theta) = \frac{1}{Z(\theta)}\exp^{\theta^{T}\mathbf{f}_{\tau_{i}}} = \frac{1}{Z(\theta)}\exp^{\sum_{s_{j}\in\tau_{i}}\theta^{T}\mathbf{f}_{s_{j}}}
 \end{align}
@@ -37,20 +36,20 @@ Given a set of expert demonstrations, an optimal reward structure should maximiz
 \label{eq:loglikelihood-IRL}
 \theta^{*} = \argmax_{\theta} \mathbf{L}(\theta) = \argmax_{\theta} \sum_{\tau \in D} \log{P(\tau| \theta, T)}
 \end{align}
-\cite{ziebart_maxent_2008} uses a linear combination of weights as reward functions which are limiting when it comes to expressing complex reward functions. This problem is addressed by Wulfmeier et al. where they restructure the maximum entropy IRL formulation using neural networks \cite{wulfmeier2015maximum}. Neural networks are universal function approximators, and this vastly improves on the amount of complexity the reward functions can express.\\
-Now, $\theta$, represents the parameters of a neural network which can be found using gradient descent methods. The  update term for the reward network parameters w.r.t. the loss term $\mathbf{L}$ is equal to the difference in the state visitation frequencies (SVF) of the expert demonstrations and the policy $\pi_{\psi} : \mathcal{S} \mapsto \mathcal{A} $ trained on the parameters of the current reward network $R_{\theta}$:
+\cite{ziebart_maxent_2008} uses a linear combination of weights as the reward function which is limiting in expressing complex reward functions. This problem is addressed by Wulfmeier et al. where they restructure the maximum entropy IRL formulation using neural networks \cite{wulfmeier2015maximum}. Neural networks are universal function approximators. This vastly increases the amount of complexity a reward function can express.\\
+The parameters of a neural network represented by $\theta$ can be found using gradient descent methods. The  update term for the reward network parameters w.r.t. the loss term $\mathbf{L}$ is equal to the difference in the state visitation frequencies (SVF) of the expert demonstrations and the policy $\pi_{\psi} : \mathcal{S} \mapsto \mathcal{A} $ trained on the parameters of the current reward network $R_{\theta}$:
 \begin{align}
 	\label{eq:IRL-parameter-update-states}
 	\frac{\partial L}{\partial \theta} = \left(\sum_{\tau_{i} \in D}\sum_{s_{j} \in \tau{i}}s_{j} - \sum_{\hat{\tau} \in \hat{D}}\sum_{s_{k} \in \hat{\tau}}s_{k}\right)
 \end{align}
 where, $\hat{\tau}$ is a trajectory sampled by the policy $\pi_{\psi}$.\\
-A state $s_{i}$ can be represented by its features, $\phi(s_{i})$. Thus \autoref{eq:IRL-parameter-update-states} can be re-written as:
+Replacing a state, $s_{i}$, by its features, $\phi(s_{i})$, \autoref{eq:IRL-parameter-update-states} can be re-written as:
 \begin{align}
 	\label{eq:IRL-parameter-update-features}
 	\frac{\partial L}{\partial \theta} = \left(\expectval_{s \sim P(s|\mathcal{D})} \phi(s) - \expectval_{s \sim P(s|\pi_\psi)} \phi(s)\right) \frac{\partial R_\theta}{\partial \theta} 
 \end{align}
 \subsection{The SVF calculation}
-One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (SVF) of a policy $\phi_{\psi}$. In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier2015maximum}. Having access to the state dynamics of the environment might be difficult and not always readily available, especially in real-world applications like navigation. Instead, we relax this assumption for a model-free but deterministic environment. This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians, in general, are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
+One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (SVF) of a policy $\phi_{\psi}$. In model-based environments, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier2015maximum}. Access to the actual state dynamics of an environment, especially in real-world applications like navigation, is difficult and not readily available. Instead, we relax this assumption for a model-free but deterministic environment. This is a reasonable assumption in the context of a navigation problem because the movements of pedestrians, in general, are inherently deterministic. %and any observed uncertainty by the agent can be attributed to the error in measurement by the onboard sensors.\\
 
 We use sampling to get an estimate of the SVF. While this can be time-consuming and computationally expensive, the task is drastically simplified when using greedy policies, especially in a deterministic environment. SVF calculation of a greedy policy in a deterministic environment can be calculated by taking a single sample trajectory (due to the deterministic nature of the environment) for each pedestrian by replacing them with the agent and letting it run till completion. The calculation of the expected state visitation frequency of the agent is shown in equation \autoref{eq:svf-sampling}
 
@@ -94,7 +93,7 @@ where, $\hat{P}(s_{t+1}| s_{t}, a_{t})$ are the state transitions observed durin
 	
 \end{algorithm}
 
-The expert policy needs to be retrained every time the parameters of the reward network are updated. We solve the MDP using an actor-critic method \textcolor{red}{cite A2C}.
+The expert policy needs to be retrained every time the parameters of the reward network are updated. We solve the MDP using an actor-critic method \cite{mnih_actor_critic_2016}.
 
 %\subsection*{Overview of the algorithm used}
 %The algorithm trains for two networks, the reward network that, given the features of a state returns the reward associated with it,\\
@@ -110,8 +109,8 @@ The expert policy needs to be retrained every time the parameters of the reward 
 
 \section*{The RL block:}
 
-Actor-critic methods are a class of reinforcement learning algorithms that are built upon policy gradient methods. 
-In policy-gradient methods, the goal is to iteratively improve the performance of a given policy which is achieved by maximizing the expected return of the policy. Mathematically, the objective of a policy gradient method can be expressed as:
+Actor-critic are a class of reinforcement learning algorithms that are built upon policy gradient methods. 
+In policy-gradient methods, the goal is to iteratively improve the performance of a given policy. This is achieved by maximizing the expected return of the policy. Mathematically, the objective of a policy gradient method can be expressed as:
 \begin{align}
 maximize \;\; J( \psi )  &\; = \; \mathbb{E} [ R | \pi_{\psi} ] \\
                        & \; = \; \mathbb{E}[ \sum^{T-1}_{t=0} r_{t+1}| \pi_{\psi}] 
@@ -123,7 +122,7 @@ This leads to an update function:
 \nabla_{\psi} J (\psi) = \sum_{t=0}^{T-1} \nabla_{\theta}\log \pi_{\psi}(a_{t}|s_{t})\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}
 \end{align} 
 where, $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$ is the cumulative discounted reward obtained by following the policy $\pi_{\psi}$ from time $t'$.\\
-Vanilla policy gradient methods suffer from high variance because they do not have a normalizing factor for the second term. This is addressed by introducing a baseline. The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm, where the 'advantage' is the difference between the estimated value of a state at time $t$, $V(s_t)$ and the discounted cumulative reward obtained by following the policy: $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$. \\
+Vanilla policy gradient methods suffer from high variance because they do not have a normalizing factor for the second term. This is addressed by introducing a baseline. The baseline can be calculated in various ways. One of the resulting algorithms is the A2C or the Advantage actor-critic algorithm \cite{mnih_actor_critic_2016}, where the 'advantage' is the difference between the estimated value of a state at time $t$, $V(s_t)$ and the discounted cumulative reward obtained by following the policy: $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$. \\
 Instead of having two separate networks for the actor(policy) and the critic(value), we design the network in a way that the actor, $\psi_{a}$, and the critic, $\psi_{c}$, share parameters in input and the hidden layers, with a dedicated output layer for the action and value respectively.
 \begin{align}
 \label{eq:advantage-actor-update}
@@ -136,9 +135,9 @@ where \autoref{eq:advantage-actor-update} is the update for the parameters of th
 %Two symbiotic agents at play here. The actor and the critic. 
 %The critic estimates the value function of a given state.
 %The actor uses this information to update its policy distribution.
-Summarizing the RL algorithm:
+\vfill
 \begin{algorithm}[tbhp]
-	\caption{Actor Critic}
+	\caption{RL algorithm: Actor Critic}
 	\label{alg:actor-critic}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
@@ -165,15 +164,15 @@ $\mathbf{L_{crit}}$ = $\sum \hat{A}(s_{i}, a_{i})$ \Comment*[r]{Calculate critic
 \end{algorithm}
 
 
-\section{The feature extractor}
-The feature extractor is a vital component in the navigation pipeline. It is the medium that facilitates interaction between the learning algorithm and the environment and heavily influences the performance of the agent \cite{vasquez_et_al}. We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the pedestrians present in the frame. Although we have access to information about all the pedestrians, the feature representations are designed to be calculated from a partial observation of the environment.\\
+\section{The Feature extractor}
+The feature extractor is a vital component in the navigation pipeline. It is the medium that facilitates interaction between the learning algorithm and the environment and heavily influences the performance of the agent \cite{vasquez_inverse_2014}. We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the pedestrians present in the frame. Although we have access to information about all the pedestrians, the feature representations are designed to be calculated from a partial observation of the environment.\\
 The feature representation consists of the following components:
 \begin{itemize}
     \item The \textbf{local component} contains information from the vicinity of the agent captured in the form of a binary feature vector. This provides an approximate idea of the nearby obstacles and an estimate of a likely collision. Hence the term: 'risk-features'. 
     \item The \textbf{global component}, on the other hand, provides an approximation of the goal location on the map. 
 \end{itemize}
  We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the obstacles (pedestrians) in the current frame.  Having access to all this information using sensors on a mobile robot navigating the real world is highly unlikely and difficult to obtain. This is additionally addressed by the feature extractor, which also acts as an information moderator, receiving raw information from the environment and packaging it in a feature vector that can be readily constructed by a mobile robot on the go using off-the-shelf sensors.\\
- Both the local and the global components along with their subcomponents are described in greater detail below.
+ Both the local and the global components along with their sub-components are described in greater detail below.
 Talk about the relative orientation calculation
 
 
@@ -277,11 +276,10 @@ Represented by a $5 \times 1$ one-hot vector, the change in orientation captures
         \end{tabular}
     \end{center}
 \end{table}
-\subsection*{Deviation from the goal}
+\subsubsection*{Deviation from the goal}
 The deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins ($4 \times 1$ one-hot vector), with greater emphasis is laid on the lower degrees due to reasons mentioned earlier. 
 
 \begin{table}[htbp]
-    \caption{Bin thresholds for deviation from the goal.}
     \label{deviation-from-goal-bins}
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
@@ -298,6 +296,7 @@ The deviation from goal captures the magnitude of the angle between the vector t
             $\phi_{GA4}$ & $\alpha_{GA} \in \left[ \frac{3\pi}{4} , \pi \right]$ \\
             \hline
         \end{tabular}
+        \caption{Bin thresholds for deviation from the goal.}
     \end{center}
 \end{table}
 
@@ -345,7 +344,7 @@ The calculation of the risk values are based on the following entities:
     \mathbf{s}_{obs} = & \;\; \tan(\theta_{risk}) \times |\vec{d_{rel}}| \\
     \mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
 \end{align}
-where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated \textbf{safety margin} between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
+where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated safety margin between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
 An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
 
 \begin{table}[htbp]
@@ -375,28 +374,50 @@ The risk value of each bin is represented using a $3 \times 1$ one-hot vector. T
 \end{figure}
 
 
+%\begin{figure}
+%	\label{fig:agent-perspective-risk-features}
+%	\begin{subfigure}[t]{.5\linewidth}
+%
+%		\includegraphics[width=.95\textwidth]{figures/screenshot_video_frame_agent_perspective.png}
+%		\label{fig:agent-perspective_screenshot}
+%		\caption{A frame from the UCY dataset. The pedestrian which is the acting agent for the current episode is marked with a blue triangle.}
+%	\end{subfigure}
+%	\begin{subfigure}[t]{.5\linewidth}
+%		\centering
+%		\includegraphics[width=.95\textwidth]{figures/env_screenshot_agent_perspective.png}
+%		\label{fig:agent-perspective_env}
+%		\centering
+%		\caption{Representation of the video frame in the in-house built environment. The blue square represents the acting agent, the red squares represent other pedestrians (obstacles), and the green square represents the goal. The yellow circle around the agent is the area around the agent taken into consideration while computing the local information used by the agent.} 
+%	\end{subfigure}
+%	\begin{subfigure}[b]{\linewidth}
+%		\centering
+%		\includegraphics[width=.4\textwidth]{figures/agent_perspective_recreated.png}
+%		\label{fig:agent-perspective_agent-perspective}
+%		\caption{The local information from the frame as perceived by the agent using the risk features. The spatial bins are represented by the concentric circles around the agent (black square) and the dotted lines. The squares in green mark pedestrians which pose low risk, while the ones in blue denote medium risk.}
+%	\end{subfigure}
+%\end{figure}
+
+
 \begin{figure}
 	\label{fig:agent-perspective-risk-features}
-	\begin{subfigure}[t]{.5\linewidth}
-
-		\includegraphics[width=.95\textwidth]{figures/screenshot_video_frame_agent_perspective.png}
-		\label{fig:agent-perspective_screenshot}
-		\caption{A frame from the UCY dataset. The pedestrian which is the acting agent for the current episode is marked with a blue triangle.}
-	\end{subfigure}
 	\begin{subfigure}[t]{.5\linewidth}
 		\centering
 		\includegraphics[width=.95\textwidth]{figures/env_screenshot_agent_perspective.png}
 		\label{fig:agent-perspective_env}
 		\centering
-		\caption{Representation of the video frame in the in-house built environment. The blue square represents the acting agent, the red squares represent other pedestrians (obstacles), and the green square represents the goal. The yellow circle around the agent is the area around the agent taken into consideration while computing the local information used by the agent.} 
+		\subcaption{A screenshot of a frame populated with obstacles.} 
 	\end{subfigure}
-	\begin{subfigure}[b]{\linewidth}
+	\begin{subfigure}[t]{.5\linewidth}
 		\centering
-		\includegraphics[width=.4\textwidth]{figures/agent_perspective_recreated.png}
+		\includegraphics[width=.7\textwidth]{figures/agent_perspective_recreated.png}
 		\label{fig:agent-perspective_agent-perspective}
-		\caption{The local information from the frame as perceived by the agent using the risk features. The spatial bins are represented by the concentric circles around the agent (black square) and the dotted lines. The squares in green mark pedestrians which pose low risk, while the ones in blue denote medium risk.}
+		\subcaption{The local perspective of the agent in the frame. The arrows mark the relative velocity of the nearby pedestrians w.r.t. the agent. Risk classification is color-coded as mentioned earlier.}
 	\end{subfigure}
+	\caption{Visualizing the agent's perception of the environment.}
 \end{figure}
+
+
+
 
 %Additionally, we also introduce a \textbf{smoothing technique} for the calculated svf. \\
 %\textbf{What is smoothing?}\\

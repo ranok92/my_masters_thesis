@@ -19,50 +19,56 @@ The agent represents the entity being controlled by an external controller. At a
 \end{enumerate}
 To navigate the environment the agent can control two aspects of its motion: its speed and its orientation.
 Unlike most stock environments, this supports both continuous and discrete action space. These are elaborated in \autoref{subsec:action-space}.
-\subsubsection{The goal:}
+\subsection{The goal}
 The goal is a pre-designated area of the map where on arrival marks the end of an episode with a success. It is represented by a green rectangle. Like the agent, the size of the goal area can be customized as per the requirement of the experiment. For now, the environment just has provision for static goals. That being said, the environment does come with the provision to randomly alter the position of the goal at the end of each episode.
 
 
-\subsection{The obstacles:}
-There are 3 ways of putting the obstacles in the map each of them serving a different purpose.
+\subsection{The obstacles}
+There are 3 ways of putting obstacles in the map each of them serving a different purpose.
 \begin{enumerate}
-\item \textbf{Via a list:}
-The information for the placement of the obstacles can be passed in the form of a list, where each element of the list is a Numpy array containing the pixel coordinate ([row, col]) of the obstacle. This is primarily useful when the number of obstacles to be deployed is small. Although it severely limits the number and the configuration of the obstacles that can be placed in the map, it is ideal for performing a quick initialization or a brief sanity test of a controller in a short time without investing in the making an obstacle map or an annotation file.
-\item \textbf{Via an obstacle map:}
+\item \textbf{Using a list:}
+The information for the placement of the obstacles can be passed in the form of a list, where each element in the list is a Numpy array containing the pixel coordinate ([row, col]) of the obstacle. This is primarily useful when the number of obstacles to be deployed is small. Although it severely limits the number and the configuration of the obstacles that can be placed in the map, it is ideal for performing a quick initialization or a brief sanity test of a controller in a short time without investing in creating an obstacle map or an annotation file.
+\item \textbf{Using an obstacle map:}
 This is the primary way of initializing the environment with static obstacles. In this case, the path to an image file is provided during initialization. This image is then read by the environment to obtain the size of the map and the obstacle configuration. 
-The dimensions of the image determine the size of the map and are equal to the image. Comprehending the obstacle configuration is also straight forward. Any red pixel, pixel falling in the color range of (150, 0, 0) to (255, 0, 0) is categorized as an obstacle. While defining each pixel as an individual obstacle renders the most accurate recreation of the obstacle configuration from a given image, it is inefficient as it generates an unnecessarily large number of obstacles on the map.
-This is redundant as for most of the cases, instead of having pixel-sized obstacles,  these obstacles can be grouped into bigger cells often without loosing too much information or diverging too much from the original configuration. The grouping can be adjusted by tuning the obstacle-width parameter in the environment.  Setting the width to one sets the size of an individual obstacle to 1. This retains the highest amount of information (basically pixel-by-pixel information) from the obstacle map. Increasing the width groups pixels in the image to form obstacles of the given width, which drastically reduces the number of obstacles at the cost of introducing a pixelation effect in the final obstacle map.
+The dimensions of the image determine the size of the map. Comprehending the obstacle configuration is also straight forward. Any red pixel, pixel falling in the color range of ($150$, $0$, $0$) to ($255$, $0$, $0$) is categorized as an obstacle. While defining each pixel as an individual obstacle renders the most accurate recreation of the obstacle configuration from a given image, it is inefficient as it generates an unnecessarily large number of obstacles on the map.
+This is redundant as for most of the cases, instead of having pixel-sized obstacles,  these obstacles can be grouped into bigger cells often without loosing too much information or diverging too much from the original configuration. The grouping can be adjusted by tuning the obstacle-width parameter in the environment.  Setting the width to one sets the size of an individual obstacle to $1$. This retains the highest amount of information (basically pixel-by-pixel information) from the obstacle map. Increasing the width groups pixels in the image to form obstacles of the given width, which drastically reduces the number of obstacles at the cost of introducing a pixelation effect in the final obstacle map.
 %\textbf{A set of 3 images: obstacle image, and its comparison with changing obstacle size}
+
 \begin{figure}[!h]
-	\begin{subfigure}[b]{.5\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 		\centering
 		\includegraphics[width=.95\linewidth]{figures/real_map.jpg}
 		\caption{The original obstacle map}
 		\label{fig:obsmap_sfig1}
 	\end{subfigure}%
-	\begin{subfigure}[b]{.5\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 		\centering
 		\includegraphics[width=.95\linewidth]{figures/obs_width_2_total_obs_51348.jpg}
-		\caption{Obstacle width 2, number of obstacles}
+		\caption{Obstacle width: 2, number of obstacles: 51348}
 		\label{fig:obsmap_sfig2}
 	\end{subfigure}%
-	\hfill
+\end{figure}
+
+\vfill
+\begin{figure}[!h]\ContinuedFloat
 	\begin{subfigure}[b]{.5\textwidth}
 		\centering
 		\includegraphics[width=.95\linewidth]{figures/obs_width_7_total_obs_4293.jpg}
-		\caption{Obstacle width 7, number of obstacles: 4293}
+		\caption{Obstacle width: 7, number of obstacles: 4293}
 		\label{fig:obsmap_sfig3}
 	\end{subfigure}
 	\begin{subfigure}[b]{.5\textwidth}
 		\centering
 		\includegraphics[width=.95\linewidth]{figures/obs_width_15_total_obs_996.jpg}
-		\caption{Obstacle width 15, number of obstacles: 996}
+		\caption{Obstacle width: 15, number of obstacles: 996}
 		\label{fig:obsmap_sfig4}
 \end{subfigure}
-	\caption{Recreation of the given image in the form of an obstacle map in the environment in different resolutions.}
+	\caption{Recreation of the given image in the form of an obstacle map in the environment at different resolutions.}
 	\label{fig:fig}
 \end{figure}
-\item \textbf{Via an annotation file.}
+
+
+\item \textbf{Using an annotation file:}
 This is used to populate the environment with dynamic obstacles. The annotation file is a text file containing frame-by-frame information of all the obstacles and is commonly used to recreate pedestrian motion captured in the real-world. An annotation file should adhere to this particular format: 4 columns frame, id, y-coordinate, and x-coordinate, in that order, and separated by blank spaces.
 \begin{itemize}
     \item frame id: The serial number of a given frame, with respect to the first frame.
@@ -70,21 +76,26 @@ This is used to populate the environment with dynamic obstacles. The annotation 
     \item y-coordinate: The position of the obstacle in column space.
     \item x-coordinate: The position of the obstacle in row space.
 \end{itemize}
+
+
+\vfill
 \begin{figure}[htbp]
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}[t]{0.5\textwidth}
 		\centering
 		\includegraphics[width=.95\linewidth]{figures/video_frame_students_with_agent_pointer.png}
 		\caption{Frame from the original video}
 		\label{fig:anno_sfig1}
 	\end{subfigure}
-	\begin{subfigure}{0.5\textwidth}
+	\begin{subfigure}[t]{0.5\textwidth}
 		\centering
-		\includegraphics[width=0.95\linewidth]{figures/env_screenshot.jpg}
+		\includegraphics[width=0.9\linewidth]{figures/env_screenshot.jpg}
 		\caption{Corresponding frame recreated in the environment using the annotation file.}
 		\label{fig:anno_sfig2}
 	\end{subfigure}
 \end{figure}
 \end{enumerate}
+
+
 \subsection{Input spaces and observation}
 \label{subsec:action-space}
 The environment has provisions for both discrete and continuous action space.

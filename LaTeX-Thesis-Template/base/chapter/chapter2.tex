@@ -21,9 +21,9 @@
 %    \end{enumerate}
 %
 
-In this chapter, we go through some of the classical methods/ model-based approaches from the existing literature that tackle the problem of socially compliant navigation. We will start by briefly describing the method and its strengths, followed by their limitations and the subsequent body of research that improves on it.
+In this chapter, we go through some of the classical/ model-based approaches from the existing literature that tackle the problem of socially compliant navigation. We will start by briefly describing the method and its strengths, followed by their limitations and the subsequent body of research that improves on it.
 %\subsubsection*{Khatib et al}
-One of the earliest controllers for autonomous navigation is based controllers based on artificial potential fields \cite{khatib_1986}. The main idea behind the method is that an agent moving through a scene is analogous to a particle moving through a force-field, where the goal exerts an attractive force while the obstacle surfaces negative forces. The resultant force, which is inversely proportional to the distance between these external entities, then guides the agent towards the goal while avoiding incoming obstacles. The resulting controller, with proper hyper-parameters, does a fairly good job of navigating a scene and checking all the boxes of a good navigating agent: it reaches the goal and avoids the obstacles in the path to doing so. That being said, there were many drawbacks to this method. The most notable being getting stuck in local minima, which were addressed by more sophisticated methods like probabilistic road-map based approaches \cite{Lavalle98rrt}. \\
+One of the earliest controllers for autonomous navigation is based controllers based on artificial potential fields \cite{khatib_1986}. The main idea behind the method is that an agent moving through a scene is analogous to a particle moving through a force-field, where the goal exerts an attractive force while the obstacle surfaces negative forces. The resultant force, which is inversely proportional to the distance between these external entities, then guides the agent towards the goal while avoiding incoming obstacles. The resulting controller, with proper hyper-parameters, does a fairly good job of navigating a scene checking all the boxes of a good navigating agent: it reaches the goal location avoiding obstacles along the way. But, there were many drawbacks to this method. The most notable being getting stuck in local minima, which were addressed by more sophisticated methods like probabilistic road-map based approaches \cite{Lavalle98rrt}. \\
 %\subsubsection*{Helbing and Molnar: Social Forces}
 
 Building on artificial potential fields, Helbing and Molnar introduce a pedestrian model that follows principles similar to that of the artificial potential fields and encapsulates a richer set of information to imbibe 'social' behavior in the agent's movement \cite{helbing_social_1998}.\\
@@ -47,19 +47,18 @@ The first term is the motivation to reach the goal.
 The second and third term denotes the motivation to maintain a certain distance from other pedestrians and boundaries respectively.
 The final term represents attractive forces other than the goal, that might attract a pedestrian like a street artist or a window of a shop.
 \par
-\textbf{Conclusion:}\\
 Careful observation and interpretation of human behavior and engineering rules that resemble them lead to the creation of a controller that provides a social flavor to the previously socially-indifferent controller obtained from artificial potential fields. But formulations of this nature are highly dependent on the different cases being considered and assumptions being made in the creation of the model
 %\textcolor{red}{A lot of careful engineering has been put into creating this 'formulae' that dictate/emulate the naturalness of human-movement while negotiating crowded space in an artificial agent/robot. 
 %Formulations of this nature are highly dependent on the different cases being considered and assumptions being made in the creation of the model.}\\
 
 %\subsubsection*{Sisbot et al}
 
-In more recent work, Sisbot et al. present a more sophisticated and meticulously constructed path planner \cite{sisbot_human_2007}. Similar to the work of potential fields \cite{khatib_1986} and the social forces model \cite{helbing_social_1998}, the planner plans a path with the least cost ('cost' is analogous to 'forces/potential'). But the process of generating the cost map is different.
-The authors generate and make use of three cost maps, primarily, $Cost_{safety}$, $Cost_{visibility}$ and an additional $Cost_{hidden zone}$.
+In more recent work \cite{sisbot_human_2007}, Sisbot et al. present a more sophisticated and meticulously constructed path planner. Similar to the work of potential fields \cite{khatib_1986} and the social forces model \cite{helbing_social_1998}, the planner plans a path with the least cost. But the process of generating the cost map is different.
+The authors generate and make use of three cost maps, $Cost_{safety}$, $Cost_{visibility}$ and $Cost_{hidden zone}$.
 The $Cost_{safety}$ keeps track of how safe a location in the grid is based on the structure and kinematics of the human and his/her state, where the state includes information like the posture (sitting or standing), configuration and parameters.\\
 The $Cost_{visbility}$ assigns a cost proportional to the ease of visibility of the robot to a person in a given location. The rationale being, the effort a human has to make to keep the robot in his/her vision is directly proportional to the discomfort caused by the robot with its movements.\\
-And lastly, it also takes into account the times when the robot remains hidden behind an obstacle and the accompanying cost with the term $Cost_{hidden zone}$. 
-The authors also provide two slightly nuanced ways of merging the two primary costs. One where the $Cost_{merged}$ is the weighted sum of two
+And lastly, $Cost_{hidden zone}$ takes into account the amount of time when the robot remains hidden behind any obstacle and the penalty associated with it. 
+The authors also provide two nuanced ways of merging the cost terms. One where the $Cost_{merged}$ is the weighted sum of two
 \begin{align}
 Cost_{merged}(x,y) = w_{1}Cost_{safety}(x,y) + w_{2}Cost_{visibility}(x,y)
 \end{align}
@@ -72,43 +71,42 @@ The final cost function factoring in the $Cost_{hidden zone}$ is
 \begin{align}
 Cost_{final}(x,y) \leftarrow w_{3} Cost_{hidden zone}(x,y)
 \end{align}
-when, x and y are in the field of view of a human but is obstructed by the presence of the robot and 
+when, x and y are in the field of view of a human, but is obstructed by the presence of the robot and 
 \begin{align}
 Cost_{final}(x,y) \leftarrow Cost_{merged}(x,y)
 \end{align}
-Once the final cost grid is obtained, a path between two points on the grid is computed using $A^*$ search.
+Once the final cost map is obtained, a path between two points on the grid is computed using $A^*$ search.
 
 %\subsubsection*{Svenstrup et al}
-Lastly, we look into another body of work by Svenstrup et al., that combines a potential field-like cost map with a probabilistic road map. The probabilistic road map is a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and trying to connect them to the existing graph.\\
-In their work, Trajectory planning for robots in a dynamic human environment \cite{svenstrup_trajectory_2010}, Svenstrup et al. take on the problem of autonomous navigation in a social environment in a different approach. They use the idea of a potential field and combine that with a rapidly exploring random tree that takes into account the robot kino-dynamics while planning future trajectory.
-Calculating the potential field:
-The calculation of the potential field is broken down to three parts:
+Lastly, we look into another body of work by Svenstrup et al., that combines a potential field-like cost map with a probabilistic road map. Probabilistic road maps are a class of planning algorithms where a robot navigates from a starting point to a goal point by creating a graph in a given space. The graph is constructed by generating random samples and connecting them to the existing graph.\\
+In their work, Trajectory planning for robots in a dynamic human environment \cite{svenstrup_trajectory_2010}, Svenstrup et al. take on the problem of autonomous navigation in a social environment from a different direction. They use the idea of potential field combined with rapidly exploring random trees that takes into account the robot kino-dynamics while planning the trajectory.
+The calculation of the potential field is broken down in three parts:
 \begin{enumerate}
-	\item The cost associated with the general desired behavior of the agent. The authors use a cost function with a bias towards a non-agoraphobic behavior i.e. an agent motivated not linger at the edges of an environment. This is given by
+	\item The cost associated with the general desired behavior of the agent. The authors use a cost function with a bias towards a non-agoraphobic behavior i.e. an agent motivated not to linger at the edges of an environment. This is given by:
 	\begin{align}
 	g_{1}(x(t)) = c_{y}y^{2}(t)
 	\end{align}
-	where, $c_y$ is a hyper parameter denoting the affinity of the agent to move towards the center of the environment.
-	\item The cost associated with the presence of humans in the vicinity. The calculation is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction" \cite{svenstrup_pose_estimation_2009}, where the potential field is constructed by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
+	where, $x(t)$ is the position of the agent at time $t$ and $c_y$ is a hyper parameter denoting the affinity of the agent to move towards the center of the environment.
+	\item The cost associated with the presence of humans in the vicinity. This is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction" \cite{svenstrup_pose_estimation_2009}, where a potential field is constructed by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
 	\begin{align}
 	g_{2}(x_{1:2}) = \sum_{k=1}^{4}c_{k}\exp(-\frac{1}{2}[x_{1:2} - 0]^{T}\sum^{-1}_{k}[x_{1:2} - 0])
 	\end{align} 
 	where $c_{k}$ are the normalizing constants, $x_{1:2}$ denote the relative position of the robot to the person and $\sum_k$ are the co-variances of the distributions.
-	\item The cost associated with the goal which penalizes the robot for not moving or not orienting itself towards the goal. The cost is not uniform and is skewed to have a higher penalty at lower distances.
+	\item The cost associated with the goal that penalizes the robot for not moving or not orienting itself towards the goal. The cost is not uniform and is skewed to have a higher penalty at lower distances.
 	\begin{align}
 	g_{3}(x(t)) = c_{e1}\exp(c_{e2}(x(t) - \hat{x}(0))) + c_{\theta}\theta^{4}(t)
 	\end{align}
-	\textbf{where, $c_{(.)}$ are constants and $\hat{x}(0)$ is the desired position at time $t=0$.}
+	where, $c_{(.)}$ are constants and $\hat{x}(0)$ is the desired position at time $t=0$.
 \end{enumerate}
 
-Figure depicting the PF around a pedestrian.
+%\textcolor{red}{Figure depicting the PF around a pedestrian?}
 
-The final cost is given by 
+The final cost is given by: 
 \begin{align}
 G(t) = g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t)) + g_{3}(x(t))
 \end{align}
 where,$\mathcal{P}(t)$ is the matrix containing the positions of the persons at a given time $t$ and $g_{1}$, $g_{2}$ and $g_{3}$ are the three cost functions described above.\\
-The navigation is represented as a minimization problem that aims to minimize the cost of moving through the potential field while respecting the dynamic constraints of the robot and is given by
+The navigation is represented as a minimization problem that aims to minimize the cost of moving through the potential field while respecting the dynamic constraints of the robot and is given by:
 \begin{align}
 \begin{split}
 minimize \qquad I(\tilde{u}_{0:T}) = &\int_{0}^{T} [g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t))]dt + g_{3}(x(t))\\
@@ -119,12 +117,12 @@ g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
 \end{split}
 \end{align}
 The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
-
-\textbf{Their overall algorithm:????}
-
-\textbf{General Conclusion:}
+\vspace{3cm}
+\par
+%\textbf{Their overall algorithm:????}
+%%%%% conculsion %%%%%%
 A theme for most of the model-based approaches to the path planning problem is two folds: design a cost function that considers some of the day-to-day interactions and preferences we as humans have, and, use that information to create a cost function that in works in tandem with a path planner to produce a socially compliant navigator.\\
-While this approach has been tried, tested, and proven to work, there are a few drawbacks. The design of the cost functions is highly dependent on the particular social etiquettes and cultural norms that had been considered at the time of designing the model. There are many tacit 'agreements/rules' that we as humans follow and respect while navigation, like not going through two people who are talking, which is hard to list and therefore take into consideration in the design of the model. Some of the issues arising from the model-based approach can be circumvented by using a data-driven approach as elaborated in the following section.
+While this approach has been tried, tested, and proven to work, there are a few drawbacks. The design of the cost functions is highly dependent on the particular social etiquette and cultural norms that had been considered at the time of designing the model. There are many tacit 'agreements/rules' that we as humans follow and respect while navigation, like not going through two people who are talking, which is hard to list and therefore take into consideration in the design of the model. Some of the issues arising from the model-based approach can be circumvented by using a data-driven approach as elaborated in \autoref{ch:3}.
 
 
 
