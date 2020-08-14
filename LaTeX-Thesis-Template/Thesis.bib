@@ -1050,7 +1050,17 @@ numpages = {8},
 location = {Banff, Alberta, Canada},
 series = {ICML ’04}
 }
-  
+
+
+@article{elu,
+author = {Clevert, Djork-Arné and Unterthiner, Thomas and Hochreiter, Sepp},
+year = {2015},
+month = {11},
+pages = {},
+title = {Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)},
+journal = {Under Review of ICLR2016 (1997)}
+}
+
 @inproceedings{ziebart_maxent_2008,
 author = {Ziebart, Brian D. and Maas, Andrew and Bagnell, J. Andrew and Dey, Anind K.},
 title = {Maximum Entropy Inverse Reinforcement Learning},
@@ -1124,4 +1134,41 @@ url = {http://papers.nips.cc/paper/4479-map-inference-for-bayesian-inverse-reinf
   pages={620},
   year={1957},
   publisher={APS}
+}
+@InProceedings{mnih_actor_critic_2016,
+  title = 	 {Asynchronous Methods for Deep Reinforcement Learning},
+  author = 	 {Volodymyr Mnih and Adria Puigdomenech Badia and Mehdi Mirza and Alex Graves and Timothy Lillicrap and Tim Harley and David Silver and Koray Kavukcuoglu},
+  booktitle = 	 {Proceedings of The 33rd International Conference on Machine Learning},
+  pages = 	 {1928--1937},
+  year = 	 {2016},
+  editor = 	 {Maria Florina Balcan and Kilian Q. Weinberger},
+  volume = 	 {48},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {New York, New York, USA},
+  month = 	 {20--22 Jun},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v48/mniha16.pdf},
+  url = 	 {http://proceedings.mlr.press/v48/mniha16.html},
+  abstract = 	 {We propose a conceptually simple and lightweight framework for deep reinforcement learning that uses asynchronous gradient descent for optimization of deep neural network controllers. We present asynchronous variants of four standard reinforcement learning algorithms and show that parallel actor-learners have a stabilizing effect on training allowing all four methods to successfully train neural network controllers. The best performing method, an asynchronous variant of actor-critic, surpasses the current state-of-the-art on the Atari domain while training for half the time on a single multi-core CPU instead of a GPU. Furthermore, we show that asynchronous actor-critic succeeds on a wide variety of continuous motor control problems as well as on a new task of navigating random 3D mazes using a visual input.}
+}
+@article{lerner_crowds_by_example_2007,
+author = {Lerner, Alon and Chrysanthou, Yiorgos and Lischinski, Dani},
+title = {Crowds by Example},
+journal = {Computer Graphics Forum},
+volume = {26},
+number = {3},
+pages = {655-664},
+keywords = {I.3.7 Computer Graphics: Animation},
+doi = {10.1111/j.1467-8659.2007.01089.x},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8659.2007.01089.x},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8659.2007.01089.x},
+abstract = {Abstract We present an example-based crowd simulation technique. Most crowd simulation techniques assume that the behavior exhibited by each person in the crowd can be defined by a restricted set of rules. This assumption limits the behavioral complexity of the simulated agents. By learning from real-world examples, our autonomous agents display complex natural behaviors that are often missing in crowd simulations. Examples are created from tracked video segments of real pedestrian crowds. During a simulation, autonomous agents search for examples that closely match the situation that they are facing. Trajectories taken by real people in similar situations, are copied to the simulated agents, resulting in seemingly natural behaviors.},
+year = {2007}
+}
+
+@techreport{project-shakey,
+ 	title = {Shakey the robot},
+ 	author = {Nilsson, Nils J},
+ 	year = {1984},
+ 	institution = {SRI INTERNATIONAL MENLO PARK CA}
 }

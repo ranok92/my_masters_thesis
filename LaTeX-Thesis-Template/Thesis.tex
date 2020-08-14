@@ -73,9 +73,10 @@
 \usepackage{subcaption}
 \usepackage{cleveref}
 
-\captionsetup[subfigure]{subrefformat=simple,labelformat=simple}
+\captionsetup[subfigure]{subrefformat=simple,labelformat=simple,skip=15pt,justification=raggedright}
 \renewcommand\thesubfigure{(\alph{subfigure})}
-
+\newcommand{\edited}[1]{\textbf{\color{blue} #1}}
+\newcommand{\thcomment}[1]{\textbf{\color{magenta}COMMENT:}\textit{\color{magenta}  #1}}
 \usepackage{url}
 \usepackage{multirow}
 \usepackage[bf,rm,medium,compact]{titlesec} % nice section titles
