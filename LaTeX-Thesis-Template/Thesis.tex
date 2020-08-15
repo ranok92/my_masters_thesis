@@ -13,6 +13,11 @@
 \usepackage[landscape]{geometry}
 \usepackage{lscape}
 \usepackage[pdfa,colorlinks=true,urlcolor=black]{hyperref}
+\usepackage[english]{babel}
+\addto\extrasenglish{%
+	\renewcommand{\chapterautorefname}{Chapter}%
+}
+
 \usepackage{tabularx}
 \usepackage{gensymb}
 %\usepackage{mathabx}
@@ -301,22 +306,22 @@
 \label{ch:intro}
 \input{base/intro/intro.tex}
 \chapter{Literature review: Classical path planning}
-\label{ch:chapter2}
+\label{ch:Chapter2}
 \input{base/chapter/chapter2.tex}
 \chapter{Literature review: Data driven approach}
-\label{ch:chapter3}
+\label{ch:Chapter3}
 \input{base/chapter/chapter3.tex}
 
 \chapter{Design and Methodology}
-\label{ch:chapter4}
+\label{ch:Chapter4}
 \input{base/chapter/chapter4.tex}
 
 \chapter{The environment}
-\label{ch:chapter5}
+\label{ch:Chapter5}
 \input{base/chapter/chapter5.tex}
 
 \chapter{Experiments and results}
-\label{ch:chapter6}
+\label{ch:Chapter6}
 \input{base/chapter/chapter6.tex}
 
 \chapter{Final Conclusion \& Future Work}
