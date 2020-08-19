@@ -92,43 +92,89 @@ The calculation of the potential field is broken down in three parts:
 	\begin{align}
 	g_{1}(\textbf{x}(t)) = c_{y}y^{2}(t)
 	\end{align}
-	where, $\textbf{x}(t)$ and $y(t)$ are the dynamical model, and position in $y$ direction of the agent at time $t$. $c_y$ is a hyper-parameter denoting the affinity of the agent to move towards the center of the environment.
+	where, $\textbf{x}(t)$ and $y(t)$ are the dynamical model, and position in $y$ direction of the agent at time $t$. $c_y$ is a hyper-parameter denoting the affinity of the agent to move towards the center of the environment. The dynamical model is given by \autoref{eq:robot_dynamics_sven}
+	\edited{
+	\begin{equation}
+	\label{eq:robot_dynamics_sven}
+	\textbf{x}(t) = 
+	{%
+		\vphantom{\begin{bmatrix}0\\0\\0\\0\\0\\0\end{bmatrix}}
+		\begin{bmatrix}
+		x_1(t)\\x_2(t)\\x_3(t)\\x_4(t)\\x_5(t)\\
+		\end{bmatrix}
+	}
+	=
+		{%
+		\vphantom{\begin{bmatrix}0\\0\\0\\0\\0\end{bmatrix}}
+		\begin{bmatrix}
+		x(t)\\y(t)\\v(t)\\\theta(t)\\\dot{\theta}(t)
+		\end{bmatrix}}	
+	\rightarrow
+			{%
+		\vphantom{\begin{bmatrix}0\\0\\0\\0\\0\end{bmatrix}}
+		\begin{bmatrix}
+		\text{x position}\\\text{y position}\\\text{linear velocity}\\\text{rotation angle}\\ \text{rotational velocity}
+		\end{bmatrix}}		
+	\end{equation}
+	The robot behavior is given by the differential equation \autoref{eq:diff_eqn_sven}
+	\begin{equation}
+	\label{eq:diff_eqn_sven}
+	\dot{\textbf{x}}(t) = 
+	\mathbf{f}(\textbf{x}(t), \mathbf{u})
+	=
+	{%
+		\vphantom{\begin{bmatrix}0\\0\\0\\0\\0\end{bmatrix}}
+		\begin{bmatrix}
+		\dot{x}(t)\\\dot{y}(t)\\\dot{v}(t)\\\dot{\theta}(t)\\\ddot{\theta}(t)
+		\end{bmatrix}}	
+	\rightarrow
+	{%
+		\vphantom{\begin{bmatrix}0\\0\\0\\0\\0\end{bmatrix}}
+		\begin{bmatrix}
+		x_3(t)\cos{x_4(t)}\\	x_3(t)\sin{x_4(t)}\\u_v(t)\\ \dot{\theta}(t) \\ u_\theta(t)
+		\end{bmatrix}}		
+	\end{equation}
+	where, $u_v$ is the linear acceleration and $u_\theta$ is the rotational acceleration.}
 	\item The cost associated with the presence of humans in the vicinity. This is based on their previous work, "Pose Estimation and Adaptive Robot Behavior for Human-Robot Interaction" \cite{svenstrup_pose_estimation_2009}, where a potential field is constructed by fine-tuning the co-variances of four Gaussian distributions expressing the following information: attraction towards a human, preventing the robot to approach a human from behind and two distributions to account for the parallel and perpendicular direction to the Person Interest indicator, which is calculated based on the person's velocity, position and pose.  
 	\begin{align}
-	g_{2}(x_{1:2}) = \sum_{k=1}^{4}c_{k}\exp(-\frac{1}{2}[x_{1:2} - 0]^{T}\sum^{-1}_{k}[x_{1:2} - 0])
+	g_{2}(\textbf{x}_{1:2}) = \sum_{k=1}^{4}c_{k}\exp(-\frac{1}{2}[\textbf{x}_{1:2} - P_0]^{T}\sum^{-1}_{k}[\textbf{x}_{1:2} - P_0])
 	\end{align} 
-	where $c_{k}$ are the normalizing constants, $x_{1:2}$ denote the relative position of the robot to the person and $\sum_k$ are the co-variances of the distributions.
+	\edited{where $c_{k}$ are the normalizing constants, $\textbf{x}_{1:2}$ denote the first two components of the robot dynamics, $P_0$ is the position of the person, and $\sum_k$ are the co-variances of the Gaussian distributions.}
 	\item The cost associated with the goal that penalizes the robot for not moving or not orienting itself towards the goal. The cost is not uniform and is skewed to have a higher penalty at \edited{shorter} distances.
 	\begin{align}
-	g_{3}(x(t)) = c_{e1}\exp(c_{e2}(x(t) - \hat{x}(0))) + c_{\theta}\theta^{4}(t)
+	g_{3}(\textbf{x}(t)) = c_{e1}\exp(c_{e2}(x(t) - \hat{x}(0))) + c_{\theta}\theta^{4}(t)
 	\end{align}
-	where, $c_{(.)}$ are constants and $\hat{x}(0)$ is the desired position at time $t=0$.
+	\edited{where, $c_{(.)}$ are constants, $\theta(t)$ is the rotation angle at time $t$, and $\hat{x}(0)$ is the desired position at time $t=0$.}
 \end{enumerate}
 
 %\textcolor{red}{Figure depicting the PF around a pedestrian?}
-
+\edited{
 The final cost is given by: 
 \begin{align}
-G(t) = g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t)) + g_{3}(x(t))
+G(t) = g_{1}(\textbf{x}(t)) + g_{2}(\textbf{x}(t), \mathcal{P}(t)) + g_{3}(\textbf{x}(t))
 \end{align}
 where,$\mathcal{P}(t)$ is the matrix containing the positions of the persons at a given time $t$ and $g_{1}$, $g_{2}$ and $g_{3}$ are the three cost functions described above.\\
 The navigation is represented as a minimization problem that aims to minimize the cost of moving through the potential field while respecting the dynamic constraints of the robot and is given by:
+\thcomment{I am not sure what you wanted to convey here. Is there anything else other than making sure all the symbols are defined?}
 \begin{align}
+\label{eq:sven_optimziation}
 \begin{split}
-minimize \qquad I(\tilde{u}_{0:T}) = &\int_{0}^{T} [g_{1}(x(t)) + g_{2}(x(t), \mathcal{P}(t))]dt + g_{3}(x(t))\\
-s.t. \qquad \qquad \dot{x}(t) = & f(x(t),u(t)) \\
-where \qquad g_{1}(x(t)) = &c_{y}x_{2}(t)^{2}\\
-g_{2}((x(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\exp(-\frac{1}{2}[x_{1:2} - \mu_{j}]^{T}\sum^{-1}_{k}[x_{1:2} - \mu_{j}])\\
+minimize \qquad I(\tilde{u}_{0:T}) = &\int_{0}^{T} [g_{1}(\textbf{x}(t)) + g_{2}(\textbf{x}(t), \mathcal{P}(t))]dt + g_{3}(\textbf{x}(t))\\
+s.t. \qquad \qquad \dot{\textbf{x}}(t) = & f(\textbf{x}(t),u(t)) \\
+where \qquad g_{1}(\textbf{x}(t)) = &c_{y}x_{2}(t)^{2}\\
+g_{2}((\textbf{x}(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\exp(-\frac{1}{2}[\textbf{x}_{1:2} - \mu_{j}]^{T}\sum^{-1}_{k}[\textbf{x}_{1:2} - \mu_{j}])\\
 g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
 \end{split}
 \end{align}
-The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
-\vspace{3cm}
+where $\mu$ is the mean of the position of the pedestrians.}\\
+
+The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. \thcomment{The following line is one of the steps in their algorithm. not an explanation of the of the expression above. I did not make any changes to address your comment. } Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.
+
 \par
 %\textbf{Their overall algorithm:????}
 %%%%% conculsion %%%%%%
-A theme for most of the model-based approaches to the path planning problem is two folds: design a cost function that considers some of the day-to-day interactions and preferences we as humans have, and, use that information to create a cost function that in works in tandem with a path planner to produce a socially compliant navigator.\\
-While this approach has been tried, tested, and proven to work, there are a few drawbacks. The design of the cost functions is highly dependent on the particular social etiquette and cultural norms that had been considered at the time of designing the model. There are many tacit 'agreements/rules' that we as humans follow and respect while navigation, like not going through two people who are talking, which is hard to list and therefore take into consideration in the design of the model. Some of the issues arising from the model-based approach can be circumvented by using a data-driven approach as elaborated in \autoref{ch:3}.
+A theme for most of the model-based approaches to the path planning problem is two fold: \edited{design a cost function that takes into account a set of social norms and construct a navigation model based on it.}\\
+While this approach has been tried, tested, and \edited{shown to be capable of navigating in the presence of humans}, there are a few drawbacks. The design of the cost functions is highly dependent on the particular social etiquette and cultural norms that had been considered at the time of designing the model. There are many \edited{social conventions and tacit agreements that we as humans follow and respect while navigation, like not obstructing people engaged in a conversation, or, respecting personal space when possible, to name a few. The full set is hard to enumerate and never explicit making it difficult to take into consideration in the design of the model.} Some of the issues arising from the model-based approach can be circumvented by using a data-driven approach as elaborated in \autoref{ch:3}.
 
 
 

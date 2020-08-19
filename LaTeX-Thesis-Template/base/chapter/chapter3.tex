@@ -1,5 +1,5 @@
 \label{ch:3}
-In this section, we discuss different learning-based approaches that have been explored in recent years. Learning-based methods in the field of social navigation can be broadly classified into reinforcement learning (RL)-based and inverse reinforcement learning(IRL)-based approaches. While these methods differ at their core, the problem definition for both the cases is mostly similar but with a key difference. For both RL and IRL setting, the problem at hand is expressed in the form of a Markov decision process (MDP). We define the problem below.
+In this section, we discuss different learning-based approaches that have been explored in recent years. \edited{To keep the discussion relevant to the contribution of the thesis, the discussion is focused on bodies work that fall under the banner of reinforcement learning (RL) or inverse reinforcement learning (IRL) based methods. Both RL and IRL have been widely researched in the field of socially-aware navigation.} While these methods differ at their core, the problem definition for both the cases is mostly similar but with a key difference. For both RL and IRL setting, the problem at hand is expressed in the form of a Markov decision process (MDP). We define the problem below.
 \subsection*{Problem definition:}
 A Markov decision process is a discrete-time stochastic control process and can be represented as a 5 tuple
 ($\mathcal{S}$,$\mathcal{A}$,T,$\gamma$, $\mathcal{R}$), where,
@@ -16,39 +16,63 @@ In contrast, in inverse reinforcement learning problems, there is no reward func
 
 \section{RL based approaches}
  With their remarkable success in the field of video games and a suite of tasks of similar anatomy, RL has been one of the go-to tools in the field of social navigation in recent years. \\
-Chen et al. \cite{chen_socially_2017} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent. The reward function primarily focuses on three different aspects of interaction: overtaking, passing, and crossing as shown in the figure below.
+Chen et al. \cite{chen_socially_2017} address this problem by focusing on what not to do, rather than what to do. They introduce a reward function crafted to induce social norms in the behavior of the agent. The reward function primarily focuses on three different aspects of interaction: overtaking, passing, and crossing as shown in \autoref{fig:chen_socially_crossing}
  \begin{figure}[!htbp]
      \centering
     \includegraphics[width=.6\linewidth]{figures/chapter2_rl_based_approach}
-    \caption{Representation of the three interaction scenarios.}
-    \label{fig:label1}
+    \caption{\edited{Symmetric pairwise collision avoidance in a time efficient manner by the red agent in the three interaction scenarios. The interactions in the top and bottom row are often referred as left and right-handed rules respectively.}}
+    \label{fig:chen_socially_crossing}
  \end{figure}
+\thcomment{In their paper they write : "This work notes that social norms are one of the many
+	ways to resolve a symmetrical collision avoidance scenario,
+	as illustrated in... "}
+They claim that symmetry is one of the driving factors \edited{that} incorporate social behavior. The reward function they define is given by \autoref{eq:chen_socially_2017_reward_function}.
+\begin{align}
+\label{eq:chen_socially_2017_reward_function}
+\begin{split}
+R_{norm}(s^{jn}, a) &=  q_nI(s^{jn} \in S_{norm})\\
+s.t. \qquad S_{norm}&=  S_{pass} \cup S_{ovtk} \cup S_{cross}\\
+S_{pass} &= \{s^{jn} | d_g > 3, 1 < \tilde{p_x} < 4,
+			  -2 < \tilde{p_y} < 0, |\tilde{\phi} - \psi| > 3\pi/4 \} \\
+S_{ovtk} &= \{s^{jn} | d_g > 3, 0 < \tilde{p_x} < 3, |v| > |\tilde{v}|
+			  0 < \tilde{p_y} < 1, |\tilde{\phi} - \psi| < \pi/4 \} \\
+S_{cross} &= \{s^{jn} | d_g > 3, \tilde{d_a} < 2,  \tilde{\phi_{rot}} > 0,
+			  -3\pi/4 < \tilde{\phi} - \psi < -\pi/4  \}
+\end{split}
+\end{align}\\
+where, $I$ is an indicator function. $S_{pass}$, $S_{ovtk}$, and $S_{cross}$ are the set of states that fall under the category of passing, overtaking and crossing respectively, $s^{jn}$ is the joint state of the agent and its neighbor, $a$ is the action, $q_{n}$ is a scalar penalty, $d_{g}$ is the distance of the goal from the agent, $d_{a}$ is the distance to the neighboring agent, $\tilde{\phi}$ is the neighboring agent's orientation, $\phi$ is the agent's orientation, $\tilde{\phi_{rot}}$ is the relative rotation angle between the two agents and $\tilde{p_x}$ and $\tilde{p_y}$ are the $x$ and $y$ coordinates of the neighboring agent in the target agent's reference frame. The reward function in \autoref{eq:chen_socially_2017_reward_function} biases the agent towards adhering to the right-hand rules.
 \\
-They note that symmetry is one of the driving factors to incorporate social behavior, so they introduce a network architecture for symmetric multi-agent training.\\
 
-A more recent work by the same authors, Collision avoidance in pedestrian-rich environments with deep reinforcement learning \cite{everett_collision_2019}, 
-address drawbacks of their previous work: the inability to tackle a variable number of agents in the environment. They introduce a Long Short-Term Memory (LSTM) \cite{hochreiterLongShortTermMemory1997} based network architecture that takes as input the information from the nearby pedestrians in a sequence. This eliminates the need for specifying a limit on the number of nearby-agents the method can handle.\\
-The state comprises of two parts: 
-\begin{enumerate}
-    \item The information of the agent itself, \textbf{s}
-    \item The information from the other $n$ number of agents present in the environment at a given time. This is where the LSTM comes in to play and takes information from these n agents and passes them sequentially through an LSTM layer to generate a final hidden state which is concatenated with \textbf{s} to obtain the final state representation of the environment.
-\end{enumerate}
+A more recent work by the same authors, "Collision avoidance in pedestrian-rich environments with deep reinforcement learning" \cite{everett_collision_2019}, \thcomment{Yes, it is the title of their paper.}
+address drawbacks of their previous work: the inability to tackle a variable number of agents in the environment. They introduce a \edited{long short-term memory} (LSTM) \cite{hochreiterLongShortTermMemory1997} network architecture as shown in \autoref{fig:everett_lstm_network} that takes as input the information from the nearby pedestrians in a sequence which eliminates the need for specifying a limit on the number of nearby-agents the method can handle.
 \begin{figure}[!htbp]
-    \centering
-    \includegraphics[width=0.6\linewidth]{figures/everett}
-    \caption{LSTM based network architecture to account for a variable number of nearby agents.}
-    \label{fig:label2}
+	\centering
+	\includegraphics[width=0.6\linewidth]{figures/everett}
+	\caption{LSTM based network architecture to account for a variable number of nearby agents.}
+	\label{fig:everett_lstm_network}
 \end{figure}
-
-The reward function used in this work is a relatively straight forward and sparse with positive and negative feedback for either reaching the goal and encountering a collision respectively.
-
+ For this work, they select a relatively simple sparse reward function that focuses on collision avoidance and maintaining distance from others as shown in \autoref{eq:everett_reward_function}\\
+\begin{align}
+\label{eq:everett_reward_function}
+f)x) = 
+\begin{cases}
+	 1 & \text{if \quad $p=p_g$} \\
+	 -0.1+d_{min}/2 & \text{if \quad 0 < $d_{min}$ < 0.2} \\
+	 -0.25 & \text{if \quad $d_{min}$ < 0}\\
+	 0 & \text{otherwise}, 
+\end{cases}
+\end{align}
+where $d_{min}$ is the distance to the nearest neighboring agent.
 %\textbf{Conclusion}\\
-Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including but not limited to video games making it one of the more preferred choices to tackle the problem of social navigation. \par
-However, using RL in this particular setting necessitates the formulation of a reward function that can correctly capture the 'social and cultural' characteristics. Coming up with such a set of rules can be difficult and daunting as 'social norms' are not always explicit and can vary widely across different societies and even based on a given situation.\\
+\subsection*{Conclusion}
+Reward function is the most succinct definition of the task at hand (Abbeel and Ng), so reward plays the most vital role in the performance of a RL method. Similar to the work in classical approach. Still involves reward engineering, which can get pretty complex even when considering a handful of simple interactions. The reward function by 2019 chen focuses solely on collision avoidance, and 2017 incorporates an element of naturalness to the mix. But it takes into account a very limited number of scenarios: just 3 possible interaction scenarios, which is a small subset of the very many implicit intentions and explicit decisions a human takes while navigating.  
+ 
+Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including, but not limited to, video games making it one of the more preferred choices to tackle the problem of social navigation. \par
+Using RL in this particular setting however necessitates the formulation of a reward function that can correctly capture the 'social and cultural' characteristics. As noted earlier, coming up with such a set of rules can be difficult and daunting as 'social norms' are not always explicit and can vary widely across different societies and even based on a given situation.\\
 
 \section{IRL based approaches}
 %\textbf{Learning approaches meet probabilistic road map style path planner.}
-Engineering a reward function that illicit social compliance from an agent is difficult. That is why a lot of the recent research in this field takes the approach of inverse reinforcement learning. \par 
+Engineering a reward function that elicits social compliance from an agent is difficult. That is why a lot of the recent research in this field takes the approach of inverse reinforcement learning. \par 
 Vasquez et al. in their work \cite{vasquez_inverse_2014}, present a comprehensive study on the effect of different feature representations and IRL methods on the performance of an agent in the task of social navigation. They examine two IRL methods: max-margin IRL and max entropy IRL.\\
 For the feature representations, they create a pool of measurements garnered from the state of the agent itself and the state of the other entities in the environment and combine these measurements to create 3 feature representations. \\
 They test all of these on a ROS based pedestrian simulator on 3 scenarios: airport gate, crossing hallway, and intersection. Expert demonstrations for these scenarios are obtained through teleoperation. They find that the performance across the two learning methods are similar. The feature representation, on the other hand, plays a major role in the final performance of the agent hence they come to the conclusion that spending time on modeling the feature representations or working to come up with learning methods that aid in the simplification of building the feature representations might be the way to go.
@@ -89,6 +113,8 @@ The authors present a feature representation consisting of 4 parts:
 The authors train and test their procedure using data collected in the "ATC" business center in Osaka, Japan.
 From these experiments, they show that the method is not only capable of producing a general navigator to negotiate the crowd, but also an agent that show traits of pedestrian behaviors like collision-avoidance and following the leader.
 
+
+\subsection*{Conclusion}
 Given the nature of the task, IRL based methods seem to be a promising avenue to explore. But the problem of social navigation is far from solved and many issues still need addressing. IRL methods are highly dependent on the design of the feature representation used in the algorithm, and a lot of time and effort are needed towards optimizing a set of features that would perform well. Moreover, for most of the existing work, not a lot has been discussed about the generalization of the agent. Most of the experiments are either conducted in a relatively simple environment, like a narrow hallway, or address some specific aspect of crowd navigation like negotiating intersections. 
 \begin{comment}
 \textbf{Collection of expert trajectory might be expensive}
