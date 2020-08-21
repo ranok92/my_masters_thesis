@@ -105,8 +105,14 @@ Fahad et. al. \cite{fahad_learning_2018}, present a navigation framework to trai
 This is achieved by dividing each demonstration, or trajectory, in this case, into a sum of the individual states encountered by the expert. and minimizing the difference in the state visitation frequency (SVF) of the agent and the expert.\\
 The authors present a feature representation consisting of 4 parts:
 \begin{enumerate}
-    \item Social Affinity Map(SAM): This captures the motion of the pedestrians in the vicinity of the agent. The area near the agent is divided into two concentric circles. The region inside the inner circle is then divided into 4 parts, and the region between the inner and outer circle is divided into 6 parts.
+    \item Social Affinity Map(SAM): This captures the motion of the pedestrians in the vicinity of the agent. The area near the agent is divided into two concentric circles. The region inside the inner circle is then divided into 4 parts, and the region between the inner and outer circle is divided into 6 parts as shown in \autoref{fig:SAM_local_bins}
     Information from each of these 10 areas (or bins) is then expressed using a 6-dimensional vector that captures the average velocity of the pedestrians in a given bin. 
+    \begin{figure}
+    	\centering
+    	\includegraphics[width=0.5\linewidth]{figures/SAM_local_bins.png}
+    	\caption{Division of the area around the agent into spatial bins as done in the SAM features. The arrow marks the direction of heading of the agent.}
+    	\label{fig:SAM_local_bins}
+    \end{figure}
     \item Density feature: Helps provide an idea of how dense the vicinity of the agent is. It is calculated by adding up the number of pedestrians present in the spatial bins (calculated above). Once calculated they are discretized based on some predefined threshold.
     \item Distance feature: Captures the distance between the agent's current location and the goal.
     \item Default Cost feature: Introduced to balance the rest of the other features. This has been proposed by various other works in the past.
