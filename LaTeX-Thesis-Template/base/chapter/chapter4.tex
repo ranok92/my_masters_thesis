@@ -323,7 +323,7 @@ The deviation from goal captures the magnitude of the angle between the vector t
 
 \subsubsection*{Speed}
 The current speed of the agent is quantized and represented in the form of a $6 \times 1$ one-hot vector. 
-
+\thcomment{I could not come up with a more formal alternative for "one-hot vector"}
 %\begin{table}[htbp]
 %    \caption{Thresholds for the qantization of the speed of the agent.}
 %    \label{tab:speed-quantization}
@@ -352,7 +352,7 @@ Taking inspiration from previous \edited{work} in this field \cite{fahad_learnin
 \subsubsection*{Creation of the bins}
 There are 16 spatial bins surrounding the agent arranged in two concentric circles. 8 equal divisions of the region between the agent and the inner circle form bin 1-8. Similarly, the divisions in the region between the first and the second concentric circle form bins 9 - 16.
 \subsubsection*{Calculation of the risk}
-Oxford learner's dictionary defines 'risk' as "a person or thing that is likely to cause problems or danger at some time in the future" \textcolor{red}{cite oxford learners' dictionary}. In this context, 'risk' can be loosely correlated to the likelihood of a collision with a nearby obstacle/pedestrian. As a property of the spatial bins, it implies the possibility of a collision with an obstacle located in the given bin. 
+\edited{Oxford English Dictionary defines 'risk' as " the possibility of loss, injury, or other adverse or unwelcome circumstance; a chance or situation involving such a possibility" \cite{oxford_dictionary}}. In this context, 'risk' can be loosely correlated to the likelihood of a collision with a nearby obstacle/pedestrian. As a property of the spatial bins, it implies the possibility of a collision with an obstacle located in the given bin. 
 The 'risk' is divided into 3 levels: high, low, and medium.
 \begin{itemize}
     \item High risk:
@@ -371,8 +371,8 @@ The calculation of the risk values are based on the following entities:
     \mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
 \end{align}
 where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated safety margin between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
-An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. If $\theta$ < $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
-
+An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. \edited{The rationale behind this is,  $\theta$ < $90 \degree$ indicates that the involved objects are moving towards each other. Additionally, if the objects are close by, i.e. $ < \mathbf{T}$, then this describes a condition where two objects in close proximity are moving towards each other: a circumstance that is likely to encounter a collision.}  If $\theta$ > $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
+\thcomment{I do not have any citation or study to back the classification but I have added a justification based on common sense if that helps.}
 \begin{table}[htbp]
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
@@ -392,6 +392,7 @@ An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and 
     \end{center}
 
 \end{table}
+\par
 The risk value of each bin is represented using a $3 \times 1$ one-hot vector. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
 \begin{figure}[!htbp]
 	\centering
@@ -425,22 +426,20 @@ The risk value of each bin is represented using a $3 \times 1$ one-hot vector. T
 %\end{figure}
 
 
-\begin{figure}
+\begin{figure}[!htbp]
 	\label{fig:agent-perspective-risk-features}
-	\begin{subfigure}[t]{.5\linewidth}
 		\centering
 		\includegraphics[width=.95\textwidth]{figures/env_screenshot_agent_perspective.png}
 		\label{fig:agent-perspective_env}
 		\centering
-		\subcaption{A screenshot of a frame populated with obstacles.} 
-	\end{subfigure}
-	\begin{subfigure}[t]{.5\linewidth}
+		\caption{A screenshot of a frame populated with \edited{human obstacles}.} 
+\end{figure}
+
+\begin{figure}[!htbp]
 		\centering
 		\includegraphics[width=.7\textwidth]{figures/agent_perspective_recreated.png}
 		\label{fig:agent-perspective_agent-perspective}
-		\subcaption{The local perspective of the agent in the frame. The arrows mark the relative velocity of the nearby pedestrians w.r.t. the agent. Risk classification is color-coded as mentioned earlier.}
-	\end{subfigure}
-	\caption{Visualizing the agent's perception of the environment.}
+		\caption{The local perspective of the agent in the frame. The arrows mark the relative velocity of the nearby pedestrians w.r.t. the agent. Risk classification is color-coded as mentioned earlier.}
 \end{figure}
 
 
