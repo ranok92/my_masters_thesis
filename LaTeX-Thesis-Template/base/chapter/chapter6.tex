@@ -1,9 +1,9 @@
 \label{ch:6}
 \subsubsection*{Overview}
-In this chapter, we report the results from various qualitative and quantitative experiments conducted to showcase a comprehensive performance comparison of our method to that in the existing literature. All the experiments are conducted in the in-house built simulator described in \autoref{ch:enviornment}. \\
+In this chapter, we report the results from various qualitative and quantitative experiments conducted to \edited{show} a comprehensive performance comparison of our method to that in the existing literature. All the experiments are conducted in the simulator described in \autoref{ch:enviornment}. \\
 We perform baseline comparisons in \autoref{sec:baseline-evaluation}: comparing our IRL method to a model-based potential field controller, and a data-driven RL agent trained in a similar setting using a simple yet dense hand-crafted reward function. This helps in demonstrating the difference in the performance of agents coming from different training methods and how our IRL pipeline fare against them.\\
- Feature representations play a vital role in an IRL pipeline. Keeping that in mind we dedicate \autoref{sec:comparing-other-featreps} comparing the performance of IRL agents trained in a similar setting but different feature representations.\\
- Finally, \autoref{sec:generalization} is dedicated to test the generalization capabilities of our method where we perform the same set of experiments on an untouched dataset.
+ Feature representations play a vital role in an IRL pipeline. Keeping that in mind, we dedicate \autoref{sec:comparing-other-featreps} to comparing the performance of IRL agents trained in a similar setting but different feature representations.\\
+ Finally, \autoref{sec:generalization} is dedicated to testing the generalization capabilities of our method, where we repeat our experiments on \edited{out-of-distribution} data.
 
 %Getting tricky scenarios that help showcase the subtle qualitative aspects of a navigating agent from the real-world video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced qualitative behaviors of the IRL and how that differs to that of the RL.
 %
@@ -11,15 +11,10 @@ We perform baseline comparisons in \autoref{sec:baseline-evaluation}: comparing 
 
 \section{Experimental setup and training details}
 \label{sec:exp-setup}
-
-The MEDIRL pipeline is run for 100 epochs. The reinforcement learning algorithm \cite{mnih_actor_critic_2016} running in the inner loop is run for a predefined number of episodes. An episode terminates when the agent reaches the goal, hits an obstacle, or exceeds the limit of frames assigned to an episode. Both the policy and reward networks have a relatively simple architecture. The reward network has an input layer of width equal to that of the size of the feature vector and a single hidden layer consisting of $256$ nodes. Both the layers use Exponential Linear Unit (ELU) \cite{elu} activation function. The hidden layer is followed by a output layer that returns a real value which uses a Tanh activation function. The policy network as a similar architecture: an input layer whose size is dictated by the size of the feature vector followed by a hidden layer with $256$ nodes and ELU activation. From the hidden layer, the network bifurcates to the action head and the value head, forming the actor and the critic network. The action head consists of a linear layer followed by a Softmax layer while the value head consists of only a linear layer that outputs a real number.
+\edited{In this section we outline our experimental setup and training details.} The MEDIRL pipeline is run for $100$ epochs. The reinforcement learning algorithm \cite{mnih_actor_critic_2016} running in the inner loop is run for a predefined number of episodes. An episode terminates when the agent reaches the goal, hits an obstacle, or exceeds the limit of frames assigned to an episode. Both the policy and reward networks have a relatively simple architecture. The reward network has an input layer of width equal to that of the size of the feature vector and a single hidden layer consisting of $256$ nodes. Both the layers use Exponential Linear Unit (ELU) \cite{elu} activation function. The hidden layer is followed by a output layer that returns a real value which uses a Tanh activation function. The policy network as a similar architecture: an input layer whose size is dictated by the size of the feature vector followed by a hidden layer with $256$ nodes and ELU activation. From the hidden layer, the network bifurcates to the action head and the value head, forming the actor and the critic network. The action head consists of a linear layer followed by a Softmax layer while the value head consists of only a linear layer that outputs a real number.
 
 %with an exponential linear unit (ELU) \cite{exponential-linear-unit} as the activation function and adaptive moment estimation (Adam) \cite{adaptive-moment-estimation} as the choice of the optimizer. The learning rate for the policy and reward network is set to $0.001$ and $0.0005$ respectively.
-\begin{figure}
-	\caption {A diagram of the network architecture the reward network and the policy network.}
-\end{figure}
 
-To train our agent we select demonstrations from the UCY university students dataset \cite{lerner_crowds_by_example_2007}. It consists of trajectories of 430 different pedestrians on a relatively busy area captured over $3$ minutes and $37$ seconds. The video is captured at $25$ fps resulting in a total of $5400$ frames. The length of the trajectories varies from $47.31$  to $2047$ with an average of $406$ frames per trajectory. 
 \begin{figure}
     	\begin{subfigure}[b]{.5\textwidth}
     	\centering
@@ -37,12 +32,11 @@ To train our agent we select demonstrations from the UCY university students dat
 \end{figure}
 
 
+To train our agent we select demonstrations from the UCY university students data set \cite{lerner_crowds_by_example_2007}. It consists of trajectories of 430 different pedestrians on a relatively busy area captured over $3$ minutes and $37$ seconds. The video is captured at $25$ fps resulting in a total of $5400$ frames. The length of the trajectories varies from $47.31$  to $2047$ with an average of $406$ frames per trajectory.\edited{A key aspect of this data set is that the data is captured from a moderate to densely crowded scene of an open space on a university campus. This puts nominal restriction by static obstacles on the pedestrians and provides a data set where the movements of the subjects are primarily dictated by social interaction.} 
 \begin{figure}
-    \caption {Distribution of pedestrian based on obstacles in the vicinity}
+	\caption {Distribution of pedestrian based on obstacles in the vicinity}
 \end{figure}
 
-
-There are a few key properties that make this environment challenging: dense crowd, open space so lack of any constrain offered by spaces like narrow pathways, as because open space pedestrians(obstacles) can and does come from different directions making the process of negotiating such crowds rather challenging. 
 
 %\begin{table}
 %    \caption {Table containing useful information on the what is useful}
@@ -81,7 +75,7 @@ There are a few key properties that make this environment challenging: dense cro
 %        \item Training and testing on different annotation files.
 %        \item Testing on custom scenarios.
 %\end{itemize}
-To get a comprehensive comparison of the performance of the agents, we compare them over different metrics, each capturing a unique characteristic of the navigation behavior exhibited by the agent. The metrics are described below:
+To get a comprehensive comparison of the performance of the agents, we compare them \edited{using} different metrics, each capturing a unique characteristic of the navigation behavior exhibited by the agent. The metrics are described below:
 \begin{itemize}
         \item \textbf{Reaching the goal:} The ability to reach a goal from a given position is one of the fundamental criteria to measure the performance of a navigating agent. It is calculated as the fraction of runs in which the agent successfully reaches its desired location.        
         
@@ -91,8 +85,8 @@ To get a comprehensive comparison of the performance of the agents, we compare t
 
 %        \item \textbf{Minimum distance over time graphs:} Indicates the minimum distance maintained by an agent throughout its entire trajectory. It can be thought of as a measure of how 'dangerously' or 'cautiously' an agent behaves while interacting with neighboring obstacles. (line graphs over time frame)
         \item \textbf{Trajectory smoothness:} Trajectories traced by people are smooth with rare occurrences of drastic change in the heading direction. This metric measures how much an agent changes its heading direction, thus the smoothness of its trajectory while negotiating obstacles or navigating in general. (bar plots with error bars.)
-        \item \textbf{Drift analysis plots: }The main aim of the work is to obtain agents that navigate and interact with crowds like a human being, which is why the drift analysis is one of the most important metrics we use to evaluate the agents. This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian and is calculated as the mean squared error (MSE) between the points on the trajectory of the agent and the pedestrian (ground truth) at each time frame. The comparison is performed over a range of trajectory segment lengths to showcase the short to medium term navigation capabilities of the agents. It is a measure of how much the trajectory traced by an agent conforms to the original trajectory of the pedestrian when subjected to similar conditions. (line graphs with error bars)\\
-        \textbf{\textcolor{red}{Navigation is an under-constrained problem}}. This is especially true for sparsely populated regions with more than one paths to a given destination. To better understand the 'drift' of the agents from the ground truth, we classify the pedestrians into 3 levels of difficulty: easy, moderate, and hard, based on the average number of pedestrians in the vicinity and perform separate drift analysis on the pedestrians of each class. The idea is that a pedestrian from the "easier" class encounters relatively less crowd along its path, which in turn provides a wider choice of 'good' trajectories, that does not necessarily conform to the ground truth.
+        \item \textbf{\edited{Divergence from expert:}}The main aim of the work is to obtain agents that navigate and interact with crowds like a human being, which is why \edited{computing the divergence from expert} is one of the most important metrics we use to evaluate the agents. This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian and is calculated as the mean squared error (MSE) between the points on the trajectory of the agent and the pedestrian (ground truth) at each time frame. The comparison is performed over a range of trajectory segment lengths to showcase the short to medium term navigation capabilities of the agents. It is a measure of how much the trajectory traced by an agent conforms to the original trajectory of the pedestrian when subjected to similar conditions. (line graphs with error bars)\\
+        \edited{Social navigation is an under-constrained problem}. This is especially true for sparsely populated regions with more than one paths to a given destination. To better understand the 'drift' of the agents from the ground truth, we classify the pedestrians into 3 levels of difficulty: easy, moderate, and hard, based on the average number of pedestrians in the vicinity and perform separate drift analysis on the pedestrians of each class. The idea is that a pedestrian from the "easier" class encounters relatively less crowd along its path, which in turn provides a wider choice of 'good' trajectories, that does not necessarily conform to the ground truth.
         %\item \textbf{Traced trajectory of multiple agents for a particular pedestrian:} Primarily a visual tool to see how an agent performs in comparison to the ground truth.
 \end{itemize}
 
@@ -171,9 +165,9 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 			\hline
 			Metric Name & Potential Field & RL & IRL  &  Ground Truth \\
 			\hline
-			Goal reached (in $\%$) & $75.11$ & $46.35$ & $71.73$ & $91.16$\\
-			Collisions encountered (per run) & $ 0.12$ & $1.06$ & $0.41$ & $0.11$\\
-			Change in orientation ( $\degree$ per frame) & $31.92$ & $27.77$ &  $4.06$ & $1.12$ \\
+			Goal reached (in $\%$) & $75.11$ & $40.20$ & $65.30$ & $91.16$\\
+			Collisions encountered (per run) & $ 0.12$ & $.20$ & $0.11$ & $0.10$\\
+			Change in orientation ( $\degree$ per frame) & $29.56$ & $25.31$ &  $4.29$ & $1.12$ \\
 			%Displacement to Distance ratio & $0.71$ & $0.67$ & $0.81$ & $0.84$ \\
 			\hline
 		\end{tabular}
@@ -182,7 +176,7 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 	\label{tab:inter_method_numerical_results}
 \end{table}\\
 \textbf{Drift analysis}\\
-\textcolor{red}{Figure \ref{fig:inter_method-drift_analysis_all} shows that the IRL agent suffers the least amount of drift when calculated over the set of all the pedestrians. The results from the pedestrian groups of varying difficulty provides more insight. The amount of drift suffered by the agents is inversely proportional to the difficulty level of the pedestrian trajectory as shown in Figures. \ref{fig:inter_method-drift_analysis_easy}, \ref{fig:inter_method-drift_analysis_med}, \ref{fig:inter_method-drift_analysis_hard}. This is understandable, as the clutter around a pedestrian decreases, the agent has less incentive to follow the 'ground truth' path traced by the original pedestrian as a scant crowd increases the option of available good paths. As the difficulty increases, the room for taking good alternative trajectories decreases and so does the drift, with the IRL agent being the quickest to conform to the expert trajectory not only displaying the least drift suffered but also producing the biggest reduction in drift.}\\
+\textcolor{red}{\autoref{fig:inter_method-drift_analysis_all} shows that the IRL agent suffers the least amount of drift when calculated over the set of all the pedestrians. The results from the pedestrian groups of varying difficulty provides more insight. The amount of drift suffered by the agents is inversely proportional to the difficulty level of the pedestrian trajectory as shown in \autoref{fig:inter_method-drift_analysis_easy}, \autoref{fig:inter_method-drift_analysis_med}, \autoref{fig:inter_method-drift_analysis_hard}. This is understandable, as the clutter around a pedestrian decreases, the agent has less incentive to follow the 'ground truth' path traced by the original pedestrian as a scant crowd increases the option of available good paths. As the difficulty increases, the room for taking good alternative trajectories decreases and so does the drift, with the IRL agent being the quickest to conform to the expert trajectory not only displaying the least drift suffered but also producing the biggest reduction in drift.}\\
 
 %
 %As the difficulty increases, all the agents show reduced drift, with the IRL agent enjoying significantly lower values as compared to the other. This implies that the rate of resemblance.
@@ -191,26 +185,26 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_easy_ucy_inter_method.png}
-		\label{subfig:inter_method-drift_analysis_easy}
 		\caption{Drift suffered by different methods over the easy pedestrians.}
+		\label{fig:inter_method-drift_analysis_easy}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_med_ucy_inter_method.png}
-		\label{subfig:inter_method-drift_analysis_med}
 		\caption{Drift suffered by different methods over the moderate pedestrians.}
+		\label{fig:inter_method-drift_analysis_med}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_hard_ucy_inter_method.png}
-		\label{subfig:inter_method-drift_analysis_hard}
 		\caption{Drift suffered by different methods over the hard pedestrians.}
+		\label{fig:inter_method-drift_analysis_hard}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_all_ucy_inter_method.png}
-		\label{subfig:inter_method-drift_analysis_all}
 		\caption{Drift suffered by different methods over all the pedestrians.}
+		\label{fig:inter_method-drift_analysis_all}
 	\end{subfigure}
 	\caption{Drift analysis of different agents trained using different methods on the UCY university students dataset.}
 \end{figure}
@@ -275,9 +269,9 @@ Table \ref{tab:inter_irl_numerical_comparison} summarizes the scores obtained by
 			Metric Name & Risk Features & Goal augmented  & Vasquez $\mathcal{F}1$ & Vasquez $\mathcal{F}3$\\
 			  &   & SAM  &  &  \\
 			\hline
-			Goal reached (in $\%$) & $71.73$ & $56.16$ & $16.17$ & $40.05$ \\
-			Collisions encountered (per run) & $0.41$ & $0.72$ & $2.10$ & $1.25$\\
-			Change in orientation ( $\degree$ per frame) & $4.06$ & $6.01$ &  $8.07$ & $ 5.73$\\
+			Goal reached (in $\%$) & $65.30$ & $49.70$ & $21.72$ & $36.74$ \\
+			Collisions encountered (per run) & $0.11$ & $0.17$ & $.32$ & $.26$\\
+			Change in orientation ( $\degree$ per frame) & $4.29$ & $6.27$ &  $4.08$ & $ 5.02$\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -356,9 +350,9 @@ Table \autoref{tab:inter_irl_numerical_results_zara02} summarizes the results fr
 			Metric Name & Risk Features & Goal augmented  & Vasquez $\mathcal{F}1$  & Vasquez $\mathcal{F}3$ \\
 			&   & SAM  & &  \\
 			\hline
-			Goal reached (in $\%$) & $75.43$ & $60.35$ & $38.04$ & $48.25$ \\
-			Collisions encountered (per run) & $0.08$ & $0.10$ & $ 0.27$ & $0.19$ \\
-			Change in orientation ( $\degree$ per frame) & $3.03$ & $3.46$ &  $6.03$ & $5.56$\\
+			Goal reached (in $\%$) & $80.06$ & $60.35$ & $42.58$ & $48.25$ \\
+			Collisions encountered (per run) & $0.05$ & $0.10$ & $ 0.24$ & $0.19$ \\
+			Change in orientation ( $\degree$ per frame) & $2.34$ & $2.65$ &  $2.45$ & $2.41$\\
 			\hline
 		\end{tabular}
 	\end{center}
