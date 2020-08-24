@@ -114,13 +114,13 @@ The implementation of the potential field controller is based on \cite{khatib_19
 \begin{figure}[htbp]
     \begin{subfigure}{0.5\textwidth}
         \centering
-        \includegraphics[width=0.95\linewidth, height=6cm]{plots/ucy_inter_method_new/goal_reached_ucy_inter_method.png}
+        \includegraphics[width=0.95\linewidth, height=6cm]{plots/plot_without_outliers/ucy_inter_method_no_outlier/goal_reached_ucy_no_outlier_inter_method.png}
         \caption{The fraction of run successfully completed by agents trained using the different methods.}
         \label{fig:inter_method-goal_reached}
     \end{subfigure}
         \begin{subfigure}{0.5\textwidth}
             \centering
-        \includegraphics[width=0.95\linewidth, height=6cm]{plots/ucy_inter_method_new/count_collisions_ucy_inter_method.png}
+        \includegraphics[width=0.95\linewidth, height=6cm]{plots/plot_without_outliers/ucy_inter_method_no_outlier/count_collisions_ucy_no_outlier_inter_method.png}
         \caption{The average number of collisions encountered by the agents in a single trajectory.}
         \label{fig:inter_method-collision_counts}
     \end{subfigure}
@@ -133,7 +133,7 @@ Figure \ref{fig:inter_method-goal_reached} and \ref{fig:inter_method-collision_c
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\linewidth]{plots/ucy_inter_method_new/compute_trajectory_smoothness_ucy_inter_method.png}
+    \includegraphics[width=0.7\linewidth]{plots/plot_without_outliers/ucy_inter_method_no_outlier/compute_trajectory_smoothness_ucy_no_outlier_inter_method.png}
     \caption{Average change in the orientation (in degrees) of different agents across multiple trajectories.}
     \label{fig:inter_method-change_in_orientation_avg}
 \end{figure}
@@ -184,25 +184,25 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 \begin{figure}[htbp]
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_easy_ucy_inter_method.png}
+		\includegraphics[width=\linewidth]{plots/plot_without_outliers/ucy_inter_method_no_outlier/drift_analysis_easy_no_outliers.png}
 		\caption{Drift suffered by different methods over the easy pedestrians.}
 		\label{fig:inter_method-drift_analysis_easy}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_med_ucy_inter_method.png}
+		\includegraphics[width=\linewidth]{plots/plot_without_outliers/ucy_inter_method_no_outlier/drift_analysis_med_no_outliers.png}
 		\caption{Drift suffered by different methods over the moderate pedestrians.}
 		\label{fig:inter_method-drift_analysis_med}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_hard_ucy_inter_method.png}
+		\includegraphics[width=\linewidth]{plots/plot_without_outliers/ucy_inter_method_no_outlier/drift_analysis_hard_no_outliers.png}
 		\caption{Drift suffered by different methods over the hard pedestrians.}
 		\label{fig:inter_method-drift_analysis_hard}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{plots/ucy_inter_method_new/drift_all_ucy_inter_method.png}
+		\includegraphics[width=\linewidth]{plots/plot_without_outliers/ucy_inter_method_no_outlier/drift_analysis_all_no_outliers.png}
 		\caption{Drift suffered by different methods over all the pedestrians.}
 		\label{fig:inter_method-drift_analysis_all}
 	\end{subfigure}
@@ -223,13 +223,13 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 \begin{figure}[!htbp]
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth, height=6cm]{plots/ucy_inter_irl_new/goal_reached_ucy_inter_irl.png}
+		\includegraphics[width=\linewidth, height=6cm]{plots/plot_without_outliers/ucy_inter_irl_no_outliers/goal_reached_ucy_no_outlier_inter_irl.png}
 		\caption{Fraction of the runs where the agent succeeds in reaching the goal}
 		\label{fig:inter_IRL-goal_reached}
 	\end{subfigure}
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth, height=6cm]{plots/ucy_inter_irl_new/count_collisions_ucy_inter_irl.png}
+		\includegraphics[width=\linewidth, height=6cm]{plots/plot_without_outliers/ucy_inter_irl_no_outliers/count_collisions_ucy_no_outlier_inter_irl.png}
 		\caption{Average number of collisions encountered by the agent per trajectory.}
 		\label{fig:inter_IRL-collision_counts}
 	\end{subfigure}
@@ -238,7 +238,7 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{plots/ucy_inter_irl_new/compute_trajectory_smoothness_ucy_inter_irl.png}
+	\includegraphics[width=0.7\linewidth]{plots/plot_without_outliers/ucy_inter_irl_no_outliers/compute_trajectory_smoothness_ucy_no_outlier_inter_irl_7743_8397_8468_5181.png}
 	\caption{Average change in orientation of different agents.}
 	\label{fig:inter_IRL-change_in_orientation_avg}
 \end{figure}
@@ -318,13 +318,13 @@ To test the generalization of the agents, we perform the set of aforementioned t
 \begin{figure}[htbp]
 	\begin{subfigure}[t]{.5\columnwidth}
 	\centering
-	\includegraphics[width=\columnwidth]{plots/zara02_inter_irl_adjusted_speed/goal_reached_zara02_adjusted_inter_irl.png}
-	\caption{Fraction of runs successfully ending at the goal location for different feature represntations.}
+	\includegraphics[width=\columnwidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/goal_reached_zara02_no_outlier_inter_irl.png}
+	\caption{Fraction of runs successfully ending at the goal location for different feature representations.}
 	\label{fig:inter_method-goal_reached-zara02}
 	\end{subfigure}%
 	\begin{subfigure}[t]{.5\columnwidth}
 		\centering
-		\includegraphics[width=\columnwidth]{plots/zara02_inter_irl_adjusted_speed/count_collisions_zara02_adjusted_inter_irl.png}
+		\includegraphics[width=\columnwidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/count_collisions_zara02_no_outlier_inter_irl.png}
 		\subcaption{Average number of collisions encountered by the different feature representations.}
 		\label{fig:inter_method-count_collisions-zara02}
 	\end{subfigure}%
@@ -332,7 +332,7 @@ To test the generalization of the agents, we perform the set of aforementioned t
 \end{figure}
 
 \begin{figure}[htbp]
-	\includegraphics[width=.95\linewidth]{plots/zara02_inter_irl_adjusted_speed/compute_trajectory_smoothness_zara02_adjusted_inter_irl.png}
+	\includegraphics[width=.95\linewidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/compute_trajectory_smoothness_zara02_no_outlier_inter_irl.png}
 	\caption{Average change in orientation per frame for different feature representations.}
 	\label{fig:inter_irl-trajectory_smoothness-zara02}
 \end{figure}
