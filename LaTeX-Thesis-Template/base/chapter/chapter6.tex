@@ -1,11 +1,11 @@
 \label{ch:6}
 \subsubsection*{Overview}
-In this chapter, we report the results from various qualitative and quantitative experiments conducted to \edited{show} a comprehensive performance comparison of our method to that in the existing literature. All the experiments are conducted in the simulator described in \autoref{ch:enviornment}. \\
+In this chapter, we report the results from various subjective and objective experiments conducted to \edited{show} a comprehensive performance comparison of our method to that in the existing literature. All the experiments are conducted in the simulator described in \autoref{ch:enviornment}. \\
 We perform baseline comparisons in \autoref{sec:baseline-evaluation}: comparing our IRL method to a model-based potential field controller, and a data-driven RL agent trained in a similar setting using a simple yet dense hand-crafted reward function. This helps in demonstrating the difference in the performance of agents coming from different training methods and how our IRL pipeline fare against them.\\
  Feature representations play a vital role in an IRL pipeline. Keeping that in mind, we dedicate \autoref{sec:comparing-other-featreps} to comparing the performance of IRL agents trained in a similar setting but different feature representations.\\
  Finally, \autoref{sec:generalization} is dedicated to testing the generalization capabilities of our method, where we repeat our experiments on \edited{out-of-distribution} data.
 
-%Getting tricky scenarios that help showcase the subtle qualitative aspects of a navigating agent from the real-world video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced qualitative behaviors of the IRL and how that differs to that of the RL.
+%Getting tricky scenarios that help showcase the subtle subjective aspects of a navigating agent from the real-world video might be difficult and indeed with the time and effort spent scrolling through the videos to find these are hard, so we also generate some synthetic scenarios to check some of the specific, more advanced subjective behaviors of the IRL and how that differs to that of the RL.
 %
 %The last subsection looks into the reward function: the second, and unfortunately, in most of the cases, ignored part of the equation. We try to visualize and interpret the reward function in an attempt to get a better insight into the functioning of our agent.
 
@@ -32,11 +32,7 @@ We perform baseline comparisons in \autoref{sec:baseline-evaluation}: comparing 
 \end{figure}
 
 
-To train our agent we select demonstrations from the UCY university students data set \cite{lerner_crowds_by_example_2007}. It consists of trajectories of 430 different pedestrians on a relatively busy area captured over $3$ minutes and $37$ seconds. The video is captured at $25$ fps resulting in a total of $5400$ frames. The length of the trajectories varies from $47.31$  to $2047$ with an average of $406$ frames per trajectory.\edited{A key aspect of this data set is that the data is captured from a moderate to densely crowded scene of an open space on a university campus. This puts nominal restriction by static obstacles on the pedestrians and provides a data set where the movements of the subjects are primarily dictated by social interaction.} 
-\begin{figure}
-	\caption {Distribution of pedestrian based on obstacles in the vicinity}
-\end{figure}
-
+To train our agent we select demonstrations from the UCY university students dataset \cite{lerner_crowds_by_example_2007}. It consists of trajectories of $430$ different pedestrians on a relatively busy area captured over $3$ minutes and $37$ seconds. The video is captured at $25$ fps resulting in a total of $5400$ frames. The length of the trajectories varies from $47.31$  to $2047$ with an average of $406$ frames per trajectory.\edited{A key aspect of this dataset is that the data is captured from a moderate to densely crowded scene of an open space on a university campus. This puts nominal restriction by static obstacles on the pedestrians and provides a dataset where the movements of the subjects are primarily dictated by social interaction.} 
 
 %\begin{table}
 %    \caption {Table containing useful information on the what is useful}
@@ -85,21 +81,44 @@ To get a comprehensive comparison of the performance of the agents, we compare t
 
 %        \item \textbf{Minimum distance over time graphs:} Indicates the minimum distance maintained by an agent throughout its entire trajectory. It can be thought of as a measure of how 'dangerously' or 'cautiously' an agent behaves while interacting with neighboring obstacles. (line graphs over time frame)
         \item \textbf{Trajectory smoothness:} Trajectories traced by people are smooth with rare occurrences of drastic change in the heading direction. This metric measures how much an agent changes its heading direction, thus the smoothness of its trajectory while negotiating obstacles or navigating in general. (bar plots with error bars.)
-        \item \textbf{\edited{Divergence from expert:}}The main aim of the work is to obtain agents that navigate and interact with crowds like a human being, which is why \edited{computing the divergence from expert} is one of the most important metrics we use to evaluate the agents. This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian and is calculated as the mean squared error (MSE) between the points on the trajectory of the agent and the pedestrian (ground truth) at each time frame. The comparison is performed over a range of trajectory segment lengths to showcase the short to medium term navigation capabilities of the agents. It is a measure of how much the trajectory traced by an agent conforms to the original trajectory of the pedestrian when subjected to similar conditions. (line graphs with error bars)\\
+        \item \textbf{\edited{Drift from expert:}}The main aim of the work is to obtain agents that navigate and interact with crowds like a human being, which is why \edited{computing the drift or divergence from expert} is one of the most important metrics we use to evaluate the agents. This performs a direct comparison between the trajectory taken by an agent and the trajectory followed by the pedestrian and is calculated as the mean squared error (MSE) between the points on the trajectory of the agent and the pedestrian (ground truth) at each time frame. The comparison is performed over a range of trajectory segment lengths to showcase the short to medium term navigation capabilities of the agents. It is a measure of how much the trajectory traced by an agent conforms to the original trajectory of the pedestrian when subjected to similar conditions.\\
         \edited{Social navigation is an under-constrained problem}. This is especially true for sparsely populated regions with more than one paths to a given destination. To better understand the 'drift' of the agents from the ground truth, we classify the pedestrians into 3 levels of difficulty: easy, moderate, and hard, based on the average number of pedestrians in the vicinity and perform separate drift analysis on the pedestrians of each class. The idea is that a pedestrian from the "easier" class encounters relatively less crowd along its path, which in turn provides a wider choice of 'good' trajectories, that does not necessarily conform to the ground truth.
         %\item \textbf{Traced trajectory of multiple agents for a particular pedestrian:} Primarily a visual tool to see how an agent performs in comparison to the ground truth.
+        \edited{For the UCY university students, we arrange the set of all pedestrians according to the average density of obstacles (other pedestrians) encountered over the their trajectory and segregate them in three groups accordingly. The first $248$ pedestrians of the sorted list fall under the easy category, the next $133$ pedestrians fall under the moderate category and the rest are marked as hard as illustrated in \autoref{fig:ucy_ped_density_division}.}
+        \begin{figure}
+        	\centering
+        	\includegraphics[width=0.8\linewidth]{plots/ucy_students_density_divisions.png}
+        	\caption{Classification of the pedestrians of the UCY university students dataset according to the average density of obstacles faced over their trajectories.}
+        	\label{fig:ucy_ped_density_division}
+        \end{figure}
+		\begin{table}[htbp]
+			\begin{center}
+			\renewcommand{\arraystretch}{1.3}
+				\begin{tabular}{|c|c|}
+					\hline
+					\multirow{2}{*}{\textbf{Difficulty level}} & \textbf{Average pedestrians} \\
+										& \textbf{encountered per frame} \\
+				    \hline
+					Easy & $0.048$ \\
+					Moderate & $0.295$ \\
+					Hard & $0.73$\\
+				   \hline
+				\end{tabular}
+			\caption{Average pedestrians encountered at each pedestrian difficulty level}
+			\label{tab:ucy_difficulty_level_division}
+			\end{center}
+		\end{table}
 \end{itemize}
 
 \section{Baseline evaluation}
 \label{sec:baseline-evaluation}
-In this section we compare an agent trained using our inverse reinforcement learning (IRL) pipeline to two other agents: an agent trained using reinforcement learning and a potential-field controller. The RL agent is trained in the same environment as the IRL using similar training hyper-parameters and network architecture with a dense reward function shown in \autoref{tab:reward-function-summarization}.
+In this section we compare an agent trained using our method to two other agents: an agent trained using reinforcement learning and a potential-field controller. The RL agent is trained in the same environment as the IRL using similar training hyper-parameters and network architecture with a dense reward function shown in \autoref{tab:reward-function-summarization}.
 \begin{table}[htbp]
-    \caption{Reward structure used for the RL agent}
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
         \begin{tabular}{|c|c|}
         \hline
-        Condition & Reward assigned \\
+        \textbf{Condition} & \textbf{Reward assigned} \\
         \hline
         Reach goal & 1 \\
         Hit obstacle & -1 \\
@@ -108,6 +127,7 @@ In this section we compare an agent trained using our inverse reinforcement lear
         \hline
         \end{tabular}
     \end{center}
+    \caption{Reward structure used for the RL agent}
     \label{tab:reward-function-summarization}
 \end{table}\\
 The implementation of the potential field controller is based on \cite{khatib_1986}.\\  
@@ -127,7 +147,8 @@ The implementation of the potential field controller is based on \cite{khatib_19
 \caption{Comparing the fundamental properties of navigation in agents trained using different methods}
 \end{figure}\\
 
-Figure \ref{fig:inter_method-goal_reached} and \ref{fig:inter_method-collision_counts} show that out of the 3 agents, the potential field and the IRL based method are significantly better at navigating the environment with potential field slightly pulling ahead of the IRL agent in both the criteria. In the task of reaching the goal, the potential field achieves a success rate of $75.11\%$ closely followed by the IRL agent with a success rate of  $71.73\%$ and finally, the RL agent with $46.35\%$. The average number of collisions encountered by the agents also has a similar trend, with the PF agent encountering the least number of collisions at $0.12$ per trajectory, followed by the IRL agent and the RL agent at $0.41$ and $1.06$ respectively. This is understandable for a PF controller as they are explicitly designed to reach a goal avoiding collisions in the process, and with the absence of local-maxima, which is one of the major drawbacks of the method, the potential field agent is at its niche. It is also interesting to see that opting for IRL over RL as the choice of training significantly increases the objective performance of the agent.
+Figure \ref{fig:inter_method-goal_reached} and \ref{fig:inter_method-collision_counts} show that out of the 3 agents, the potential field and the IRL based method are significantly better at navigating the environment with potential field slightly pulling ahead of the IRL agent in both the criteria. \edited{In the task of reaching the goal, the potential field achieves a success rate of $75.11\%$ closely followed by the IRL agent with a success rate of  $65.30\%$ and finally, the RL agent with $40.20\%$. The potential field controller enjoys about a $13\%$ greater success rate in reaching the goal, but the number of collisions encountered by the potential field controller is more, albeit by a slight margin, as compared to the IRL agent. This shows that while the IRL agent might not have the high propensity of the potential field controller to proceed towards the goal, it is does outperform the potential field controller at avoiding other pedestrians while navigating the map. This is understandable because, not often people beeline for the goal. Especially in a crowded environment, avoiding fellow pedestrians take a higher precedence. The IRL agent is trained on demonstrations from people, and so depict a similar behavior. } %This is understandable for a PF controller as they are explicitly designed to reach a goal avoiding collisions in the process, and with the absence of local-maxima, which is one of the major drawbacks of the method, the potential field agent is at its niche. 
+It is also interesting to see that opting for IRL over RL as the choice of training significantly increases the objective performance of the agent.
 
 %Figure \ref{fig:inter_method-reach_goal}, and \ref{fig:inter_method-collision_counts} shows that both, the IRL agent and the potential field controller are better at avoiding obstacles when compared to the RL agent, with the potential field controller having a slight edge over the IRL agent in both the cases. This is somewhat understandable as we know that classical methods like potential fields are potent navigation algorithms. Although it has its drawbacks, including but not limited to the inability to negotiate local minima, the highly dynamic environment rarely presents one.  
 
@@ -137,7 +158,7 @@ Figure \ref{fig:inter_method-goal_reached} and \ref{fig:inter_method-collision_c
     \caption{Average change in the orientation (in degrees) of different agents across multiple trajectories.}
     \label{fig:inter_method-change_in_orientation_avg}
 \end{figure}
-While PF agents are good navigators, their lack motivation for smooth, controlled movement. A slight change in the configuration of the nearby obstacles can significantly change the potential field around it. This instability reflects in Figure \ref{fig:inter_method-change_in_orientation_avg}, where the PF agent, on average, changes its orientation by almost $31.92\degree$ per frame compared to the $27.77\degree$ of the RL agent and insignificant $4.06\degree$ of the IRL agent.
+\edited{While PF agents are good navigators, their lack motivation for smooth, controlled movement. A slight change in the configuration of the nearby obstacles can significantly change the potential field around it. This instability reflects in Figure \ref{fig:inter_method-change_in_orientation_avg}, where the PF agent, on average, changes its orientation by almost $29.56\degree$ per frame as compared to the $4.29\degree$ of the IRL agent. The RL agent is trained on a simple goal-centric reward function, a possible cause for undergoing an average of $25.31\degree$ of rotation per frame and thus producing irregular movement patterns like the potential field controller.}
 
 %\begin{figure}[!htbp]
 %    \begin{subfigure}{\textwidth}
@@ -163,10 +184,10 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 		\renewcommand{\arraystretch}{1.3}
 		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			Metric Name & Potential Field & RL & IRL  &  Ground Truth \\
+			\textbf{Metric Name} & \textbf{Potential Field} & \textbf{RL} & \textbf{IRL}  &  \textbf{Ground Truth} \\
 			\hline
 			Goal reached (in $\%$) & $75.11$ & $40.20$ & $65.30$ & $91.16$\\
-			Collisions encountered (per run) & $ 0.12$ & $.20$ & $0.11$ & $0.10$\\
+			Collisions encountered (per run) & $ 0.12$ & $0.20$ & $0.11$ & $0.10$\\
 			Change in orientation ( $\degree$ per frame) & $29.56$ & $25.31$ &  $4.29$ & $1.12$ \\
 			%Displacement to Distance ratio & $0.71$ & $0.67$ & $0.81$ & $0.84$ \\
 			\hline
@@ -175,8 +196,7 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 	\caption{Score obtained by the different feature representations across different metrics}
 	\label{tab:inter_method_numerical_results}
 \end{table}\\
-\textbf{Drift analysis}\\
-\textcolor{red}{\autoref{fig:inter_method-drift_analysis_all} shows that the IRL agent suffers the least amount of drift when calculated over the set of all the pedestrians. The results from the pedestrian groups of varying difficulty provides more insight. The amount of drift suffered by the agents is inversely proportional to the difficulty level of the pedestrian trajectory as shown in \autoref{fig:inter_method-drift_analysis_easy}, \autoref{fig:inter_method-drift_analysis_med}, \autoref{fig:inter_method-drift_analysis_hard}. This is understandable, as the clutter around a pedestrian decreases, the agent has less incentive to follow the 'ground truth' path traced by the original pedestrian as a scant crowd increases the option of available good paths. As the difficulty increases, the room for taking good alternative trajectories decreases and so does the drift, with the IRL agent being the quickest to conform to the expert trajectory not only displaying the least drift suffered but also producing the biggest reduction in drift.}\\
+\edited{\autoref{fig:inter_method-drift_analysis_all} shows that at any given interval the IRL agent suffers the least amount of drift when calculated over the set of all the pedestrians. The results from the pedestrian groups of varying difficulty provides more insight. The agents trend to drift more in easier levels of difficulty as shown in \autoref{fig:inter_method-drift_analysis_easy}, \autoref{fig:inter_method-drift_analysis_med}, \autoref{fig:inter_method-drift_analysis_hard}. A possible explanation to this can be that with the reduction in density of pedestrians nearby, the agent has less incentive to follow the 'ground truth' path traced by the original pedestrian as a scant crowd increases the option of available good paths. As the difficulty increases, the room for taking good alternative trajectories decreases and so does the drift with the IRL agent being the quickest to conform to the expert trajectory not only displaying the least drift suffered but also producing the biggest reduction in drift. An exception to the trend is the performance of the potential field controller on the pedestrian set with the highest difficulty. From the formulation of potential field, we know that the force is inversely proportional to the distance between nearby obstacles. In a scene with a large number of pedestrians in the vicinity, the potential field controller, is subjected to a relatively high repulsive force that motivates it to avoid the pedestrians. And while it successfully does so, (low collision rate), it does so by taking irregular trajectories (high rotation rate) which are very different from the ones taken by humans (high drift value). Another characteristic of all the drift performance plots is that without fail the value of drift experienced by an agent is more in the longer intervals. This is because an increase in interval denotes a longer distance over which a agent has to plan its trajectory which in turn introduces more autonomy and a greater chance of diverging from the original trajectory traced by the expert.}
 
 %
 %As the difficulty increases, all the agents show reduced drift, with the IRL agent enjoying significantly lower values as compared to the other. This implies that the rate of resemblance.
@@ -209,16 +229,43 @@ Table \ref{tab:inter_method_numerical_results} shows a comparison of the differe
 	\caption{Drift analysis of different agents trained using different methods on the UCY university students dataset.}
 \end{figure}
 
+\begin{table}[htbp]
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			 \multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Agent}}} & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Difficulty level}}}  & \multicolumn{5}{c|}{\multirow{1}{*}{\textbf{Interval}}}\\ \cline{3-7}
+				
+			 && 30 & 70 & 110 & 150  &  190 \\
+			\hline
+								& Easy & $417.34$ & $2011.70$ & $4804.05$ & $9235.29$ & $14022.90$ \\ \cline{2-7}
+			Potential Field & Moderate & $475.91$ & $2287.18$ & $5283.88$ & $9085.77$ & $13057.17$ \\  \cline{2-7}
+								& Hard & $529.96$ & $2538.86$ & $5504.33$ & $8742.69$ & $14210.12$ \\
+								\hline
+		    	 & Easy & $292.17$ & $1632.78$ & $4286.30$ & $8867.51$ & $14028.13$ \\ \cline{2-7}
+		    RL	 & Moderate & $224.62$ & $1330.73$ & $3672.95$ & $7136.29$ & $11659.10$ \\ \cline{2-7}
+		    	 & Hard & $186.74$ & $1144.88$ & $3136.16$ & $6047.80$ & $10400.95$ \\
+							 	\hline
+						& Easy & $259.10$ & $1508.30$ & $4042.63$ & $8314.17$ & $13015.44$ \\ \cline{2-7}
+				IRL  & Moderate & $207.27$ & $1255.14$ & $3524.00$ & $6722.75$ & $10782.98$ \\ \cline{2-7}
+						& Hard & $164.38$ & $1025.16$ & $2694.89$ & $5546.78$ & $9373.695$ \\
+			%Displacement to Distance ratio & $0.71$ & $0.67$ & $0.81$ & $0.84$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Drift score obtained by different methods in UCY university students dataset.}
+	\label{tab:ucy_inter_method_drift_results}
+\end{table}
 
 \section{Comparing different feature representations}
 \label{sec:comparing-other-featreps}
 \subsubsection*{Description of the other feature extractors}
 To test for the efficacy of our proposed risk-based feature representation, we test agents trained on our training pipeline with different existing feature representations. For this, we use feature representations proposed in \cite{fahad_learning_2018} and \cite{vasquez_inverse_2014} with some minor modifications and adjustments.\\
 %\textbf{Fahad}\\
-Due to an underwhelming performance of the originally proposed SAM feature representation from \cite{fahad_learning_2018} in our environmental setup, we substitute the part of the feature representation accommodating the goal information originally proposed by the authors with our global feature representation. We call this modified version the 'Goal conditioned SAM'.\\
+Due to an underwhelming performance of the originally proposed SAM feature representation from \cite{fahad_learning_2018} in our experimental setup, we substitute the part of the feature representation accommodating the goal information originally proposed by the authors with our global feature representation. We call this modified version the 'Goal conditioned SAM'.\\
 %\textbf{Vasquez}\\
-We use the feature sets $\mathcal{F}_1$, $\mathcal{F}_2$ and $\mathcal{F}_3$ from \cite{vasquez_inverse_2014} and as before substitute their goal information with our goal information.
-To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, and $\mathcal{F}_3$, the two best performers out of the three representations in our tests.\\
+We use the feature sets $\mathcal{F}_1$, $\mathcal{F}_2$ and $\mathcal{F}_3$ from \cite{vasquez_inverse_2014} and as before substitute their goal related features with ours.
+To compare against ours, we pick the feature sets $\mathcal{F}_1$, and $\mathcal{F}_3$, the two best performers out of the three representations in our tests.\\
 %\textbf{Discuss the results}
 \begin{figure}[!htbp]
 	\begin{subfigure}{.5\textwidth}
@@ -238,7 +285,7 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{plots/plot_without_outliers/ucy_inter_irl_no_outliers/compute_trajectory_smoothness_ucy_no_outlier_inter_irl_7743_8397_8468_5181.png}
+	\includegraphics[width=0.7\linewidth]{plots/plot_without_outliers/ucy_inter_irl_no_outliers/compute_trajectory_smoothness_ucy_no_outliers_traj_0.png}
 	\caption{Average change in orientation of different agents.}
 	\label{fig:inter_IRL-change_in_orientation_avg}
 \end{figure}
@@ -259,19 +306,22 @@ To compare against the risk features, we pick the feature sets $\mathcal{F}_1$, 
 %	\caption{Comparing the efficiency of the path taken by the different agents to reach their goals}
 %\end{figure}
 
-We carry out a similar performance analysis as before. \autoref{fig:inter_IRL-goal_reached} and \autoref{fig:inter_IRL-collision_counts} show that in both the fundamental tasks, the risk features outperforms the others with a considerable margin, reaching the goal $71.73\%$ of the times as compared to $16.17$, $40.05\%$ and $56.16\%$ of Vasquez $\mathcal{F}1$, Vasquez $\mathcal{F}3$ and Goal conditioned SAM respectively and encountering significantly less collision counts, $0.41$, compared to $2.10$, $1.25$ and $0.72$ from the other  representations. In qualitative evaluation metrics, the risk feature based agent produces comparable results in terms of trajectory smoothness (\autoref{fig:inter_IRL-change_in_orientation_avg}). %and outperforms the others at making efficient navigation choices producing shorter paths to the goal while avoiding obstacles (Figure. \ref{fig:inter_IRL-distance_disp_ratio_histplot}). 
+We carry out a similar performance analysis as before. \autoref{fig:inter_IRL-goal_reached} and \autoref{fig:inter_IRL-collision_counts} show that in both the fundamental tasks, the risk features outperforms the others with a considerable margin, reaching the goal $65.30\%$ of the times as compared to $21.72\%$, $36.74\%$ and $49.70\%$ of Vasquez $\mathcal{F}1$, Vasquez $\mathcal{F}3$ and Goal conditioned SAM respectively and encountering significantly less collision counts, $0.11$, compared to $0.32$, $0.26$ and $0.17$ from the other  representations. In the subjective evaluation metrics, the results are less pronounced as shown in \autoref{fig:inter_IRL-change_in_orientation_avg}. The risk features undergo a change of $5.08\degree$, $6.54\degree$  by Vasquez $mathcal{F}1$ which is closely followed by Vasquez $\mathcal{F}3$ and Goal augmented SAM at $6.59\degree$ and $6.78\degree$ respectively. 
+\par
+\edited{Unlike the comparison of the baseline agents, the performance of the different feature representations at maintaining a smooth trajectory while navigation is comparable. This can be attributed to the use of inverse reinforcement learning to train the agent as the agent learns from demonstration how to behave in crowds.  From the results we infer that all of the feature representations can successfully emulate characteristics of navigation learned from the demonstrations, but the risk features surpass the others at capturing pieces of information from the environment that better convey information like direction of the goal, and the arrangement of obstacles in the neighborhood. This in turn enabled the agent to better grasp the performance of the experts during training and in turn recreate that during testing.}%and outperforms the others at making efficient navigation choices producing shorter paths to the goal while avoiding obstacles (Figure. \ref{fig:inter_IRL-distance_disp_ratio_histplot}). 
 Table \ref{tab:inter_irl_numerical_comparison} summarizes the scores obtained by the different feature representations.
 \begin{table}[htbp]
 	\begin{center}
 		\renewcommand{\arraystretch}{1.5}
 		\begin{tabular}{|p{2.5cm}|c|c|c|c|}
 			\hline
-			Metric Name & Risk Features & Goal augmented  & Vasquez $\mathcal{F}1$ & Vasquez $\mathcal{F}3$\\
-			  &   & SAM  &  &  \\
+			\textbf{Metric Name} & \textbf{Risk Features} & \textbf{Goal augmented}  & \textbf{Vasquez $\mathcal{F}1$} & \textbf{Vasquez $\mathcal{F}3$}\\
+			  &   & \textbf{SAM}  &  &  \\
 			\hline
 			Goal reached (in $\%$) & $65.30$ & $49.70$ & $21.72$ & $36.74$ \\
-			Collisions encountered (per run) & $0.11$ & $0.17$ & $.32$ & $.26$\\
-			Change in orientation ( $\degree$ per frame) & $4.29$ & $6.27$ &  $4.08$ & $ 5.02$\\
+			Collisions encountered (per run) & $0.11$ & $0.17$ & $0.32$ & $0.26$\\
+			%Change in orientation ( $\degree$ per frame) & $4.29$ & $6.27$ &  $4.08$ & $ 5.02$\\
+			Change in orientation ( $\degree$ per frame)  & $5.08$ & $6.78$ &  $6.54$ & $ 6.59$\\ %traj >=0
 			\hline
 		\end{tabular}
 	\end{center}
@@ -308,14 +358,72 @@ Table \ref{tab:inter_irl_numerical_comparison} summarizes the scores obtained by
 	\caption{Drift analysis across different feature representations on the UCY university students dataset.}
 \end{figure}
 
-The difference is less pronounced as compared to the agents from different methods. Figures. \ref{fig:inter_IRL-drift_analysis_easy}, \ref{fig:inter_IRL-drift_analysis_med}, \ref{fig:inter_IRL-drift_analysis_hard}), with the risk features consistently outperforming the other representations in all the difficulty levels. This show that the IRL in junction with the risk features is the combination to obtain agents that best reflect human behavior while moving through a social setting while respecting the fundamentals of navigation.
 
-\vspace{4cm}
+\begin{table}[htbp]
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Agent}}} & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Difficulty level}}}  & \multicolumn{5}{c|}{\multirow{1}{*}{\textbf{Interval}}}\\ \cline{3-7}
+			
+			&& 30 & 70 & 110 & 150  &  190 \\
+			\hline
+								& Easy & $259.10$ & $1508.30$ & $4042.63$ & $8314.17$ & $13015.44$ \\ \cline{2-7}
+			Risk features & Moderate & $207.27$ & $1255.14$ & $3524.00$ & $6722.75$ & $10782.98$ \\ \cline{2-7}
+								& Hard & $164.38$ & $1025.16$ & $2694.89$ & $5546.78$ & $9373.695$ \\
+			\hline
+											& Easy & $331.79$ & $1974.40$ & $4931.50$ & $10732.14$ & $16397.06$ \\ \cline{2-7}
+			Vasquez $\mathcal{F}1$ & Moderate & $293.78$ & $1774.70$ & $4779.41$ & $9233.74$ & $14183.24$ \\ \cline{2-7}
+											& Hard & $294.29$ & $1834.67$ & $4343.50$ & $7919.24$ & $12597.04$ \\
+			\hline
+			 								& Easy & $267.87$ & $1634.24$ & $4355.77$ & $9164.88$ & $15101.88$ \\ \cline{2-7}
+			Vasquez $\mathcal{F}3$ & Moderate & $226.58$ & $1499.33$ & $4073.54$ & $8043.44$ & $13516.85$ \\ \cline{2-7}
+											& Hard & $200.88$ & $1380.26$ & $3640.10$ & $7016.41$ & $11987.05$ \\
+			\hline			
+		 							 	& Easy & $351.29$ & $1964.34$ & $4948.78$ & $9901.09$ & $15929.93$ \\ \cline{2-7}
+			Goal augmented SAM & Moderate & $302.65$ & $1615.08$ & $4139.58$ & $7437.50$ & $11573.43$ \\ \cline{2-7}
+										& Hard & $324.93$ & $1623.84$ & $3818.54$ & $6390.66$ & $10566.04$ \\
+			%Displacement to Distance ratio & $0.71$ & $0.67$ & $0.81$ & $0.84$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Drift score obtained by different feature representations in UCY university students dataset.}
+	\label{tab:ucy_inter_irl_drift_results}
+\end{table}
+
+
+The difference is less pronounced as compared to the agents from different methods. \edited{Again we observe that drift values of every agent tend to increase with the decrease in difficulty of the set of pedestrians being considered.}  Figures. \ref{fig:inter_IRL-drift_analysis_easy}, \ref{fig:inter_IRL-drift_analysis_med}, \ref{fig:inter_IRL-drift_analysis_hard}), with the risk features consistently outperforming the other representations in all the difficulty levels. This show that the IRL in junction with the risk features produces agents that better reflect human behavior while moving through a social setting while respecting the fundamentals of navigation when compared to other baseline methods and existing feature representations.
+
+
 \section{Testing for generalization}
 \label{sec:generalization}
-To test the generalization of the agents, we perform the set of aforementioned tests on the Zara02 dataset: a subset of the UCY dataset. The Zara02 dataset captures a view of a sidewalk in front of a store. It features 203 pedestrians over a time span of 7 minutes, making this a relatively sparse scenario in comparison to the UCY university students dataset.
+To test for generalization of the different feature representations, we perform the set of aforementioned tests on the Zara02 dataset: a subset of the UCY dataset. The Zara02 dataset captures a view of a sidewalk in front of a store. It features $203$ pedestrians over a time span of $7$ minutes, making this a relatively sparse scenario in comparison to the UCY university students dataset. \edited{As before, we divide the pedestrians into 3 groups based on the average pedestrian density in the vicinity. Out of the $203$ pedestrians, the first $105$ pedestrians with the least density are marked as easy, the next $75$ as moderate and the rest as hard as shown in \autoref{fig:zara02_ped_density_division}.} The average density of each division are present in \autoref{tab:zara02_difficulty_level_division}
 
 \begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{plots/zara02_ped_density_divisions.png}
+	\caption{Classification of the pedestrians of the UCY Zara02 dataset according to the average density of obstacles faced over their trajectories.}
+	\label{fig:zara02_ped_density_division}
+\end{figure}
+\begin{table}[htbp]
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|}
+			\hline
+			\multirow{2}{*}{\textbf{Difficulty level}} & \textbf{Average pedestrians} \\
+			& \textbf{encountered per frame} \\
+			\hline
+			Easy & $0.017$ \\
+			Moderate & $0.20$ \\
+			Hard & $0.71$\\
+			\hline
+		\end{tabular}
+	\caption{Average pedestrians encountered at each pedestrian difficulty level}
+	\label{tab:zara02_difficulty_level_division}
+	\end{center}
+\end{table}
+
+\begin{figure}[!htbp]
 	\begin{subfigure}[t]{.5\columnwidth}
 	\centering
 	\includegraphics[width=\columnwidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/goal_reached_zara02_no_outlier_inter_irl.png}
@@ -332,27 +440,27 @@ To test the generalization of the agents, we perform the set of aforementioned t
 \end{figure}
 
 \begin{figure}[htbp]
-	\includegraphics[width=.95\linewidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/compute_trajectory_smoothness_zara02_no_outlier_inter_irl.png}
+	\includegraphics[width=.95\linewidth]{plots/plot_without_outliers/zara02_inter_irl_no_outlier/compute_trajectory_smoothness_zara02_no_outlier_inter_irl_traj_5.png}
 	\caption{Average change in orientation per frame for different feature representations.}
 	\label{fig:inter_irl-trajectory_smoothness-zara02}
 \end{figure}
 
- The risk features enjoy the highest success rate of reaching the goal at $75.43$, followed by Goal-conditioned SAM, Vasquez $\mathcal{F}3$ and Vasquez $\mathcal{F}1$ with a success rate of $60.35$, $38.04$, and $48.25$ respectively. Unsurprisingly, a negative correlation between the success rate of reaching the goal and the number of collisions encountered can be observed: with the risk features encountering the least number of average collisions per trajectory at $0.08$ and the Vasquez F1 features on the opposite side of the spectrum averaging $0.27$ collisions per trajectory.  
-On the qualitative side, the risk features produce the smoothest trajectories, changing its orientation an average of $3.03\degree$ in a dataset with an average of $0.63\degree$ change observed in the expert demonstrations. \\
+ The risk features enjoy the highest success rate of reaching the goal at $80.06$, followed by Goal-conditioned SAM, Vasquez $\mathcal{F}3$ and Vasquez $\mathcal{F}1$ with a success rate of $60.35$, $42.58$, and $48.25$ respectively.  We also observe a negative correlation between the success rate of reaching the goal and the number of collisions encountered can be observed: with the risk features encountering the least number of average collisions per trajectory at $0.05$ and the Vasquez F1 features on the opposite side of the spectrum averaging $0.24$ collisions per trajectory.  
+On the subjective side, the risk features produce the smoothest trajectories, changing its orientation an average of $2.66\degree$ in a dataset that has an average of $0.63\degree$ change observed in the expert demonstrations.\\
 Table \autoref{tab:inter_irl_numerical_results_zara02} summarizes the results from the Zara02 dataset.
-
 
 \begin{table}[htbp]
 	\begin{center}
 		\renewcommand{\arraystretch}{1.3}
 		\begin{tabular}{|p{2.5cm}|c|c|c|c|}
 			\hline
-			Metric Name & Risk Features & Goal augmented  & Vasquez $\mathcal{F}1$  & Vasquez $\mathcal{F}3$ \\
-			&   & SAM  & &  \\
+			\textbf{Metric Name} & \textbf{Risk Features} & \textbf{Goal augmented}  & \textbf{Vasquez $\mathcal{F}1$}  & \textbf{Vasquez $\mathcal{F}3$} \\
+			&   & \textbf{SAM}  & &  \\
 			\hline
 			Goal reached (in $\%$) & $80.06$ & $60.35$ & $42.58$ & $48.25$ \\
 			Collisions encountered (per run) & $0.05$ & $0.10$ & $ 0.24$ & $0.19$ \\
-			Change in orientation ( $\degree$ per frame) & $2.34$ & $2.65$ &  $2.45$ & $2.41$\\
+			%Change in orientation 50 ( $\degree$ per frame) & $2.34$ & $2.65$ &  $2.45$ & $2.41$\\
+			Change in orientation ( $\degree$ per frame) & $2.66$ & $3.14$ &  $2.84$ & $3.32$\\ %traj len 5
 			\hline
 		\end{tabular}
 	\end{center}
@@ -391,9 +499,42 @@ Table \autoref{tab:inter_irl_numerical_results_zara02} summarizes the results fr
 	\label{fig:drift_analysis-inter_IRL-zara02}
 \end{figure}
 
-\autoref{fig:drift_analysis-inter_IRL-zara02} show that even on a previously unseen dataset, the risk features outperform its counterparts, adhering more to the trajectories traced by the expert demonstrations compared to any other existing feature representations.
 
+\begin{table}[htbp]
+	\begin{center}
+		\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Agent}}} & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Difficulty level}}}  & \multicolumn{5}{c|}{\multirow{1}{*}{\textbf{Interval}}}\\ \cline{3-7}
+			
+			&& 30 & 70 & 110 & 150  &  190 \\
+			\hline
+		    & Easy & $159.27$ & $952.73 $ & $2473.52$ & $4982.58$ & $8985.95 $ \\ \cline{2-7}
+			Risk features 	& Moderate & $192.84$ & $985.33 $ & $2528.58$ & $5191.57$ & $7735.49 $ \\ \cline{2-7}
+			& Hard & $156.16$ & $909.62 $ & $2482.29$ & $4938.37$ & $8605.43 $ \\
+			\hline
+			& Easy & $206.30$ & $1282.88$ & $3536.66$ & $7438.34 $ & $13562.75$ \\ \cline{2-7}
+			Vasquez $\mathcal{F}1$  & Moderate & $250.43$ & $1407.54$ & $3719.27$ & $7889.18$ & $12960.74$ \\ \cline{2-7}
+			& Hard & $231.17$ & $1493.02$ & $4330.47$ & $9032.76$ & $15586.48$ \\
+			\hline
+			& Easy & $198.17$ & $1241.53$ & $3279.74$ & $6455.54$ & $11569.65$ \\ \cline{2-7}
+	    	Vasquez $\mathcal{F}3$ 	& Moderate & $234.40$ & $1365.36$ & $3556.70$ & $7280.97$ & $11881.93$ \\ \cline{2-7}
+			& Hard & $232.59$ & $1677.60$ & $4731.14$ & $9509.05$ & $16422.56$ \\
+			\hline			
+			& Easy & $258.47$ & $1477.45$ & $3869.17$ & $7533.29$ & $13064.31$ \\ \cline{2-7}
+			Goal augmented SAM  & Moderate & $251.04$ & $1235.15$ & $3076.86$ & $5821.04$ & $8890.96 $ \\ \cline{2-7}
+			& Hard & $275.43$ & $1356.22$ & $3437.67$ & $6506.27$ & $11286.85$ \\
+			%Displacement to Distance ratio & $0.71$ & $0.67$ & $0.81$ & $0.84$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Drift score obtained by different feature representations in UCY Zara02 dataset.}
+	\label{tab:zara02_inter_irl_drift_results}
+\end{table}
 
+\edited{\autoref{fig:drift_analysis-inter_IRL-zara02} show that the risk features outperform its counterparts, adhering more to the trajectories traced by the expert demonstrations compared to any other existing feature representations. The experiments conducted show that along with a better representation, more meaningful representation of the environment, the risk features are also better at generalizing for previously unseen states from different data distributions.}
+
+\edited{We conduct $3$ sets of experiments first, each aimed for a specific goal. The baseline section compares the performance of different methods providing insight on how inverse reinforcement learning methods compare against some other forms of approach used in the literature. Feature representation plays a major role in the performance of an IRL agent. To test the efficacy of our proposed representation, we fix the training process and alter the feature representation effectively performing an ablation study. Finally, we conduct a generalizability test to study the performance of the different feature representations in a novel setting. We employ various metrics, both subjective and objective to evaluate the performance of the agents. Evaluation of the agents, especially in metrics like trajectory smoothness and drift comes with its own set of challenges. Calculation of trajectory smoothness is straight forward, but there are various cases that needs to be considered in order to get a true reflection of the performance. For example, let us consider two agents: one never changes its direction and keeps moving forward until termination via reaching the goal or otherwise, and the other actively sidesteps to avoid obstacles and steers towards the goal. Focusing only on the smoothness of their trajectories and placing the first agent ahead of the second, while objectively true, does not convey the true performance, because in this case, the first agent receives a lower, more desired score, by the virtue of being an inadequate navigator who fails to respond to external entities. Similarly, calculation of the drift is based on the assumption that there is only one optimal trajectory for a particular situation, which in most case is too restrictive of an assumption.}
 %\subsection*{Testing on custom scenarios}
 %\textbf{Follow the group}
 %follow\_the\_group\_1.txt(subject 5)
