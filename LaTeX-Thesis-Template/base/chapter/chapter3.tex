@@ -54,7 +54,7 @@ address drawbacks of their previous work: the inability to tackle a variable num
  For this work, they select a relatively simple sparse reward function that focuses on collision avoidance and maintaining distance from others as shown in \autoref{eq:everett_reward_function}\\
 \begin{align}
 \label{eq:everett_reward_function}
-f)x) = 
+R(S^{jn}, \mathbf{u}) = 
 \begin{cases}
 	 1 & \text{if \quad $p=p_g$} \\
 	 -0.1+d_{min}/2 & \text{if \quad 0 < $d_{min}$ < 0.2} \\
@@ -62,7 +62,7 @@ f)x) =
 	 0 & \text{otherwise}, 
 \end{cases}
 \end{align}
-where $d_{min}$ is the distance to the nearest neighboring agent.
+where $\mathbf{u}$ is the action, and $s^{jn}$ is the joint state representing all the agents in the world, $p$ and $p_{g}$ are the position of the agent and the goal respectively, and $d_{min}$ is the distance to the nearest neighboring agent.
 %\textbf{Conclusion}\\
 \subsection*{Conclusion}
 
