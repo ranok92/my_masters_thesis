@@ -19,7 +19,7 @@ The agent represents the entity being controlled by an external controller. At a
     \item Speed: The current speed of the agent.
     \item Orientation: A unit vector along the velocity vector of the agent.
 \end{enumerate}
-To navigate the environment the agent can control two aspects of its motion: its speed and its orientation.
+To navigate the environment, the agent controls two aspects of its motion: its speed and orientation.
 Unlike most stock environments, this supports both continuous and discrete action space. These are elaborated in \autoref{subsec:action-space}.
 \subsection{The goal}
 The goal is a pre-designated area of the map where on arrival marks the end of an episode with a success. It is represented by a green rectangle. Like the agent, the size of the goal area can be customized as per the requirement of the experiment. For now, the environment just has provision for static goals. That being said, the environment does come with the provision to randomly alter the position of the goal at the end of each episode.
@@ -92,7 +92,7 @@ There are 3 ways of putting obstacles in the map each of them serving a differen
 \end{enumerate}
 
 
-\subsection{Input spaces and observation (Re-edited entirely)} 
+\section{Input spaces and observation (Re-edited entirely)} 
 \label{subsec:action-space}
 The environment has provisions for both discrete and continuous action space.
 \begin{enumerate}
@@ -122,6 +122,7 @@ The environment has provisions for both discrete and continuous action space.
 	The permitted range of the rate of change in speed and orientation are summarized in \autoref{tab:env_kinematic_ranges}.
 \begin{table}[tbhp]
 	\begin{center}
+	  \renewcommand{\arraystretch}{1.3}
 		\begin{tabular}{|c|c|c|}
 			\hline
 			\textbf{Motion component} & \textbf{Lower bound} & \textbf{Upper bound}\\
@@ -142,20 +143,20 @@ The environment has provisions for both discrete and continuous action space.
 \edited{The observation from the environment returns a tuple of 4 elements: ( $S$, $\rho$, $\mathbf{d}$, $\iota$ ), where
 $S$ is the state of environment containing the information relating to the agent, goal, and the obstacles for a given time step,
 $\rho$ is the reward obtained at a given time step, $\mathbf{d}$ is a Boolean flag that indicates the completion of the current episode, and $\iota$ contains any extra information the environment might want to convey. }
-\subsection{Additional features}
+\section{Additional features}
 Additionally, the environment comes with a set of options that provide added flexibility and customization while training and evaluating IRL agents.
 \subsubsection{Training modes:}
 The environment supports 3 types of training modes:. 
 \begin{enumerate}
     \item \textbf{Fixed respawn:} The starting and goal position of the agent remains the same throughout the training process.
-    \item \textbf{Random respawn:} For every episode, the agent and the goal spawn at random positions on the map. 
+    \item \textbf{Random respawn:} For every episode, the agent and the goal spawns at random locations on the map. 
     \item \textbf{Replace a pedestrian:} For every episode, the agent assumes the role of a randomly selected pedestrian. Once a pedestrian is selected, the pedestrian is ignored as an obstacle for that episode. The initial position of the agent is set to the coordinated of the pedestrian in its first frame of appearance. Similarly, the goal is set to the coordinates of the pedestrian in the final frame.
-    This mode is especially useful for training IRL models because demonstrations from experts for navigation are the optimal demonstrations for a particular configuration of goal and obstacle. Placing the agent in the exact context enables the agent to observe the same state distribution as the expert, which helps to maintain the effectiveness of the expert demonstrations. 
+    This mode is especially useful for training IRL models because demonstrations from experts for navigation are the optimal demonstrations for a particular configuration of goal and obstacle. Placing the agent in the exact context enables the agent to observe the same state distribution as the expert, which helps to maintain the relevance of the expert demonstrations. 
 \end{enumerate}
 Features available for testing of the environment:
 The environment was designed primarily for the development of IRL methods for navigation, and also comes with built-in tools to test IRL methods.
 \subsubsection{Deployment of ghost}
-IRL agents learn from demonstrations. Creating meaningful metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. \edited{We define the 'ghost' of a given pedestrian as an entity that traces the exact path, both spatially and temporally, as the pedestrian without interacting or interfering with any other entities of the environment. This greatly benefits in the comparison of the performance of the agent to the expert. }
+IRL agents learn from demonstrations. Creating meaningful metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. \edited{We define the `ghost' of a given pedestrian as an entity that traces the exact path, both spatially and temporally, as the pedestrian without interacting or interfering with any other entities of the environment. This greatly benefits in the comparison of the performance of the agent to the expert. }
 
 \subsubsection{User control}
 \edited{The environment also has a provision to let an external user control and agent and navigate the crowds. There might be cases where there are not enough expert demonstrations available to perform proper training. In that case, the size of the expert demonstration set can be bolstered by letting humans take control of the agent and generate additional expert demonstrations. }
