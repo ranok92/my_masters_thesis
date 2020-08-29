@@ -35,14 +35,14 @@ P(\tau_{i}| \theta) = \frac{1}{Z(\theta)}\exp^{\theta^{T}\mathbf{f}_{\tau_{i}}} 
 \begin{align}
 Z = \sum_{\tau_{i}\in \mathbf{D}}\exp{\theta^{T}\mathbf{f}_{\tau_{i}}}
 \end{align}
-where, $Z$ is the normalizing term, and $\mathbf{D}$ is the set of all possible trajectories.\\
+where, $Z$ is the normalizing term, $\theta$ are the weights of the reward function, and $\mathbf{D}$ is the set of all possible trajectories.\\
 Given a set of expert demonstrations, an optimal reward structure should maximize the probability of the occurrence of the expert demonstrations and their associated states. Mathematically, this is given by: 
 \begin{align}
 \label{eq:loglikelihood-IRL}
 \theta^{*} = \argmax_{\theta} \mathbf{L}(\theta) = \argmax_{\theta} \sum_{\tau \in D} \log{P(\tau| \theta, T)}
 \end{align}
 \edited{Ziebart et al. \cite{ziebart_maxent_2008} uses a linear combination of weights which lacked the ability to capture complex non-linear reward functions. This drawback was alleviated by Wulfmeier et al. where they restructure the maximum entropy IRL formulation using neural networks \cite{wulfmeier2015maximum}.} Neural networks are universal function approximators. This vastly increases the amount of complexity a reward function can express.\\
-The parameters of the reward network, $\mathbf{R}_{\theta}$ represented by $\theta$ can be found using gradient descent methods. The  update term for the reward network parameters w.r.t. the loss term $\mathbf{L}$ is equal to the difference in the state visitation frequencies (SVF) of the expert demonstrations and the optimal policy $\pi_{\psi} : \eta(s) \mapsto \mathcal{A} $ trained on the parameters of the current reward network $R_{\theta}$:
+The parameters of the reward network, $\mathbf{R}_{\theta}$ represented by $\theta$ can be found using gradient descent methods. The  update term for the reward network parameters w.r.t. the loss term $\mathbf{L}$ is equal to the difference in the state visitation frequencies (SVF) of the expert demonstrations and the optimal policy $\pi_{\psi} : \eta(s) \mapsto \mathcal{A} $, trained on the parameters of the current reward network $R_{\theta}$:
 \begin{align}
 	\label{eq:IRL-parameter-update-states}
 	\frac{\partial \mathbf{L}}{\partial \theta} = \left(\sum_{\tau_{i} \in D}\sum_{s_{j} \in \tau{i}}s_{j} - \sum_{\hat{\tau} \in \hat{D}}\sum_{s_{k} \in \hat{\tau}}s_{k}\right)
@@ -77,7 +77,7 @@ We use sampling to get an estimate of the SVF. While this can be time-consuming 
 %\end{align}
 %where the $\mathcal{P}$ represents state transitions obtained from sampling and not the state transition dynamics. \textbf{We argue that this assumption is reasonable in a navigation setting because the task is not inherently uncertain, and most transition dynamic uncertainty can be attributed to sensory noise and control error. We summarize our approach in algorithm 1. (Taken word-to-word from IROS manuscript)}
 \begin{algorithm}[tbhp]
-	\caption{Deterministic Maximum Entropy IRL}
+	\caption{Maximum Entropy Deep Deterministic IRL}
 	\label{deterministic-medirl}
 	
 	\SetKwInOut{Input}{Input}
@@ -94,8 +94,8 @@ We use sampling to get an estimate of the SVF. While this can be time-consuming 
 	$\mu_e= \expectval_{s \sim D}{\phi(s)}$ \DontPrintSemicolon \Comment*[r]{Calculate expert svf}
 	\For{$m \gets 1$ \KwTo M}{
 		$\pi_\psi^m \gets \SolveMDP(R_\theta^m,\mathcal{S}, \mathcal{A}, \mathcal{T}, \gamma)$\\
-		$\mu_{\text{svf}} = \mu_e - \expectval_{s \sim P(s|\pi_\psi^m)} \phi(s)$ \Comment*[r]{from \autoref{eq:svf-sampling}} 
-		$\frac{\partial L}{\partial \theta^m} = $ \Backprop($\theta^m, \mu_{\text{svf}}$) \\
+		$\delta_{\text{svf}} = \mu_e - \expectval_{s \sim P(s|\pi_\psi^m)} \phi(s)$ \Comment*[r]{from \autoref{eq:svf-sampling}} 
+		$\frac{\partial L}{\partial \theta^m} = $ \Backprop($\theta^m, \delta_{\text{svf}}$) \\
 		$\theta^{m+1} \gets $ \UpdateWeight($\frac{\partial L}{\partial \theta^m}, \theta^m$) 
 	}
 	\BlankLine
@@ -139,7 +139,7 @@ Standard policy gradient methods suffer from high variance because they do not h
 \nabla_{\psi} J (\psi) = \sum_{t=0}^{T-1} \nabla_{\theta}\log \pi_{\psi}(a_{t}|s_{t})\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'} - \mathbf{b}(s_{t})
 \end{align}
 where, $\mathbf{b}(s_{t})$ is a baseline measurement for state $s_{t}$.
- The baseline can be calculated in various ways. One of the resulting algorithms is the Advantage actor-critic algorithm or A2C\cite{mnih_actor_critic_2016}, where the $V$ value of a state acts as the baseline function. In this case, the 'advantage' is the difference between the estimated $V$ value of a state at time $t$, $V(s_t)$ and the discounted cumulative reward obtained by following the policy $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$ as shown in \autoref{eq:advantage-eq}.\\
+ The baseline can be calculated in various ways. One of the resulting algorithms is the Advantage actor-critic algorithm or A2C\cite{mnih_actor_critic_2016}, where the $V$ value of a state acts as the baseline function. In this case, the `advantage' is the difference between the estimated $V$ value of a state at time $t$, $V(s_t)$ and the discounted cumulative reward obtained by following the policy $\sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'}$ as shown in \autoref{eq:advantage-eq}.\\
 \begin{align}
 \label{eq:advantage-eq}
 A(s_{t}, a_{t}) = \sum_{t'=t+1}^{T} \gamma^{t'-t-1} r_{t'} - V(s_{t}, a_{t})
@@ -190,24 +190,23 @@ $\mathbf{L_{crit}}$ = $\sum \hat{A}(s_{i}, a_{i})$ \Comment*[r]{Calculate critic
 The feature extractor is a vital component in the navigation pipeline. \edited{It acts as a mechanism that} facilitates interaction between the learning algorithm and the environment and heavily influences the performance of the agent \cite{vasquez_inverse_2014}. We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the pedestrians present in the frame. Although we have access to information about all the pedestrians, the feature representations are designed to be calculated from a partial observation of the environment.\\
 The feature representation consists of the following components:
 \begin{itemize}
-    \item The \textbf{local component} contains information from the vicinity of the agent captured in the form of a binary feature vector. This provides an approximate idea of the nearby obstacles and an estimate of a likely collision. Hence the term: 'risk-features'. 
+    \item The \textbf{local component} contains information from the vicinity of the agent captured in the form of a binary feature vector. This provides an approximate idea of the nearby obstacles and an estimate of a likely collision. Hence the term: `risk-features'. 
     \item The \textbf{global component}, on the other hand, provides an approximation of the goal location on the map. 
 \end{itemize}
  We assume the following information available to us: the current position and velocity of the agent, the position of the goal, and the position and velocity of all the obstacles (pedestrians) in the current frame.  Having access to all this information using sensors on a mobile robot navigating the real world is highly unlikely and difficult to obtain. This is additionally addressed by the feature extractor, which also acts as an information moderator, receiving raw information from the environment and packaging it in a feature vector that can be readily constructed by a mobile robot on the go using off-the-shelf sensors.\\
  Both the local and the global components along with their sub-components are described in greater detail below.
-Talk about the relative orientation calculation
-
 
 \subsection*{The global component}
 The global information is further comprised of 4 elements: \edited{relative goal orientation, change in orientation, deviation from the goal and speed. Each of them are explained below.}
 \subsubsection*{Relative goal orientation} 
-This acts as a compass, providing a rough estimate of the direction of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ one-hot vector, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent is divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal.
+This acts as a compass, providing a rough estimate of the direction of the goal based on the current position and orientation of the agent. This is denoted by a $9 \times 1$ indicator variable, where the presence of the goal in any one of the bins is marked by a $1$ keeping the rest to $0$. The $360 \degree$ around the agent is divided into $8$ equal divisions forming the first 8 bins of $45 \degree$ each. The $9^{th}$ bin denotes the contact of the agent with the goal.
 \begin{table}[tbhp]
 	\label{tab:goal-vector-bins}
 	\begin{center}
+		 \renewcommand{\arraystretch}{1.3}
 		\begin{tabular}{|c|c|}
 			\hline
-			Feature & Threshold \\
+			\textbf{Feature} & \textbf{Threshold} \\
 			\hline
 			$\phi_{GV1}$ & $\alpha_{GV} \in \left[ \frac{15\pi}{8} , 2\pi \right) \cup \left[ 0, 2\pi \right)$ \\
 			
@@ -272,9 +271,9 @@ This acts as a compass, providing a rough estimate of the direction of the goal 
 \end{figure}
 
 \subsubsection*{Change in orientation}
-Represented by a $5 \times 1$ one-hot vector, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The value ranges between $0 \degree$ -  $ 180 \degree$. This value is \edited{allocated to one} of 5 asymmetric bins. The rationale behind the uneven distribution is that we have observed empirically that human motion is smooth. The bins are thus constructed in a way to put greater emphasis on smaller changes in orientation. This helps capture the nuances in human motion in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown below.
+Represented by a $5 \times 1$ indicator variable, the change in orientation captures the magnitude of the change in the orientation of the agent in consecutive steps. The value ranges between $0 \degree$ -  $ 180 \degree$. This value is \edited{allocated to one} of 5 asymmetric bins. The rationale behind the uneven distribution is that we have observed empirically that human motion is smooth. The bins are thus constructed in a way to put greater emphasis on smaller changes in orientation. This helps capture the nuances in human motion in greater detail leading to better encapsulation of the essence of the navigational pattern. The division of the range is shown in \autoref{tab:orientation-change-bins}.
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
 
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
@@ -295,13 +294,13 @@ Represented by a $5 \times 1$ one-hot vector, the change in orientation captures
             \hline
         \end{tabular}
         \caption{Bin thresholds orientation change features.}
-    \label{orientation-change-bins}
+    \label{tab:orientation-change-bins}
     \end{center}
 \end{table}
 \subsubsection*{Deviation from the goal}
-The deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins ($4 \times 1$ one-hot vector), with greater emphasis \edited{on the smaller angles as described earlier.} 
+The deviation from goal captures the magnitude of the angle between the vector to the goal from the current position of the agent and the current orientation vector of the agent. The value ranges from $0 \degree$ - $ 180 \degree$ which is again asymmetrically divided into 4 bins ($4 \times 1$ indicator variable), with greater emphasis \edited{on the smaller angles as described earlier (\autoref{tab:deviation-from-goal-bins})}. 
 
-\begin{table}[htbp]
+\begin{table}[!htbp]
     \begin{center}
         \renewcommand{\arraystretch}{1.3}
         \begin{tabular}{|c|c|}
@@ -318,13 +317,12 @@ The deviation from goal captures the magnitude of the angle between the vector t
             \hline
         \end{tabular}
         \caption{Bin thresholds for deviation from the goal.}
-          \label{deviation-from-goal-bins}
+          \label{tab:deviation-from-goal-bins}
     \end{center}
 \end{table}
 
 \subsubsection*{Speed}
-The current speed of the agent is quantized and represented in the form of a $6 \times 1$ one-hot vector. 
-\thcomment{I could not come up with a more formal alternative for "one-hot vector"}
+The current speed of the agent is quantized and represented in the form of a $6 \times 1$ indicator variable. 
 %\begin{table}[htbp]
 %    \caption{Thresholds for the qantization of the speed of the agent.}
 %    \label{tab:speed-quantization}
@@ -343,7 +341,7 @@ The current speed of the agent is quantized and represented in the form of a $6 
 %    \end{table}
 
 \subsection*{The local information}
-Taking inspiration from previous \edited{work} in this field \cite{fahad_learning_2018} \cite{vasquez_inverse_2014}, we use spatial bins to effectively divide the region surrounding the agent into discrete segments and calculate a 'risk' metric for each of these bins.
+Taking inspiration from previous \edited{work} in this field \cite{fahad_learning_2018} \cite{vasquez_inverse_2014}, we use spatial bins to effectively divide the region surrounding the agent into discrete segments and calculate a `risk' metric for each of these bins.
     \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{figures/risk_features_spatial_bins.png}
@@ -351,16 +349,16 @@ Taking inspiration from previous \edited{work} in this field \cite{fahad_learnin
 	\label{fig:risk_local_bins}
 \end{figure}
 \subsubsection*{Creation of the bins}
-There are 16 spatial bins surrounding the agent arranged in two concentric circles. 8 equal divisions of the region between the agent and the inner circle form bin 1-8. Similarly, the divisions in the region between the first and the second concentric circle form bins 9 - 16.
+There are $16$ spatial bins surrounding the agent arranged in two concentric circles. $8$ equal divisions of the region between the agent and the inner circle form bin $1-8$. Similarly, the divisions in the region between the first and the second concentric circle form bins $9 - 16$.
 \subsubsection*{Calculation of the risk}
-\edited{Oxford English Dictionary defines 'risk' as " the possibility of loss, injury, or other adverse or unwelcome circumstance; a chance or situation involving such a possibility" \cite{oxford_dictionary}}. In this context, 'risk' can be loosely correlated to the likelihood of a collision with a nearby obstacle/pedestrian. As a property of the spatial bins, it implies the possibility of a collision with an obstacle located in the given bin. 
-The 'risk' is divided into 3 levels: high, low, and medium.
+\edited{Oxford English Dictionary defines `risk' as ``the possibility of loss, injury, or other adverse or unwelcome circumstance; a chance or situation involving such a possibility'' \cite{oxford_dictionary}}. In this context, `risk' can be loosely correlated to the likelihood of a collision with a nearby obstacle/pedestrian. As a property of the spatial bins, it implies the possibility of a collision with an obstacle located in the given bin. 
+The risk is divided into 3 levels: high, low, and medium.
 \begin{itemize}
     \item High risk:
 When the relative motion of an obstacle is towards the agent and can lead to a collision if not intervened.
     \item Low risk:
 When the relative motion of an obstacle is away from the agent.
-    \item Med risk:
+    \item Medium risk:
 Anything in between.
 \end{itemize}
 The calculation of the risk values are based on the following entities:
@@ -372,7 +370,7 @@ The calculation of the risk values are based on the following entities:
     \mathbf{T} = & \;\; \text{agent witdh} + \text{obstacle witdh}
 \end{align}
 where $\vec{o}_{rel}$ is the relative orientation of the obstacle w.r.t the agent, $\vec{d}_{rel}$ is the relative position of the agent w.r.t to the obstacle, $\theta_{risk}$ is the angle between the vectors, $\vec{o}_{rel}$ and $\vec{d}_{rel}$,  $\mathbf{s}_{obs}$ is the estimated safety margin between the agent and the obstacle and $\mathbf{T}$ is a predefined value which if maintained between the agent and an obstacle should guarantee a collision-free trajectory.\\
-An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. \edited{The rationale behind this is,  $\theta$ < $90 \degree$ indicates that the involved objects are moving towards each other. Additionally, if the objects are close by, i.e. $ < \mathbf{T}$, then this describes a condition where two objects in close proximity are moving towards each other: a circumstance that is likely to encounter a collision.}  If $\theta$ > $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
+An obstacle is marked as `high risk' when $\theta$ is less than $90\degree$ and the safety margin is less than $\mathbf{T}$. \edited{The rationale behind this is,  $\theta$ < $90 \degree$ indicates that the involved objects are moving towards each other. Additionally, if the objects are close by, i.e. $ < \mathbf{T}$, then this describes a condition where two objects in close proximity are moving towards each other: a circumstance that is likely to encounter a collision.}  If $\theta$ > $90 \degree$, this indicates that the obstacle is moving away from the agent and hence chances of collision are less and hence low risk. Anything that does not fall in the above two categories are considered as medium risk. The risk calculation conditions and values are summarized in Table \ref{risk-categorization-table}
 \thcomment{I do not have any citation or study to back the classification but I have added a justification based on common sense if that helps.}
 \begin{table}[htbp]
     \begin{center}
@@ -394,12 +392,12 @@ An obstacle is marked as 'high risk' when $\theta$ is less than $90\degree$ and 
 
 \end{table}
 \par
-The risk value of each bin is represented using a $3 \times 1$ one-hot vector. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
+The risk value of each bin is represented using a $3 \times 1$ indicator variable. The risk is calculated for individual obstacles present in a bin separately. In the event of a spatial bin containing more than one obstacle with varying degrees of risk, the risk value assigned to that bin is the highest obtained among all the obstacles that fall under that spatial bin.
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[width=.8\linewidth]{figures/risk_picture.png}
     \label{fig:risk-calculation}
-    \caption{A pictorial representation of how the risk is classified. Pedestrian $1$, $2$ and $3$ falls under the category of 'high risk', 'medium' and 'low' risk respectively.}
+    \caption{A pictorial representation of how the risk is classified. Pedestrian $1$, $2$ and $3$ falls under the category of `high' risk, `medium' and `low' risk respectively.}
 \end{figure}
 
 
