@@ -165,7 +165,7 @@ g_{2}((\textbf{x}(t)), \mathcal{P}(t)) = &\sum_{j=1}^{p} \sum_{k=1}^{4} c_{k}\ex
 g_{3}(x(T)) = & c_{e1}\exp(c_{e2}(x_{1}(T) - x_{1}(0))) + c_{\theta}x_{4}^{4}(T)
 \end{split}
 \end{align}
-where $\mu$ is the mean of the position of the pedestrians.\\
+where $\tilde{u}_{0:T}$ is the input sequence to the robot from time $t=0$ to $t=T$, $\mathcal{P}(t)$ is the position and orientation of the present people at time $t$, $\mu_{j}$ is the position of the pedestrian, $j$.\\
 
 The choice of trajectory planner used for the problem at hand is a modified rapidly exploring random tree (RRT). They introduce a step to prune the nodes that helps in reducing the size of the tree and improving the stopping condition for extending the tree. Instead of depending on an error, they place a limit on the number of nodes that can be added to the tree and terminate accordingly. %\thcomment{The following line is one of the steps in their algorithm. not an explanation of the of the expression above. I did not make any changes to address your comment. }
  Finally, the trajectories with a smaller penalty are preferred over trajectories with newer vertices.

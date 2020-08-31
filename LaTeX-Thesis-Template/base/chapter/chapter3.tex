@@ -69,7 +69,7 @@ where $\mathbf{u}$ is the action, and $s^{jn}$ is the joint state representing a
 Reward function is the most succinct definition of the task at hand \cite{abbeel_apprenticeshiplearning_2004}, making it a vital component that determines the final performance of a RL method. We can see similarities between RL methods and other classical approaches. RL method still involve reward engineering, which can get pretty complex even when considering a handful of simple interactions. The reward function by Everett et al. \cite{everett_collision_2019} focuses solely on collision avoidance, and Chen et al. \cite{chen_socially_2017} incorporate an element of naturalness to the mix using symmetry. But it takes into account a very limited number of scenarios: just 3 possible interaction scenarios, which is a small subset of the very many implicit intentions and explicit decisions a human takes while navigating.
  
 Reinforcement learning, as a class of methods, has been widely successful in solving various complex control tasks including, but not limited to, video games making it one of the more preferred choices to tackle the problem of social navigation. \par
-Using RL in this particular setting however necessitates the formulation of a reward function that can correctly capture the 'social and cultural' characteristics. As noted earlier, coming up with such a set of rules can be difficult and daunting as 'social norms' are not always explicit and can vary widely across different societies and even based on a given situation.\\
+Using RL in this particular setting however necessitates the formulation of a reward function that can correctly capture the `social and cultural' characteristics. As noted earlier, coming up with such a set of rules can be difficult and daunting as `social norms' are not always explicit and can vary widely across different societies and even based on a given situation.\\
 
 \section{IRL based approaches}
 %\textbf{Learning approaches meet probabilistic road map style path planner.}
@@ -79,12 +79,12 @@ For the feature representations, they create a pool of measurements garnered fro
 They test these on a Robot Operating System or, in short, ROS-based pedestrian simulator on 3 scenarios: airport gate, crossing hallway, and intersection. Expert demonstrations for these scenarios are obtained through tele-operation. They find that the performance across the two learning methods are similar. The feature representation, on the other hand, plays a major role in the final performance of the agent hence they come to the conclusion that spending time on modeling the feature representations or working to come up with learning methods that aid in the simplification of building the feature representations might be the way to go.
 \\
 \par
-Kim and Pineau \cite{kim_socially_2016}, Socially adaptive path planning, present a way to automate the navigation of a wheelchair in a social setting. Their navigation framework comprises of 3 components, the feature extractor, the IRL module, and the path planner.\\
+Kim and Pineau \cite{kim_socially_2016}, present a way to automate the navigation of a wheelchair in a social setting. Their navigation framework comprises of $3$ components, the feature extractor, the IRL module, and the path planner.\\
 %\textbf{Feature extractor}
-The features are generated from the readings of an RGB-d sensor ($3$D point cloud) mounted on the robot. The area around the agent is divided into $3$D blocks or cells and the features are calculated for each of these spatial cells. 
+The features are generated from the readings of an RGB-d sensor (3D point cloud) mounted on the robot. The area around the agent is divided into 3D blocks or cells and the features are calculated for each of these spatial cells. 
 The authors calculate $4$ features namely,
 crowd density, speed, velocity, and distance to the goal.
-While the calculation of the crowd density and the distance to the goal is straight forward, the calculation of the speed and velocity from 3d point clouds are more involved and the authors use an RGB-d optical flow method based on Farneback RGB optical flow \cite{farneback_optical_flow}. 
+While the calculation of the crowd density and the distance to the goal is straight forward, the calculation of the speed and velocity from 3D point clouds are more involved and the authors use an RGB-d optical flow method based on Farneback RGB optical flow \cite{farneback_optical_flow}. 
 The result is a $12$-dimensional binary feature vector for each grid cell.
 %\textbf{IRL module}
 The authors use maximum-a-posteriori Bayesian inverse reinforcement learning (MAP-BIRL) \cite{choi_MAP-BIRL_2011} to calculate the cost function for socially acceptable navigation. The cost of a state is given by
@@ -118,7 +118,7 @@ The authors present a feature representation consisting of 4 parts:
     \item Default Cost feature: Introduced to balance the rest of the other features. This has been proposed by various other works in the past.
     
 \end{enumerate}
-The authors train and test their procedure using data collected in the "ATC" business center in Osaka, Japan.
+The authors train and test their procedure using data collected in the ATC business center in Osaka, Japan.
 From these experiments, they show that the method is not only capable of producing a general navigator to negotiate the crowd, but also an agent that show traits of pedestrian behaviors like collision-avoidance and following the leader.
 
 
