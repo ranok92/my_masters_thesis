@@ -54,7 +54,7 @@ Replacing a state, $s_{i}$, by its features, $\phi(s_{i})$, \autoref{eq:IRL-para
 	\frac{\partial \mathbf{L}}{\partial \theta} = \left(\expectval_{s \sim P(s|\mathcal{D})} \phi(s) - \expectval_{s \sim P(s|\pi_\psi)} \phi(s)\right) \frac{\partial R_\theta}{\partial \theta} 
 \end{align}
 where, $P(s|\mathcal{D})$ and $P(s|\pi_{\psi})$ are the probability of occurrence of state $s$ following the expert demonstrations $\mathcal{D}$ and policy $\pi_{\psi}$ respectively.
-\thcomment{All the symbols have been defined before. Do I still need to redefine them after each equation?}
+%\thcomment{All the symbols have been defined before. Do I still need to redefine them after each equation?}
 \subsection{The SVF calculation}
 One of the main challenges of IRL is calculating the expected state distribution or the state visitation frequency (SVF) of a policy $\pi_{\psi}$. The SVF is calculated over all possible trajectories, which is computationally expensive for environments with large but finite state-spaces and intractable for continuous state-spaces. In model-based environments with finite state-space, this can be calculated using the state transition matrix and dynamic programming \cite{wulfmeier2015maximum}. Access to the underlying state-dynamics of an environment, especially in real-world applications like navigation, is difficult and not readily available. Instead, we relax this by assuming a model-free but deterministic environment.\\
 %\edited{This is a reasonable assumption in the context of a navigation robot because the movements of an agent given a control command are inherently deterministic.}
