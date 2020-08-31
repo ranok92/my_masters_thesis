@@ -1,11 +1,10 @@
 \label{ch:enviornment}
-\thcomment{I have made some major changes here. I have not removed any parts but I have removed all of the implementation details. However, I have kept some of the mathematics governing the calculation of the speed and orientation. }
-\\
-This chapter presents a detailed description of the environment used for \edited{conducting} the experiments. The environment, implemented using Pygame \cite{pygame}, portrays the world as a rectangular area viewed from a top-down perspective (bird's eye view). 
+%\thcomment{I have made some major changes here. I have not removed any parts but I have removed all of the implementation details. However, I have kept some of the mathematics governing the calculation of the speed and orientation. }
+This chapter presents a detailed description of the environment used for conducting the experiments. The environment, implemented using Pygame \cite{pygame}, portrays the world as a rectangular area viewed from a top-down perspective (bird's eye view). 
 The size of the world can be set by altering the rows and columns during initialization. These values denote the size of the world in pixels.
 
 The environment follows the image coordinate system: with the center at the top left corner and each position on the map is indicated by a 2-dimensional vector containing the row and column value respectively.\\
-\section{Components (Re-edited entirely)}
+\section{Components}
 3 key components populate the environment: 
 \begin{itemize}
     \item The agent.
@@ -92,7 +91,7 @@ There are 3 ways of putting obstacles in the map each of them serving a differen
 \end{enumerate}
 
 
-\section{Input spaces and observation (Re-edited entirely)} 
+\section{Input spaces and observation} 
 \label{subsec:action-space}
 The environment has provisions for both discrete and continuous action space.
 \begin{enumerate}
@@ -140,9 +139,9 @@ The environment has provisions for both discrete and continuous action space.
 \end{enumerate}
 
 \subsubsection{The Observation:}
-\edited{The observation from the environment returns a tuple of 4 elements: ( $S$, $\rho$, $\mathbf{d}$, $\iota$ ), where
+The observation from the environment returns a tuple of 4 elements: ( $S$, $\rho$, $\mathbf{d}$, $\iota$ ), where
 $S$ is the state of environment containing the information relating to the agent, goal, and the obstacles for a given time step,
-$\rho$ is the reward obtained at a given time step, $\mathbf{d}$ is a Boolean flag that indicates the completion of the current episode, and $\iota$ contains any extra information the environment might want to convey. }
+$\rho$ is the reward obtained at a given time step, $\mathbf{d}$ is a Boolean flag that indicates the completion of the current episode, and $\iota$ contains any extra information the environment might want to convey.
 \section{Additional features}
 Additionally, the environment comes with a set of options that provide added flexibility and customization while training and evaluating IRL agents.
 \subsubsection{Training modes:}
@@ -156,10 +155,10 @@ The environment supports 3 types of training modes:.
 Features available for testing of the environment:
 The environment was designed primarily for the development of IRL methods for navigation, and also comes with built-in tools to test IRL methods.
 \subsubsection{Deployment of ghost}
-IRL agents learn from demonstrations. Creating meaningful metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. \edited{We define the `ghost' of a given pedestrian as an entity that traces the exact path, both spatially and temporally, as the pedestrian without interacting or interfering with any other entities of the environment. This greatly benefits in the comparison of the performance of the agent to the expert. }
+IRL agents learn from demonstrations. Creating meaningful metrics to evaluate their performance is elusive, which is why we resort to using IRL in the first place. One simple and effective way of conducting a performance analysis would be to subject the agent to the same conditions as the expert and compare and contrast their behaviors. This is exactly what the environment facilitates. We define the `ghost' of a given pedestrian as an entity that traces the exact path, both spatially and temporally, as the pedestrian without interacting or interfering with any other entities of the environment. This greatly benefits in the comparison of the performance of the agent to the expert.
 
 \subsubsection{User control}
-\edited{The environment also has a provision to let an external user control and agent and navigate the crowds. There might be cases where there are not enough expert demonstrations available to perform proper training. In that case, the size of the expert demonstration set can be bolstered by letting humans take control of the agent and generate additional expert demonstrations. }
+The environment also has a provision to let an external user control and agent and navigate the crowds. There might be cases where there are not enough expert demonstrations available to perform proper training. In that case, the size of the expert demonstration set can be bolstered by letting humans take control of the agent and generate additional expert demonstrations.
 
 %The agent can be controlled by a mouse pointer and action is registered only at the time of the click of the left mouse button. Once a click is registered on the map, the direction and magnitude of the vector joining the current position and the location of the click are taken as the desired orientation and speed respectively.  
 %The orientation action is then calculated based on the difference between the current orientation of the agent and comparing that with the desired direction. If there is a difference between the two, and a change in the current heading direction of the agent is warranted, then the action to inflict the change is then decided based on the magnitude and sign of the change needed relative to the current heading direction of the agent to minimize the difference.

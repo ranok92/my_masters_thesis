@@ -1,13 +1,13 @@
 \label{ch:conclusion}
 \section{Conclusion}
-In this work, we improve on existing MEDIRL based navigation pipelines by introducing a new 'risk-based' feature representation and a sampling technique to operate in a model-free environment. \\
-Unlike the majority of the existing literature that focuses on navigation in fairly restricted environments such as narrow hallways or synthetically created scenarios, we opt for a more general and therefore challenging setting: a busy university campus which includes pedestrians with a wide range of people in the vicinity. With no hard restriction on the pathways, the only constraint posed is in the form of social interaction. Additionally, we use a small dataset: 430 trajectories extracted from a three and a half minute video showcasing the capability of the pipeline to learn using a relatively small set of expert demonstrations.\\
+In this work, we improve on existing MEDIRL based navigation pipelines by introducing a new `risk-based' feature representation and a sampling technique to operate in a model-free environment. \\
+Unlike the majority of the existing literature that focuses on navigation in fairly restricted environments such as narrow hallways or synthetically created scenarios, we opt for a more general and therefore challenging setting: a busy university campus which includes pedestrians with a wide range of people in the vicinity. With no hard restriction on the pathways, the only constraint posed is in the form of social interaction. Additionally, we use a small dataset: $430$ trajectories extracted from a three and a half minute video showcasing the capability of the pipeline to learn using a relatively small set of expert demonstrations.\\
 Next, we present a detailed analysis comparing both qualitative and quantitative performance of agents trained using different methods: artificial potential fields, reinforcement learning(actor-critic), inverse reinforcement learning(MEDIRL); and different feature representations from the existing literature in tandem with IRL showcasing the strengths and weaknesses of different approaches.\\
 Lastly, in the process, we present a lightweight OpenAI-based environment using Pygame specifically designed for navigation tasks in a social environment which includes features like using annotation files from real-world videos to populate the environment, creating custom navigation scenarios and user control of the agent to collect expert demonstrations among others. \\
 There are a few caveats from MEDIRL that trickle-down in the proposed navigation pipeline. Although it leads to improved performance, we are still relying on handcrafted feature representations to make sense of our agent's surroundings. \\
 
 \section{Future Work}
-\edited{There is possible room for improvement that can be interesting to explore. The performance of learning models heavily depend on the data being used. We use a relatively small dataset to train our models and obtain a competent controller with reasonable performance. Switching to a more comprehensive data, preferably one obtained from a large, indoor space with minimal restriction on the movements of the crowd from any other entity barring pedestrians. 
+There is possible room for improvement that can be interesting to explore. The performance of learning models heavily depend on the data being used. We use a relatively small dataset to train our models and obtain a competent controller with reasonable performance. Switching to a more comprehensive data, preferably one obtained from a large, indoor space with minimal restriction on the movements of the crowd from any other entity barring pedestrians. 
 \\
 Maximum entropy inverse reinforcement learning has been the choice of algorithm in the field of social navigation. A drawback of the method is the repeated optimization of a reinforcement learning agent at every update of the reward network. This vastly increases the training time of the algorithm. Exploring different methods that bypass this, like Guided cost learning (GCL) \cite{finn2016gcl} and Generative adversarial imitation learning (GAIL) \cite{ho2016gail} would be one of our priorities in the future.  
 \\
@@ -17,7 +17,7 @@ For a project on socially acceptable navigation, the end result is a functioning
 \\
 \section{Final remarks}
 With the increase in deployment of robots alongside humans, social navigation is a problem that is more relevant that ever. This thesis builds upon work in the existing literature, improving certain components leading to a better navigation agent. We hope that the work presented here are steps in the direction of solving the problem and aid in the realization of having social autonomous robots as a part of the future society.
-}
+
 %The controller can also be used for prediction.
 %End to end model removing the need for hand-engineered feature representations.
 %use of a hierarchical control architecture to control different aspects of navigation.
