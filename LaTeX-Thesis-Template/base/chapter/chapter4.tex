@@ -5,7 +5,7 @@ In this section, we describe our data-driven inverse reinforcement learning base
 \begin{figure}[!htbp]
 	\centering
 	\includegraphics[width=\linewidth]{figures/irl_pipeline.png}
-	\caption{An overview of the proposed navigation pipeline. \edited{The feature extractor filters data from the environment before relaying it into the RL module. Using the reward network, the RL algorithm trains an optimal policy. The difference between the state visitation frequency of the optimal policy and that of the expert is then utilized to update the parameters of the reward network. On completion, we obtain a reward function and an optimal policy corresponding to that reward function.}}
+	\caption{An overview of the proposed navigation pipeline. The feature extractor filters data from the environment before relaying it into the RL module. Using the reward network, the RL algorithm trains an optimal policy. The difference between the state visitation frequency of the optimal policy and that of the expert is then utilized to update the parameters of the reward network. On completion, we obtain a reward function and an optimal policy corresponding to that reward function.}
 	\label{fig:irl_pipeline}
 \end{figure}
 
